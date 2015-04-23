@@ -1,39 +1,50 @@
-<div class="page-header" data-ng-controller="HeaderController">
-    <div class="logo pull-left">
-        <a class="navbar-brand" ui-sref="home" mean-token="'site-title'">MEAN</a>
+<div class="container" data-ng-controller="HeaderController" role="navigation">
+    <div class="navbar-header">
+        <button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target=".navbar-collapse">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" ui-sref="home" mean-token="'site-title'">infographics</a>
     </div>
 
-    <div class="left pull-left">
-        <ul class="navbar-nav nav">
+    <nav class="collapse navbar-collapse navbar-collapse">
+        <ul class="nav navbar-nav" data-ng-show="global.teamActive">
             <li data-ng-repeat="item in menus.main" ui-route="/{{item.link}}" ng-class="{active: $uiRoute}">
                 <a mean-token="item.link" ui-sref='{{item.link}}'>{{item.title}}</a>
             </li>
         </ul>
-    </div>
-
-    <div class="account">
-        <div class="text-edit">
-            <div class="pull-right" data-ng-show="global.authenticated" mean-token-editable></div>
-            <div class="pull-right" data-ng-show="global.authenticated" mean-translate></div>
-        </div>
-        <ul class="navbar-nav nav" data-ng-hide="global.authenticated">
-            <li><a ui-sref='auth.register'>Join</a>
+        <ul class="nav navbar-nav navbar-right" data-ng-hide="global.authenticated">
+            <li>
+                <a ui-sref='auth.register'>Join</a>
             </li>
-            <li class="divider-vertical"></li>
-            <li><a ui-sref='auth.login'>Log In</a>
+            <li class="divider-vertical">
+                <a ui-sref='auth.login'>Log In</a>
             </li>
         </ul>
-
-        <ul class="navbar-nav nav"  data-ng-show="global.authenticated">
+        <ul class="navbar-nav nav pull-right"  data-ng-show="global.authenticated">
             <li ng-if="global.user.profile" class="dropdown" mean-profile-menu>x</li>
             <li ng-if="!global.user.profile" class="dropdown">
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                     {{global.user.name}} <b class="caret"></b>
                 </a>
-                <ul class="dropdown-menu">
-                    <li><a href="/logout">Log Out</a></li>
+                <ul class="dropdown-menu" data-ng-controller="TeamsController" data-ng-init="find()">
+                    <li role="presentation" data-ng-class="{active: global.teamActive === team}" data-ng-repeat="team in teams">
+                        <a role="menuitem" data-ng-click="changeTeamActive(team)">{{team.name}}</a>
+                        <a data-ng-click="remove(team)" class="remove"><i class="fa fa-remove"></i></a>
+                    </li>
+                    <li role="presentation" data-ng-show="teams.length < 3">
+                        <a role="menuitem">
+                            <form name="newTeamForm" role="form" data-ng-submit="create(newTeamForm.$valid)" novalidate>
+                                <input class="new_team" name="new_team" type="text" placeholder="Add new team..." data-ng-model="team.name" required="" ng-blur="team.name = ''"/>
+                            </form>
+                        </a>
+                    </li>
+                    <li role="presentation" class="divider"></li>
+                    <li role="presentation" ><a href="/logout" role="menuitem">Log Out</a></li>
                 </ul>
             </li>
         </ul>
-    </div>
+    </nav>
 </div>

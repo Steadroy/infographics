@@ -1,0 +1,28 @@
+BACKEND
+=======
+
+GET     /api/template                  GET template list
+GET     /api/template/:template_id     GET template details
+POST    /api/template                  Create or Update template details
+DELETE  /api/template/:template_id     Delete template
+
+
+FRONTEND
+========
+
+#/template                 View template list
+#/template/:template_id    View template details
+
+
+$http(resource, restangular)
+
+
+main
+    menu
+    login
+    template list
+    template edit
+        pagination
+        combine cells
+    infographic list
+    infographic

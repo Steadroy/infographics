@@ -1,0 +1,84 @@
+* {
+  border-radius: 0 !important;
+  outline: none !important;
+}
+html,
+html body {
+  overflow: hidden;
+  height: 720px;
+}
+html:before,
+html body:before,
+html:after,
+html body:after {
+  content: "";
+  -webkit-transform: rotate(-10deg);
+  -ms-transform: rotate(-10deg);
+  transform: rotate(-10deg);
+  position: absolute;
+  height: 60%;
+  z-index: -1;
+  opacity: 0.25;
+  filter: alpha(opacity=25);
+}
+html:before,
+html body:before {
+  left: -20%;
+  right: -20%;
+  top: -50%;
+}
+html:after,
+html body:after {
+  left: -20%;
+  right: -20%;
+  bottom: -50%;
+}
+html:before,
+html:after {
+  -webkit-transform: rotate(10deg);
+  -ms-transform: rotate(10deg);
+  transform: rotate(10deg);
+  background: #3d6217;
+}
+html body:before,
+html body:after {
+  -webkit-transform: rotate(-10deg);
+  -ms-transform: rotate(-10deg);
+  transform: rotate(-10deg);
+  background: #ffdf43;
+}
+body a {
+  cursor: pointer;
+}
+body .nav-tabs {
+  margin-bottom: 15px;
+}
+body ul.dropdown-menu .divider {
+  margin: 5px 0;
+}
+body ul.dropdown-menu > li {
+  position: relative;
+}
+body ul.dropdown-menu > li > a {
+  padding: 10px 20px;
+}
+body ul.dropdown-menu > li > a input.new_team {
+  border: 1px solid transparent;
+  background: transparent;
+  width: 100%;
+}
+body ul.dropdown-menu > li > a input.new_team:hover {
+  border: 1px solid #dddddd;
+}
+body ul.dropdown-menu > li .remove {
+  display: none;
+  position: absolute;
+  right: 0;
+  top: 0;
+}
+body ul.dropdown-menu > li:hover .remove {
+  display: block;
+}
+body ul.dropdown-menu > li:hover:not(.active) a {
+  background: #f5f5f5;
+}

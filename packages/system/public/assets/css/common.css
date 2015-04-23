@@ -23,30 +23,18 @@
     margin-left: 0
 }
 .content {
-    margin-top: 70px;
     width: 100%
 }
 footer {
-	position: fixed;
-	left: 0;
-	bottom: 0;
-	height: 30px;
-	width: 100%;
-	background: #ddd;
-	-webkit-box-shadow: 0 8px 6px 6px black;
-	-moz-box-shadow: 0 8px 6px 6px black;
-	box-shadow: 0 8px 6px 6px black
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    background-color: #f5f5f5;
+    z-index: 100;
 }
 footer p {
-	padding: 5px 0 12px 10px
+    margin: 20px 0;
 }
-
 .featuredpic img{
-  width:510px;
+    width: 510px;
 }
-/*.ng-invalid.ng-dirty{*/
-    /*border-color:#FA787E;*/
-/*}*/
-/*.ng-valid.ng-dirty{*/
-    /*border-color:#78FA89;*/
-/*}*/

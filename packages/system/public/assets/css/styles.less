@@ -1,0 +1,66 @@
+@import "../../../../../bower_components/bootstrap/less/mixins.less";
+@import "../less/mixins.less";
+
+* {
+    .border-radius(0) !important;
+    outline: none !important;
+} 
+html{
+    &, body{
+        overflow: hidden;
+        height: 720px;
+        
+        &:before, &:after{
+            content: "";
+            .rotate(-10deg);
+            position: absolute;
+            height: 60%;
+            z-index: -1;
+            .opacity(.25);
+        }
+        &:before{
+            left: -20%;
+            right: -20%;
+            top: -50%; 
+        }
+        &:after{
+            left: -20%;
+            right: -20%;
+            bottom: -50%;
+        }
+    }
+    &:before, &:after{
+        .rotate(10deg);
+        background: #3d6217;
+    }
+    body{
+        &:before, &:after{
+            .rotate(-10deg);
+            background: #ffdf43;
+        }
+    }
+}
+body{
+    a{
+        cursor: pointer;
+    }
+    .nav-tabs{
+        margin-bottom: 15px;
+    }
+    ul.dropdown-menu {
+        .divider{
+            margin: 5px 0;
+        }
+        & > li{
+            position: relative;
+            & > a{
+                padding: 10px 20px;
+
+                input.new_team{
+                    .input-hover();
+                }
+            }
+            .hide-remove();
+        }
+    }
+}

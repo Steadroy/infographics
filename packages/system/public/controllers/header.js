@@ -1,40 +1,124 @@
 'use strict';
 
-angular.module('mean.system').controller('HeaderController', ['$scope', '$rootScope', 'Global', 'Menus',
-  function($scope, $rootScope, Global, Menus) {
-    $scope.global = Global;
-    $scope.menus = {};
+angular.module('mean.system')
+    .controller('HeaderController', ['$scope', '$rootScope', 'Global', 'Menus',
+        function ($scope, $rootScope, Global, Menus) {
+            $scope.global = Global;
+            $scope.menus = {};
 
-    // Default hard coded menu items for main menu
-    var defaultMainMenu = [];
+            // Default hard coded menu items for main menu
+            var defaultMainMenu = [];
 
-    // Query menus added by modules. Only returns menus that user is allowed to see.
-    function queryMenu(name, defaultMenu) {
+            // Query menus added by modules. Only returns menus that user is allowed to see.
+            function queryMenu(name, defaultMenu) {
+                Menus.query({
+                    name: name,
+                    defaultMenu: defaultMenu
+                }, function (menu) {
+                    $scope.menus[name] = menu;
+                });
+            }
 
-      Menus.query({
-        name: name,
-        defaultMenu: defaultMenu
-      }, function(menu) {
-        $scope.menus[name] = menu;
-      });
-    }
-
-    // Query server for menus and check permissions
-    queryMenu('main', defaultMainMenu);
-    queryMenu('account', []);
+            // Query server for menus and check permissions
+            queryMenu('main', defaultMainMenu);
+            queryMenu('account', []);
 
 
-    $scope.isCollapsed = false;
+            $scope.isCollapsed = false;
 
-    $rootScope.$on('loggedin', function() {
+            $rootScope.$on('loggedin', function () {
 
-      queryMenu('main', defaultMainMenu);
+                queryMenu('main', defaultMainMenu);
 
-      $scope.global = {
-        authenticated: !! $rootScope.user,
-        user: $rootScope.user
-      };
-    });
+                $scope.global = {
+                    authenticated: !!$rootScope.user,
+                    user: $rootScope.user
+                };
+            });
 
-  }
-]);
+        }
+    ])
+    .controller('TeamsController', ['$scope', '$rootScope', '$location', 'Global', 'Teams', 'Settings',
+        function ($scope, $rootScope, $location, Global, Teams, Settings) {
+            $scope.global = Global;
+            $scope.teams = [];
+            $scope.team = {};
+            
+            $scope.find = function () {
+                Teams.query(function (teams) {
+                    $scope.teams = teams;
+                    if($scope.teams.length && !$scope.global.user.lastTeamAccessed){
+                        $scope.changeTeamActive($scope.teams[0]);
+                    }
+                    else{
+                        for (var i in $scope.teams) {
+                            if($scope.teams[i] === $scope.global.user.lastTeamAccessed){
+                                $scope.changeTeamActive($scope.teams[i]);
+                            }
+                        }
+                    }
+                });
+            };
+            
+            $scope.remove = function (team) {
+                if (team) {
+                    team.$remove(function (response) {
+                        for (var i in $scope.teams) {
+                            if ($scope.teams[i] === team) {
+                                $scope.teams.splice(i, 1);
+                                if(team === $scope.global.teamActive && $scope.teams.length){
+                                    if (i - 1 >= 0) {
+                                        $scope.changeTeamActive($scope.teams[i - 1]);
+                                    }
+                                    else{
+                                        $scope.changeTeamActive($scope.teams[0]);
+                                    }
+                                }
+                                else{
+                                    delete $scope.global.teamActive;
+                                    $location.url('/');
+                                    $scope.$apply();
+                                }
+                            }
+                        }
+                    });
+                }
+            };
+            
+            $scope.create = function (isValid) {
+                if (isValid) {
+                    new Settings().$save(function(response){
+                        var team = new Teams({
+                            name: $scope.team.name,
+                            settings: response._id
+                        });
+                        team.$save(function (response) { 
+                            $scope.teams.push(response);
+                            $scope.changeTeamActive(response);
+                            $scope.team.name = ''; 
+                        });
+                    });
+                } else {
+                    $scope.submitted = true;
+                }
+            };
+            
+            $scope.changeTeamActive = function (team){
+                /*
+                var user = new Users($scope.global.user);
+                user.lastTeamAccessed = team;
+                user.$update(function(response){
+                    $scope.global.user = response;
+                    $scope.global.teamActive = team;
+                    console.log($scope.global.user.lastTeamAccessed);
+                });*/
+                
+                $scope.global.teamActive = team;
+                Settings.get({
+                    settingId: typeof team.settings === 'object' ? team.settings._id : team.settings
+                }, function (settings) {
+                    $scope.global.teamActive.settings = settings;
+                });
+            };
+        }
+    ]);

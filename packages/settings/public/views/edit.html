@@ -1,0 +1,117 @@
+<section>
+    <h1 class="setting_header" data-ng-controller="SettingsController" data-ng-init="init()">
+        <form name="teamName" role="form" data-ng-submit="update(teamName.$valid, global.teamActive.name)" novalidate> 
+            General settings for 
+            <input id="team_name" name="team_name" data-ng-model="global.teamActive.name"/>
+        </form>
+    </h1>
+    <div role="tabpanel" class="col-md-12 col-sm-12"> 
+        <tabset> 
+            <tab heading="Colours" data-ng-controller="ColoursController"> 
+                <div role="tabpanel" class="colours_panel tabpanel">
+                    <ul class="nav nav-pills nav-stacked col-md-3 col-sm-3" role="tablist">
+                        <li role="presentation" data-ng-class="{active: usage === coloursActive}" data-ng-repeat="usage in coloursUsage" >
+                            <a href aria-controls="{{usage}}" role="tab" data-toggle="tab" data-ng-click="changeColoursActive(usage)">
+                                {{ usage | pretify}}
+                            </a>
+                        </li>
+                    </ul>
+                    <div class="tab-content col-md-9 col-sm-9">
+                        <div role="tabpanel" class="tab-pane" id="{{usage}}" data-ng-class="{active: usage === coloursActive}" data-ng-repeat="usage in coloursUsage" > 
+                            <h2>{{ usage | pretify}}</h2>
+                            <hr/>
+                            <div class="container col-md-12 col-sm-12"> 
+                                <div class="col-md-2 col-sm-2 colour_container" data-ng-repeat="colour in global.teamActive.settings.colours[usage] track by $index">
+                                    <input class="colour_input" colorpicker type="text" data-ng-model="colour" style="background: {{colour}}" data-ng-blur="editColour(usage, $index, colour)" />
+                                    <button tooltip="Remove {{colour}}" tooltip-trigger="mouseenter" tooltip-placement="right" class="colour_remove" data-ng-click="removeColour(usage, $index, colour)" role="button"><i class="fa fa-close"></i></button>
+                                </div>
+
+                                <div class="col-md-2 col-sm-2 colour_container colour_new" data-ng-show="global.teamActive.settings.colours[usage].length < 6">
+                                    <input class="colour_input colour_new" colorpicker type="text" data-ng-model="newColour" style="background: {{newColour}}" data-ng-blur="addNewColour(usage, newColour);
+                                                        newColour = ''"/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </tab>
+            <tab heading="Texts" data-ng-controller="TextsController" data-ng-init="init()">
+                <div data-ng-hide="global.teamActive.settings.colours.texts.length > 0" class="alert alert-danger" role="alert">
+                    <h3>No colours have been set for texts.</h3>
+                    <h4>Please, go to <strong data-ng-click="">Colours</strong> and configure them.</h4> 
+                </div>
+                <div role="tabpanel" class="texts_panel tabpanel" data-ng-show="global.teamActive.settings.colours.texts.length > 0"> 
+                    <ul class="nav nav-pills nav-stacked col-md-3 col-sm-3" role="tablist">
+                        <li role="presentation" data-ng-class="{active: text.name === textActive}" data-ng-repeat="text in global.teamActive.settings.texts" >
+                            <a href aria-controls="{{text.name}}" role="tab" data-toggle="tab" data-ng-click="changeTextActive(text.name)">
+                                {{text.name}}
+                            </a>
+                            <a data-ng-click="remove(text)" class="remove"><i class="fa fa-remove"></i></a> 
+                        </li>
+                        <li role="presentation" data-ng-show="global.teamActive.settings.colours.texts.length > 0 && global.teamActive.settings.texts.length < 5"> 
+                            <a href>
+                                <form name="newTextStyle" role="form" data-ng-submit="create(newTextStyle.$valid)" novalidate>
+                                    <input class="new_txt_style" name="new_txt_style" type="text" placeholder="Add new style..." data-ng-model="text.name" required="" data-ng-blur="text.name = ''">
+                                </form>
+                            </a>
+                        </li>
+                    </ul>
+                    <div class="tab-content col-md-9 col-sm-9">
+                        <div role="tabpanel" class="tab-pane" id="{{text.name}}" data-ng-class="{active: text.name === textActive}" data-ng-repeat="text in global.teamActive.settings.texts">
+                            <div class="example">
+                                <h2>
+                                    <form name="textName" role="form" data-ng-submit="update(textName.$valid, temporal_ref_name, $index)" novalidate data-ng-init="temporal_ref_name = text.name"> 
+                                        <input id="text_name{{$index}}" data-ng-model="temporal_ref_name"/>
+                                    </form>
+                                </h2>
+                                <hr/>
+                                <div style="{{text.style| parse}}">
+                                    <p>The quick brown fox jumps over the lazy dog</p>
+                                    <hr/>
+                                    <!-- <span data-ng-repeat="i in []| range:33:126">{{i| fromCharCode}} </span> -->
+                                </div>
+                            </div>
+                            <div class="controls">
+                                <div class="btn-group" data-ng-repeat="group in buttonGroups">
+                                    <label class="btn btn-primary" data-ng-repeat="button in group" role="button" data-ng-class="{active: text.style[button.style] === button.highlight}" data-ng-click="toggleValue(button.style, $parent.$parent.$index, $parent.$index, $index, text.style[button.style] === button.highlight, text.name)"><i class="fa {{button.icon}}"></i></label> 
+                                </div>
+                                <div class="btn-group dd-{{dd.style}}" dropdown data-ng-repeat='dd in buttonGroup2'>
+                                    <button type="button" class="btn btn-primary dropdown-toggle" data-ng-click="scroll('id-' + dd.style, (text.style[dd.style] | clean))"> 
+                                        <span data-ng-show="dd.style !== 'color'">{{text.style[dd.style]}} </span>
+                                        <span data-ng-show="dd.style === 'color'">
+                                            <span class='dd-color' style='background: {{text.style[dd.style]}}'> </span> {{text.style[dd.style]}}
+                                        </span>
+                                        <span class="caret"></span>
+                                    </button>
+                                    <ul id="id-{{dd.style}}" class="dropdown-menu" role="menu">
+                                        <li id="{{option| clean}}" data-ng-class="{active: option === text.style[dd.style]}" data-ng-repeat="option in (dd.options === 'colours.texts' ? global.teamActive.settings.colours.texts : dd.options)">
+                                            <a href data-ng-click="change(option, dd.style, $parent.$parent.$index, text.name)" >
+                                                <span data-ng-show="dd.style === 'font-family'" style='font-family: {{option}}'>
+                                                    {{option}}
+                                                </span>
+                                                <span data-ng-show="dd.style === 'font-size'">
+                                                    {{option}}
+                                                </span>
+                                                <span data-ng-show="dd.style === 'color'">
+                                                    <span class='dd-color' style='background: {{option}}'> </span> {{option}}
+                                                </span>
+                                            </a>
+                                        </li>  
+                                    </ul>
+                                </div>
+                                <div class="btn-group">
+                                    <label class="btn btn-success" role="button" data-ng-click="clone($index)">
+                                        <i class="fa fa-copy"></i>
+                                        Clone
+                                    </label> 
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </tab>
+            <tab heading="Borders and Frames">Borders and Frames content</tab>
+        </tabset>
+    </div>
+</section>

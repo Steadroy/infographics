@@ -1,0 +1,29 @@
+@import "../../../../../bower_components/bootstrap/less/variables.less";
+
+.border-radius(@radius) {
+    border-radius: @radius;
+}
+.input-hover(){
+    border: 1px solid transparent;
+    background: transparent;
+    width: 100%;
+    &:hover{
+        border: 1px solid @table-border-color;
+    }
+}
+.hide-remove(@top: 0, @right: 0){
+    .remove{
+        display: none;
+        position: absolute;
+        right: @right;
+        top: @top;
+    }
+    &:hover{
+        .remove{
+            display: block;
+        }
+        &:not(.active) a{
+            background: @dropdown-link-hover-bg;
+        }
+    }
+}

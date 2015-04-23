@@ -1,0 +1,21 @@
+<section data-ng-controller="TemplatesController" data-ng-init="find()">
+    <ul class="templates unstyled">
+        <li data-ng-repeat="template in templates">
+            <span>{{template.created| date:'medium'}}</span> /
+            <span>{{template.user.name}}</span>
+            <h2>
+                <a data-ng-href="#!/templates/{{template._id}}">{{template.title}}</a>
+                <span data-ng-if="hasAuthorization(template)">
+                    <a class="btn" href="/#!/templates/{{template._id}}/edit">
+                        <i class="glyphicon glyphicon-edit"></i>
+                    </a>
+                    <a class="btn" data-ng-click="remove(template);">
+                        <i class="glyphicon glyphicon-trash"></i>
+                    </a>
+                </span>
+            </h2>
+            <div>{{template.content}}</div>
+        </li>
+    </ul>
+    <h1 data-ng-hide="!templates || templates.length">No templates yet. <br> Why don't you <a href="/#!/templates/create">Create One</a>?</h1>
+</section>
