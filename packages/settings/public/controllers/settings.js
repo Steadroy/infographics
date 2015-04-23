@@ -1,8 +1,8 @@
 'use strict';
 
 angular.module('mean.settings', ['colorpicker.module'])
-    .controller('SettingsController', ['$scope', '$stateParams', '$timeout', '$location', 'Global', 'Teams', 'Settings',
-        function ($scope, $stateParams, $timeout, $location, Global, Teams, Settings) { 
+    .controller('SettingsController', ['$scope', '$rootScope', '$stateParams', '$timeout', '$location', 'Global', 'Teams', 'Settings',
+        function ($scope, $rootScope, $stateParams, $timeout, $location, Global, Teams, Settings) { 
             $scope.global = Global;
             
             $scope.update = function (isValid, newName) {
@@ -14,6 +14,22 @@ angular.module('mean.settings', ['colorpicker.module'])
                     });
                 } else {
                     $scope.submitted = true;
+                }
+            };
+            $scope.clone = function(){
+                if ($scope.teams.length < $scope.constansts.max_teams) {
+                    var new_team = angular.copy($scope.global.teamActive);
+                    new_team.name = new_team.name + ' [Clone]';
+                    delete new_team._id; 
+                    delete new_team.settings._id; 
+                    
+                    new_team.settings.$save(function(settings){
+                        new_team.settings = settings._id;
+                        new_team.$save(function(response){
+                            $scope.teams.push(response);
+                            $scope.changeTeamActive(response);
+                        });
+                    });
                 }
             };
             
@@ -134,7 +150,7 @@ angular.module('mean.settings', ['colorpicker.module'])
             };
             
             $scope.create = function (isValid) {
-                if (isValid) {
+                if (isValid && $scope.global.teamActive.settings.texts.length < $scope.constants.max_fonts) {
                     var name = $scope.text.name;
                     $scope.text.name = '';
                     $scope.global.teamActive.settings.texts.push({name: name, style: {color: $scope.global.teamActive.settings.colours.texts[0]}});
@@ -212,14 +228,16 @@ angular.module('mean.settings', ['colorpicker.module'])
             };
             
             $scope.clone = function(i){
-                var new_text = angular.copy($scope.global.teamActive.settings.texts[i]);
-                new_text.name = new_text.name + ' [Clone]';
-                delete new_text._id; 
-                
-                $scope.global.teamActive.settings.texts.push(new_text);
-                $scope.global.teamActive.settings.$update(function(a){ 
-                    $scope.changeTextActive(new_text.name);
-                });
+                if($scope.global.teamActive.settings.texts.length < $scope.constants.max_fonts){
+                    var new_text = angular.copy($scope.global.teamActive.settings.texts[i]);
+                    new_text.name = new_text.name + ' [Clone]';
+                    delete new_text._id; 
+
+                    $scope.global.teamActive.settings.texts.push(new_text);
+                    $scope.global.teamActive.settings.$update(function(a){ 
+                        $scope.changeTextActive(new_text.name);
+                    });
+                }
             };
             
             $scope.init = function(){

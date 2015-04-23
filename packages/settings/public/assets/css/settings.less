@@ -4,8 +4,18 @@
     text-align: left;
     margin-bottom: 30px;
     input{
-        .input-hover();
-        width: auto;
+        .input-hover(false);
+        float: none;
+        padding-left: 0;
+        & ~ .btn{
+            margin-top: 6px;
+            display: none;
+        }
+    }
+    &:hover{
+        input ~ .btn{
+            display: inline;
+        }
     }
 }
 .colour_container{
@@ -46,7 +56,7 @@
         position: absolute;
         top: 50%;
         left: 50%;
-        margin-top: -0.5em;
+        margin-top: -0.65em;
         margin-left: -0.4em;
         z-index: -1;
         font-size: 1.7em;
@@ -61,6 +71,9 @@
     }
 }
 .tabpanel{
+    hr{
+        clear: both;
+    }
     &.colours_panel{
         .tab-content{
             h2{
@@ -71,7 +84,7 @@
     ul{
         li{
             input.new_txt_style{
-                .input-hover();
+                .input-hover(true);
             }
             &.active{
                 input.new_txt_style{
@@ -87,8 +100,20 @@
     .tab-content{
         h2{
             margin-top: 0;
+            height: 30px;
             input{
-                .input-hover();
+                .input-hover(false);
+                
+                & ~ .btn{
+                    margin-top: 2px;
+                    margin-left: 10px;
+                    display: none;
+                }
+            }
+            &:hover{
+                input ~ .btn{
+                    display: inline;
+                }
             }
         }
         .btn-group{

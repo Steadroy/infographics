@@ -34,7 +34,7 @@
                         <a role="menuitem" data-ng-click="changeTeamActive(team)">{{team.name}}</a>
                         <a data-ng-click="remove(team)" class="remove"><i class="fa fa-remove"></i></a>
                     </li>
-                    <li role="presentation" data-ng-show="teams.length < 3">
+                    <li role="presentation" data-ng-show="teams.length < constansts.max_teams">
                         <a role="menuitem">
                             <form name="newTeamForm" role="form" data-ng-submit="create(newTeamForm.$valid)" novalidate>
                                 <input class="new_team" name="new_team" type="text" placeholder="Add new team..." data-ng-model="team.name" required="" ng-blur="team.name = ''"/>

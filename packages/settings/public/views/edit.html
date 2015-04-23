@@ -1,8 +1,12 @@
-<section>
+<section> 
     <h1 class="setting_header" data-ng-controller="SettingsController" data-ng-init="init()">
         <form name="teamName" role="form" data-ng-submit="update(teamName.$valid, global.teamActive.name)" novalidate> 
             General settings for 
-            <input id="team_name" name="team_name" data-ng-model="global.teamActive.name"/>
+            <input id="team_name" name="team_name" data-ng-model="global.teamActive.name" class="col-md-7"/>
+            <label class="btn btn-success pull-right" role="button" data-ng-click="clone()" data-ng-show="teams.length < constansts.max_teams"> 
+                <i class="fa fa-copy"></i>
+                Clone Team
+            </label> 
         </form>
     </h1>
     <div role="tabpanel" class="col-md-12 col-sm-12"> 
@@ -25,10 +29,8 @@
                                     <input class="colour_input" colorpicker type="text" data-ng-model="colour" style="background: {{colour}}" data-ng-blur="editColour(usage, $index, colour)" />
                                     <button tooltip="Remove {{colour}}" tooltip-trigger="mouseenter" tooltip-placement="right" class="colour_remove" data-ng-click="removeColour(usage, $index, colour)" role="button"><i class="fa fa-close"></i></button>
                                 </div>
-
-                                <div class="col-md-2 col-sm-2 colour_container colour_new" data-ng-show="global.teamActive.settings.colours[usage].length < 6">
-                                    <input class="colour_input colour_new" colorpicker type="text" data-ng-model="newColour" style="background: {{newColour}}" data-ng-blur="addNewColour(usage, newColour);
-                                                        newColour = ''"/>
+                                <div class="col-md-2 col-sm-2 colour_container colour_new" data-ng-show="global.teamActive.settings.colours[usage].length <  constansts['max_' + usage + '_colours']">
+                                    <input class="colour_input colour_new" colorpicker type="text" data-ng-model="newColour" style="background: {{newColour}}" data-ng-blur="addNewColour(usage, newColour); newColour = ''"/>
                                 </div>
                             </div>
                         </div>
@@ -48,7 +50,7 @@
                             </a>
                             <a data-ng-click="remove(text)" class="remove"><i class="fa fa-remove"></i></a> 
                         </li>
-                        <li role="presentation" data-ng-show="global.teamActive.settings.colours.texts.length > 0 && global.teamActive.settings.texts.length < 5"> 
+                        <li role="presentation" data-ng-show="global.teamActive.settings.colours.texts.length > 0 && global.teamActive.settings.texts.length < constants.max_fonts"> 
                             <a href>
                                 <form name="newTextStyle" role="form" data-ng-submit="create(newTextStyle.$valid)" novalidate>
                                     <input class="new_txt_style" name="new_txt_style" type="text" placeholder="Add new style..." data-ng-model="text.name" required="" data-ng-blur="text.name = ''">
@@ -61,7 +63,11 @@
                             <div class="example">
                                 <h2>
                                     <form name="textName" role="form" data-ng-submit="update(textName.$valid, temporal_ref_name, $index)" novalidate data-ng-init="temporal_ref_name = text.name"> 
-                                        <input id="text_name{{$index}}" data-ng-model="temporal_ref_name"/>
+                                        <input id="text_name{{$index}}" data-ng-model="temporal_ref_name" class="col-md-10"/>
+                                        <label class="btn btn-success" role="button" data-ng-click="clone($index)" data-ng-show="global.teamActive.settings.texts.length < constants.max_fonts">
+                                            <i class="fa fa-copy"></i>
+                                            Clone Font
+                                        </label>
                                     </form>
                                 </h2>
                                 <hr/>
@@ -98,12 +104,6 @@
                                             </a>
                                         </li>  
                                     </ul>
-                                </div>
-                                <div class="btn-group">
-                                    <label class="btn btn-success" role="button" data-ng-click="clone($index)">
-                                        <i class="fa fa-copy"></i>
-                                        Clone
-                                    </label> 
                                 </div>
                             </div>
                         </div>

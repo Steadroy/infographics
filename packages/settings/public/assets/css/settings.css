@@ -5,11 +5,18 @@
 .setting_header input {
   border: 1px solid transparent;
   background: transparent;
-  width: 100%;
-  width: auto;
+  float: none;
+  padding-left: 0;
 }
 .setting_header input:hover {
   border: 1px solid #dddddd;
+}
+.setting_header input ~ .btn {
+  margin-top: 6px;
+  display: none;
+}
+.setting_header:hover input ~ .btn {
+  display: inline;
 }
 .colour_container {
   margin-bottom: 15px;
@@ -48,7 +55,7 @@
   position: absolute;
   top: 50%;
   left: 50%;
-  margin-top: -0.5em;
+  margin-top: -0.65em;
   margin-left: -0.4em;
   z-index: -1;
   font-size: 1.7em;
@@ -58,6 +65,9 @@
 }
 .colorpicker .dropdown-menu .close-colorpicker {
   display: none;
+}
+.tabpanel hr {
+  clear: both;
 }
 .tabpanel.colours_panel .tab-content h2 {
   padding: 4px 0;
@@ -97,14 +107,22 @@
 }
 .tabpanel .tab-content h2 {
   margin-top: 0;
+  height: 30px;
 }
 .tabpanel .tab-content h2 input {
   border: 1px solid transparent;
   background: transparent;
-  width: 100%;
 }
 .tabpanel .tab-content h2 input:hover {
   border: 1px solid #dddddd;
+}
+.tabpanel .tab-content h2 input ~ .btn {
+  margin-top: 2px;
+  margin-left: 10px;
+  display: none;
+}
+.tabpanel .tab-content h2:hover input ~ .btn {
+  display: inline;
 }
 .tabpanel .tab-content .btn-group {
   margin-right: 5px;

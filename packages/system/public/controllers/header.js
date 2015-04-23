@@ -5,6 +5,13 @@ angular.module('mean.system')
         function ($scope, $rootScope, Global, Menus) {
             $scope.global = Global;
             $scope.menus = {};
+            $rootScope.constansts = {
+                max_teams: 3,
+                max_backgrounds_colours: 6,
+                max_fonts_colours: 6,
+                max_borders_frames_colours: 3,
+                max_fonts: 5
+            };
 
             // Default hard coded menu items for main menu
             var defaultMainMenu = [];
@@ -41,12 +48,12 @@ angular.module('mean.system')
     .controller('TeamsController', ['$scope', '$rootScope', '$location', 'Global', 'Teams', 'Settings',
         function ($scope, $rootScope, $location, Global, Teams, Settings) {
             $scope.global = Global;
-            $scope.teams = [];
+            $rootScope.teams = [];
             $scope.team = {};
             
             $scope.find = function () {
                 Teams.query(function (teams) {
-                    $scope.teams = teams;
+                    $rootScope.teams = teams;
                     if($scope.teams.length && !$scope.global.user.lastTeamAccessed){
                         $scope.changeTeamActive($scope.teams[0]);
                     }
@@ -86,7 +93,7 @@ angular.module('mean.system')
             };
             
             $scope.create = function (isValid) {
-                if (isValid) {
+                if (isValid && $scope.teams.length < $scope.constansts.max_teams) {
                     new Settings().$save(function(response){
                         var team = new Teams({
                             name: $scope.team.name,
@@ -103,7 +110,7 @@ angular.module('mean.system')
                 }
             };
             
-            $scope.changeTeamActive = function (team){
+            $rootScope.changeTeamActive = function (team){
                 /*
                 var user = new Users($scope.global.user);
                 user.lastTeamAccessed = team;

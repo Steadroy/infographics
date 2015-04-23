@@ -3,10 +3,14 @@
 .border-radius(@radius) {
     border-radius: @radius;
 }
-.input-hover(){
+.input-hover(@inherit){
     border: 1px solid transparent;
     background: transparent;
-    width: 100%;
+    
+    .width() when(@inherit = true){
+        width: 100%;
+    }
+    .width;
     &:hover{
         border: 1px solid @table-border-color;
     }
