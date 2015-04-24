@@ -3,7 +3,7 @@
         <form name="teamName" role="form" data-ng-submit="update(teamName.$valid, global.teamActive.name)" novalidate> 
             General settings for 
             <input id="team_name" name="team_name" data-ng-model="global.teamActive.name" class="col-md-7"/>
-            <label class="btn btn-success pull-right" role="button" data-ng-click="clone()" data-ng-show="teams.length < constansts.max_teams"> 
+            <label class="btn btn-success pull-right" role="button" data-ng-click="clone()" data-ng-show="teams.length < constants.max_teams"> 
                 <i class="fa fa-copy"></i>
                 Clone Team
             </label> 
@@ -11,7 +11,10 @@
     </h1>
     <div role="tabpanel" class="col-md-12 col-sm-12"> 
         <tabset> 
-            <tab heading="Colours" data-ng-controller="ColoursController"> 
+            <tab data-ng-controller="ColoursController"> 
+                <tab-heading>
+                    <i class="fa fa-paint-brush"></i> Colours
+                </tab-heading> 
                 <div role="tabpanel" class="colours_panel tabpanel">
                     <ul class="nav nav-pills nav-stacked col-md-3 col-sm-3" role="tablist">
                         <li role="presentation" data-ng-class="{active: usage === coloursActive}" data-ng-repeat="usage in coloursUsage" >
@@ -26,10 +29,11 @@
                             <hr/>
                             <div class="container col-md-12 col-sm-12"> 
                                 <div class="col-md-2 col-sm-2 colour_container" data-ng-repeat="colour in global.teamActive.settings.colours[usage] track by $index">
-                                    <input class="colour_input" colorpicker type="text" data-ng-model="colour" style="background: {{colour}}" data-ng-blur="editColour(usage, $index, colour)" />
-                                    <button tooltip="Remove {{colour}}" tooltip-trigger="mouseenter" tooltip-placement="right" class="colour_remove" data-ng-click="removeColour(usage, $index, colour)" role="button"><i class="fa fa-close"></i></button>
+                                    <input class="colour_input" colorpicker type="text" data-ng-model="colour.hex" style="background: {{colour | toRGBA}}" data-ng-blur="editColour(usage, $index, colour.hex, colour.alpha)" />
+                                    <button tooltip="Remove {{colour.hex}}" tooltip-trigger="mouseenter" tooltip-placement="right" class="colour_remove" data-ng-click="removeColour(usage, $index)" role="button"><i class="fa fa-close"></i></button>
+                                    <input type="range" min="0" max="1" step=".025" data-ng-model="colour.alpha" data-ng-blur="editColour(usage, $index, colour.hex, colour.alpha)" />
                                 </div>
-                                <div class="col-md-2 col-sm-2 colour_container colour_new" data-ng-show="global.teamActive.settings.colours[usage].length <  constansts['max_' + usage + '_colours']">
+                                <div class="col-md-2 col-sm-2 colour_container colour_new" data-ng-show="global.teamActive.settings.colours[usage].length <  constants['max_' + usage + '_colours']">
                                     <input class="colour_input colour_new" colorpicker type="text" data-ng-model="newColour" style="background: {{newColour}}" data-ng-blur="addNewColour(usage, newColour); newColour = ''"/>
                                 </div>
                             </div>
@@ -37,41 +41,44 @@
                     </div>
                 </div>
             </tab>
-            <tab heading="Texts" data-ng-controller="TextsController" data-ng-init="init()">
-                <div data-ng-hide="global.teamActive.settings.colours.texts.length > 0" class="alert alert-danger" role="alert">
-                    <h3>No colours have been set for texts.</h3>
+            <tab data-ng-controller="FontsController" data-ng-init="init()">
+                <tab-heading>
+                    <i class="fa fa-font"></i> Fonts
+                </tab-heading>
+                <div data-ng-hide="global.teamActive.settings.colours.fonts.length > 0" class="alert alert-danger" role="alert">
+                    <h3>No colours have been set for fonts.</h3>
                     <h4>Please, go to <strong data-ng-click="">Colours</strong> and configure them.</h4> 
                 </div>
-                <div role="tabpanel" class="texts_panel tabpanel" data-ng-show="global.teamActive.settings.colours.texts.length > 0"> 
+                <div role="tabpanel" class="fonts_panel tabpanel" data-ng-show="global.teamActive.settings.colours.fonts.length > 0"> 
                     <ul class="nav nav-pills nav-stacked col-md-3 col-sm-3" role="tablist">
-                        <li role="presentation" data-ng-class="{active: text.name === textActive}" data-ng-repeat="text in global.teamActive.settings.texts" >
-                            <a href aria-controls="{{text.name}}" role="tab" data-toggle="tab" data-ng-click="changeTextActive(text.name)">
-                                {{text.name}}
+                        <li role="presentation" data-ng-class="{active: font.name === fontActive}" data-ng-repeat="font in global.teamActive.settings.fonts" >
+                            <a href aria-controls="{{font.name}}" role="tab" data-toggle="tab" data-ng-click="changeTextActive(font.name)">
+                                {{font.name}}
                             </a>
-                            <a data-ng-click="remove(text)" class="remove"><i class="fa fa-remove"></i></a> 
+                            <a role="button" data-ng-click="remove(font)" class="remove"><i class="fa fa-remove"></i></a>
                         </li>
-                        <li role="presentation" data-ng-show="global.teamActive.settings.colours.texts.length > 0 && global.teamActive.settings.texts.length < constants.max_fonts"> 
-                            <a href>
-                                <form name="newTextStyle" role="form" data-ng-submit="create(newTextStyle.$valid)" novalidate>
-                                    <input class="new_txt_style" name="new_txt_style" type="text" placeholder="Add new style..." data-ng-model="text.name" required="" data-ng-blur="text.name = ''">
+                        <li role="presentation" data-ng-show="global.teamActive.settings.colours.fonts.length > 0 && global.teamActive.settings.fonts.length < constants.max_fonts"> 
+                            <a role="menuitem" class="new_element_hover_plus"> 
+                                <form name="newFont" role="form" data-ng-submit="create(newFont.$valid)" novalidate>
+                                    <input class="new_font" name="new_font" type="text" placeholder="Add new font..." data-ng-model="font.name" required="" data-ng-blur="font.name = ''">
                                 </form>
                             </a>
                         </li>
                     </ul>
                     <div class="tab-content col-md-9 col-sm-9">
-                        <div role="tabpanel" class="tab-pane" id="{{text.name}}" data-ng-class="{active: text.name === textActive}" data-ng-repeat="text in global.teamActive.settings.texts">
+                        <div role="tabpanel" class="tab-pane" id="{{font.name}}" data-ng-class="{active: font.name === fontActive}" data-ng-repeat="font in global.teamActive.settings.fonts">
                             <div class="example">
                                 <h2>
-                                    <form name="textName" role="form" data-ng-submit="update(textName.$valid, temporal_ref_name, $index)" novalidate data-ng-init="temporal_ref_name = text.name"> 
-                                        <input id="text_name{{$index}}" data-ng-model="temporal_ref_name" class="col-md-10"/>
-                                        <label class="btn btn-success" role="button" data-ng-click="clone($index)" data-ng-show="global.teamActive.settings.texts.length < constants.max_fonts">
+                                    <form name="fontName" role="form" data-ng-submit="update(fontName.$valid, temporal_ref_name, $index)" novalidate data-ng-init="temporal_ref_name = font.name"> 
+                                        <input id="font_name{{$index}}" data-ng-model="temporal_ref_name" class="col-md-10"/>
+                                        <label class="btn btn-success" role="button" data-ng-click="clone($index)" data-ng-show="global.teamActive.settings.fonts.length < constants.max_fonts">
                                             <i class="fa fa-copy"></i>
                                             Clone Font
                                         </label>
                                     </form>
                                 </h2>
                                 <hr/>
-                                <div style="{{text.style| parse}}">
+                                <div style="{{font.style | parse}}">
                                     <p>The quick brown fox jumps over the lazy dog</p>
                                     <hr/>
                                     <!-- <span data-ng-repeat="i in []| range:33:126">{{i| fromCharCode}} </span> -->
@@ -79,19 +86,19 @@
                             </div>
                             <div class="controls">
                                 <div class="btn-group" data-ng-repeat="group in buttonGroups">
-                                    <label class="btn btn-primary" data-ng-repeat="button in group" role="button" data-ng-class="{active: text.style[button.style] === button.highlight}" data-ng-click="toggleValue(button.style, $parent.$parent.$index, $parent.$index, $index, text.style[button.style] === button.highlight, text.name)"><i class="fa {{button.icon}}"></i></label> 
+                                    <label class="btn btn-primary" data-ng-repeat="button in group" role="button" data-ng-class="{active: font.style[button.style] === button.highlight || font.style[button.style].hex === button.highlight}" data-ng-click="toggleValue(button.style, $parent.$parent.$index, $parent.$index, $index, font.style[button.style] === button.highlight || font.style[button.style].hex === button.highlight, font.name)"><i class="fa {{button.icon}}"></i></label> 
                                 </div>
                                 <div class="btn-group dd-{{dd.style}}" dropdown data-ng-repeat='dd in buttonGroup2'>
-                                    <button type="button" class="btn btn-primary dropdown-toggle" data-ng-click="scroll('id-' + dd.style, (text.style[dd.style] | clean))"> 
-                                        <span data-ng-show="dd.style !== 'color'">{{text.style[dd.style]}} </span>
+                                    <button type="button" class="btn btn-primary dropdown-toggle" data-ng-click="scroll('id-' + dd.style, (font.style[dd.style] | clean: font.style[dd.style].hex))"> 
+                                        <span data-ng-show="dd.style !== 'color'">{{font.style[dd.style]}} </span>
                                         <span data-ng-show="dd.style === 'color'">
-                                            <span class='dd-color' style='background: {{text.style[dd.style]}}'> </span> {{text.style[dd.style]}}
+                                            <span class='dd-color' style='background: {{font.style[dd.style] | toRGBA}}'> </span> {{font.style[dd.style].hex}} 
                                         </span>
                                         <span class="caret"></span>
                                     </button>
                                     <ul id="id-{{dd.style}}" class="dropdown-menu" role="menu">
-                                        <li id="{{option| clean}}" data-ng-class="{active: option === text.style[dd.style]}" data-ng-repeat="option in (dd.options === 'colours.texts' ? global.teamActive.settings.colours.texts : dd.options)">
-                                            <a href data-ng-click="change(option, dd.style, $parent.$parent.$index, text.name)" >
+                                        <li id="{{option | clean: option.hex}}" data-ng-class="{active: option === font.style[dd.style]}" data-ng-repeat="option in (dd.options === 'colours.fonts' ? global.teamActive.settings.colours.fonts : dd.options)">
+                                            <a href data-ng-click="change(option, dd.style, $parent.$parent.$index, font.name)" >
                                                 <span data-ng-show="dd.style === 'font-family'" style='font-family: {{option}}'>
                                                     {{option}}
                                                 </span>
@@ -99,7 +106,7 @@
                                                     {{option}}
                                                 </span>
                                                 <span data-ng-show="dd.style === 'color'">
-                                                    <span class='dd-color' style='background: {{option}}'> </span> {{option}}
+                                                    <span class='dd-color' style='background: {{option | toRGBA}}'> </span> {{option.hex}}
                                                 </span>
                                             </a>
                                         </li>  
@@ -111,7 +118,18 @@
 
                 </div>
             </tab>
-            <tab heading="Borders and Frames">Borders and Frames content</tab>
+            <tab>
+                <tab-heading>
+                    <i class="fa fa-table"></i> Borders and Frames
+                </tab-heading>
+                Borders and Frames content
+            </tab>
+            <tab>
+                <tab-heading>
+                    <i class="fa fa-users"></i> Team members
+                </tab-heading>
+                Team members content 
+            </tab>
         </tabset>
     </div>
 </section>

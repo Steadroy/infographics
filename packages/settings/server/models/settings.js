@@ -17,28 +17,46 @@ var SettingSchema = new Schema({
     colours: {
         type: {
             backgrounds: [{
+                hex: {
                     type: String,
                     required: true,
                     trim: true
-                }],
-            texts: [{
+                }, alpha: {
+                    type: Number,
+                    required: true,
+                    default: 1
+                }
+            }],
+            fonts: [{
+                hex: {
                     type: String,
                     required: true,
                     trim: true
-                }],
+                }, alpha: {
+                    type: Number,
+                    required: true,
+                    default: 1
+                }
+            }],
             borders_frames: [{
+                hex: {
                     type: String,
                     required: true,
                     trim: true
-                }]
+                }, alpha: {
+                    type: Number,
+                    required: true,
+                    default: 1
+                }
+            }]
         },
         default: {
             backgrounds: [],
-            texts: [],
+            fonts: [],
             borders_frames: []
         }
     },
-    texts: {
+    fonts: {
         type: [{
             name: {
                 type: String,
@@ -87,10 +105,16 @@ var SettingSchema = new Schema({
                     default: '14px'
                 },
                 color: {
-                    type: String,
-                    required: true,
-                    trim: true,
-                    default: 'inherit'
+                    hex: {
+                        type: String,
+                        required: true,
+                        trim: true,
+                        default: 'inherit'
+                    }, alpha: {
+                        type: Number,
+                        required: true,
+                        default: 1
+                    }
                 },
                 'text-align': {
                     type: String,

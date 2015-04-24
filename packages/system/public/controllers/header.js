@@ -5,7 +5,7 @@ angular.module('mean.system')
         function ($scope, $rootScope, Global, Menus) {
             $scope.global = Global;
             $scope.menus = {};
-            $rootScope.constansts = {
+            $rootScope.constants = {
                 max_teams: 3,
                 max_backgrounds_colours: 6,
                 max_fonts_colours: 6,
@@ -93,7 +93,7 @@ angular.module('mean.system')
             };
             
             $scope.create = function (isValid) {
-                if (isValid && $scope.teams.length < $scope.constansts.max_teams) {
+                if (isValid && $scope.teams.length < $scope.constants.max_teams) {
                     new Settings().$save(function(response){
                         var team = new Teams({
                             name: $scope.team.name,

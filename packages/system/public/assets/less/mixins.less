@@ -15,6 +15,16 @@
         border: 1px solid @table-border-color;
     }
 }
+.plus-background(){
+    &:before{
+        font-family: FontAwesome; 
+        content: "\f067";
+        position: absolute;
+        right: 20px;
+        top: @panel-body-padding - 3px;
+        color: @brand-success;
+    }
+}
 .hide-remove(@top: 0, @right: 0){
     .remove{
         display: none;

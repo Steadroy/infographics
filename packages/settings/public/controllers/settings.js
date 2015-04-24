@@ -17,7 +17,7 @@ angular.module('mean.settings', ['colorpicker.module'])
                 }
             };
             $scope.clone = function(){
-                if ($scope.teams.length < $scope.constansts.max_teams) {
+                if ($scope.teams.length < $scope.constants.max_teams) {
                     var new_team = angular.copy($scope.global.teamActive);
                     new_team.name = new_team.name + ' [Clone]';
                     delete new_team._id; 
@@ -46,23 +46,23 @@ angular.module('mean.settings', ['colorpicker.module'])
     .controller('ColoursController', ['$scope', '$stateParams', 'Global',
         function ($scope, $stateParams, Global) {
             $scope.global = Global;
-            $scope.coloursUsage = ['backgrounds', 'texts', 'borders_frames'];
+            $scope.coloursUsage = ['backgrounds', 'fonts', 'borders_frames'];
             $scope.newColour = '';
             $scope.coloursActive = $scope.coloursUsage[0];
             
             $scope.addNewColour = function(usage, newColour){
                 if(newColour){
-                    $scope.global.teamActive.settings.colours[usage].push(newColour.toUpperCase());
+                    $scope.global.teamActive.settings.colours[usage].push({hex: newColour.toUpperCase(), alpha: 1}); 
                     $scope.global.teamActive.settings.$update(function(a){ });
                 }
             };
             
-            $scope.editColour = function(usage, index, newColour){ 
-                $scope.global.teamActive.settings.colours[usage][index] = newColour;
+            $scope.editColour = function(usage, index, newColour, newAlpha){ 
+                $scope.global.teamActive.settings.colours[usage][index] = {hex: newColour, alpha: newAlpha};
                 $scope.global.teamActive.settings.$update(function(a){  });
             };
             
-            $scope.removeColour = function(usage, index, colour){ 
+            $scope.removeColour = function(usage, index){ 
                 $scope.global.teamActive.settings.colours[usage].splice(index, 1);
                 $scope.global.teamActive.settings.$update(function(a){ });
             };
@@ -72,12 +72,12 @@ angular.module('mean.settings', ['colorpicker.module'])
             };
         }
     ])
-    .controller('TextsController', ['$scope', '$stateParams', '$timeout', '$location', 'Global',
+    .controller('FontsController', ['$scope', '$stateParams', '$timeout', '$location', 'Global',
         function ($scope, $stateParams, $timeout, $location, Global) {
             var sizes = Array.apply(null, new Array(21)).map(function(i, j) { return 10 + j + 'px'; });
             $scope.global = Global;
-            $scope.text = {};
-            $scope.textActive = '';
+            $scope.font = {};
+            $scope.fontActive = '';
 
             $scope.buttonGroups = [[{
                     style: 'font-weight',
@@ -145,15 +145,15 @@ angular.module('mean.settings', ['colorpicker.module'])
                 }, {
                     style: 'color',
                     //it's here because of this
-                    options: 'colours.texts'
+                    options: 'colours.fonts'
             }];
             };
             
-            $scope.create = function (isValid) {
-                if (isValid && $scope.global.teamActive.settings.texts.length < $scope.constants.max_fonts) {
-                    var name = $scope.text.name;
-                    $scope.text.name = '';
-                    $scope.global.teamActive.settings.texts.push({name: name, style: {color: $scope.global.teamActive.settings.colours.texts[0]}});
+            $scope.create = function (isValid) { 
+                if (isValid && $scope.global.teamActive.settings.fonts.length < $scope.constants.max_fonts) {
+                    var name = $scope.font.name;
+                    $scope.font.name = '';
+                    $scope.global.teamActive.settings.fonts.push({name: name, style: {color: $scope.global.teamActive.settings.colours.fonts[0]}});
                     $scope.global.teamActive.settings.$update(function(a){ 
                         $scope.loadButtonGroup2();
                         $scope.changeTextActive(name);
@@ -162,21 +162,21 @@ angular.module('mean.settings', ['colorpicker.module'])
                     $scope.submitted = true;
                 }
             };
-            $scope.remove = function (text) {
-                if (text) {
+            $scope.remove = function (font) {
+                if (font) {
                     var found = -1, refocus = false;
                     
-                    for(var i in $scope.global.teamActive.settings.texts){
-                        if($scope.global.teamActive.settings.texts[i] === text){
-                            $scope.global.teamActive.settings.texts.splice(i, 1);
-                            refocus = text.name === $scope.textActive;
+                    for(var i in $scope.global.teamActive.settings.fonts){
+                        if($scope.global.teamActive.settings.fonts[i] === font){
+                            $scope.global.teamActive.settings.fonts.splice(i, 1);
+                            refocus = font.name === $scope.fontActive;
                             found = i;
                         }
                     }
                     if(found >= 0){
                         $scope.global.teamActive.settings.$update(function(a){ 
-                            if(refocus && $scope.global.teamActive.settings.texts.length){
-                                $scope.changeTextActive($scope.global.teamActive.settings.texts[found].name);
+                            if(refocus && $scope.global.teamActive.settings.fonts.length){
+                                $scope.changeTextActive($scope.global.teamActive.settings.fonts[found > $scope.global.teamActive.settings.fonts.length - 1 ? found - 1: found].name);
                             }
                         });
                     }
@@ -185,21 +185,21 @@ angular.module('mean.settings', ['colorpicker.module'])
             
             $scope.update = function (isValid, newName, index) {
                 if (isValid) {
-                    $scope.global.teamActive.settings.texts[index].name = newName;
-                    $scope.textActive = newName;
+                    $scope.global.teamActive.settings.fonts[index].name = newName;
+                    $scope.fontActive = newName;
                     $scope.global.teamActive.settings.$update(function(a){ 
-                        angular.element('#text_name' + index).blur();
+                        angular.element('#font_name' + index).blur();
                     });
                 } else {
                     $scope.submitted = true;
                 }
             };
             
-            $scope.changeTextActive = function (text){
-                $scope.textActive = text;
+            $scope.changeTextActive = function (font){
+                $scope.fontActive = font;
             };
             
-            $scope.toggleValue = function(style, text_idx, group_idx, style_idx, state, active){
+            $scope.toggleValue = function(style, font_idx, group_idx, style_idx, state, active){
                 var value = 0;
                 if(state){
                     value = $scope.buttonGroups[group_idx][style_idx].default;
@@ -207,14 +207,14 @@ angular.module('mean.settings', ['colorpicker.module'])
                 else{
                     value = $scope.buttonGroups[group_idx][style_idx].highlight;
                 }
-                $scope.global.teamActive.settings.texts[text_idx].style[style] = value;
+                $scope.global.teamActive.settings.fonts[font_idx].style[style] = value;
                 $scope.global.teamActive.settings.$update(function(a){ 
                     $scope.changeTextActive(active);
                 });
             };
             
-            $scope.change = function(value, style, text_idx, active){ 
-                $scope.global.teamActive.settings.texts[text_idx].style[style] = value;
+            $scope.change = function(value, style, font_idx, active){ 
+                $scope.global.teamActive.settings.fonts[font_idx].style[style] = value;
                 $scope.global.teamActive.settings.$update(function(a){ 
                     $scope.changeTextActive(active);
                 });
@@ -228,14 +228,14 @@ angular.module('mean.settings', ['colorpicker.module'])
             };
             
             $scope.clone = function(i){
-                if($scope.global.teamActive.settings.texts.length < $scope.constants.max_fonts){
-                    var new_text = angular.copy($scope.global.teamActive.settings.texts[i]);
-                    new_text.name = new_text.name + ' [Clone]';
-                    delete new_text._id; 
+                if($scope.global.teamActive.settings.fonts.length < $scope.constants.max_fonts){
+                    var new_font = angular.copy($scope.global.teamActive.settings.fonts[i]);
+                    new_font.name = new_font.name + ' [Clone]';
+                    delete new_font._id; 
 
-                    $scope.global.teamActive.settings.texts.push(new_text);
+                    $scope.global.teamActive.settings.fonts.push(new_font);
                     $scope.global.teamActive.settings.$update(function(a){ 
-                        $scope.changeTextActive(new_text.name);
+                        $scope.changeTextActive(new_font.name);
                     });
                 }
             };
@@ -243,8 +243,8 @@ angular.module('mean.settings', ['colorpicker.module'])
             $scope.init = function(){
                 $timeout(function () {
                     if($scope.global.teamActive){
-                        if($scope.global.teamActive.settings.texts.length){
-                            $scope.changeTextActive($scope.global.teamActive.settings.texts[0].name); 
+                        if($scope.global.teamActive.settings.fonts.length){
+                            $scope.changeTextActive($scope.global.teamActive.settings.fonts[0].name); 
                             $scope.loadButtonGroup2();
                         }
                     } else{

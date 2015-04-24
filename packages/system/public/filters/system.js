@@ -22,17 +22,20 @@ angular.module('mean.system')
             return String.fromCharCode(parseInt(code));
         };
     })
-    .filter('parse', function () {
+    .filter('parse', function (toRGBAFilter) {
         return function (style) {
             var output = '';
             for (var i in style) {
-                output = output + i + ':' + style[i] + ';';
+                output = output + i + ':' + (typeof style[i] === 'string' ? style[i] : toRGBAFilter(style[i])) + ';';
             }
             return output;
         };
     })
     .filter('clean', function () {
-        return function (text) {
-            return text.replace(/\[|\||\&|\;|\$|\%|\@|\"|<|>|\(|\)|\+|\,|\]|\s|\#/g, ''); 
+        return function (text, fallback) {
+            var _clean = function(text){ 
+                return text.replace(/\[|\||\&|\;|\$|\%|\@|\"|<|>|\(|\)|\+|\,|\]|\s|\#/g, ''); 
+            };
+            return typeof text === 'string' ? _clean(text) : (fallback ? _clean(fallback) : text); 
         };
     });

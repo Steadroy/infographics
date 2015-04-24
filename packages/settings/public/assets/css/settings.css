@@ -72,22 +72,14 @@
 .tabpanel.colours_panel .tab-content h2 {
   padding: 4px 0;
 }
-.tabpanel ul li input.new_txt_style {
-  border: 1px solid transparent;
-  background: transparent;
-  width: 100%;
-}
-.tabpanel ul li input.new_txt_style:hover {
-  border: 1px solid #dddddd;
-}
-.tabpanel ul li.active input.new_txt_style::-moz-placeholder {
+.tabpanel ul li.active input.new_font::-moz-placeholder {
   color: #ffffff;
   opacity: 1;
 }
-.tabpanel ul li.active input.new_txt_style:-ms-input-placeholder {
+.tabpanel ul li.active input.new_font:-ms-input-placeholder {
   color: #ffffff;
 }
-.tabpanel ul li.active input.new_txt_style::-webkit-input-placeholder {
+.tabpanel ul li.active input.new_font::-webkit-input-placeholder {
   color: #ffffff;
 }
 .tabpanel ul li.active .remove {
@@ -112,6 +104,7 @@
 .tabpanel .tab-content h2 input {
   border: 1px solid transparent;
   background: transparent;
+  padding-left: 0;
 }
 .tabpanel .tab-content h2 input:hover {
   border: 1px solid #dddddd;
@@ -157,6 +150,8 @@
 }
 .tabpanel .tab-content .btn-group .dd-color {
   display: inline-block;
-  width: 11px;
-  height: 11px;
+  width: 13px;
+  height: 13px;
+  border: 1px solid #ffffff;
+  margin-bottom: -1px;
 }

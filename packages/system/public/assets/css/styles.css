@@ -62,14 +62,6 @@ body ul.dropdown-menu > li {
 body ul.dropdown-menu > li > a {
   padding: 10px 20px;
 }
-body ul.dropdown-menu > li > a input.new_team {
-  border: 1px solid transparent;
-  background: transparent;
-  width: 100%;
-}
-body ul.dropdown-menu > li > a input.new_team:hover {
-  border: 1px solid #dddddd;
-}
 body ul.dropdown-menu > li .remove {
   display: none;
   position: absolute;
@@ -81,4 +73,20 @@ body ul.dropdown-menu > li:hover .remove {
 }
 body ul.dropdown-menu > li:hover:not(.active) a {
   background: #f5f5f5;
+}
+body .new_element_hover_plus:hover:before {
+  font-family: FontAwesome;
+  content: "\f067";
+  position: absolute;
+  right: 20px;
+  top: 12px;
+  color: #5cb85c;
+}
+body .new_element_hover_plus input {
+  border: 1px solid transparent;
+  background: transparent;
+  width: 100%;
+}
+body .new_element_hover_plus input:hover {
+  border: 1px solid #dddddd;
 }

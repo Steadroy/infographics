@@ -9,7 +9,7 @@ html{
     &, body{
         overflow: hidden;
         height: 720px;
-        
+
         &:before, &:after{
             content: "";
             .rotate(-10deg);
@@ -45,7 +45,7 @@ body{
         cursor: pointer;
     }
     .nav-tabs{
-        margin-bottom: 15px;
+        margin-bottom: @panel-body-padding;
     }
     ul.dropdown-menu {
         .divider{
@@ -55,12 +55,16 @@ body{
             position: relative;
             & > a{
                 padding: 10px 20px;
-
-                input.new_team{
-                    .input-hover(true);
-                }
             }
             .hide-remove();
         }
+    }
+    .new_element_hover_plus{
+        &:hover{
+            .plus-background(); 
+        }
+        input{
+            .input-hover(true);
+        } 
     }
 }
