@@ -81,6 +81,24 @@
             }
         }
     }
+    &.borders_panel{
+        .example{
+            .box{
+                width: 70px; 
+                height: 70px; 
+                margin: auto;
+            }
+        }
+    }
+    &.overlays_panel{
+        .example{
+            .box{
+                width: 300px; 
+                height: 170px; 
+                margin: auto;
+            }
+        }
+    }
     ul{
         li{
             &.active{
@@ -114,43 +132,57 @@
                 }
             }
         }
-        .btn-group{
-            margin-right: 5px;
-
-            .btn{
-                text-align: left;
-                .caret{
-                    right: 10px;
-                    top: 14px;
-                    position: absolute;
+        .controls{
+            text-align: center;
+            .btn-group{
+                margin-right: 5px;
+                .dropdown-toggle, .dropdown-menu{
+                    text-align: left;
                 }
-            }
-
-            &.dd-font-family > *, &.dd-font-family > ul * {
-                .text-overflow();
-                width: 180px;
-                min-width: 180px;
-            }
-            &.dd-font-size > *{
-                width: 70px;
-                min-width: 70px;
-            }
-            &.dd-color > *{
-                width: 110px;
-                min-width: 110px;
-            }
-            &.open{
-                ul.dropdown-menu{
-                    max-height: 132px;
-                    overflow: auto;
+                .dropdown-toggle{
+                    padding-right: 25px;
+                    .caret{
+                        right: 10px;
+                        top: 14px;
+                        position: absolute;
+                    }
                 }
-            }
-            .dd-color{
-                display: inline-block;
-                width: 13px;
-                height: 13px;
-                border: 1px solid @body-bg;
-                margin-bottom: -1px;
+                &.dd-font-family > *, &.dd-font-family > ul *, &.dd-type > * {
+                    .text-overflow();
+                    width: 180px;
+                    min-width: 180px;
+                }
+                &.dd-font-size > *, &.dd-border-width > *, &.dd-border-radius > *{
+                    width: 70px;
+                    min-width: 70px;
+                }
+                &.dd-color > *, &.dd-border-color > *, &.dd-color0 > *, &.dd-color1 > *{
+                    width: 110px;
+                    min-width: 110px;
+                }
+                &.open{
+                    ul.dropdown-menu{
+                        max-height: 132px;
+                        overflow: auto;
+                        .dropelement{
+                            &.dd-border-style{
+                                display: block;
+                                height: 20px;
+                                width: 80%;
+                                border: 1px solid black;
+                                border-width: 0 0 1px 0; 
+                                margin: -10px auto 10px;
+                            }
+                        }
+                    }
+                }
+                .dd-color{
+                    display: inline-block;
+                    width: 13px;
+                    height: 13px;
+                    border: 1px solid @body-bg;
+                    margin-bottom: -1px;
+                }
             }
         }
     }

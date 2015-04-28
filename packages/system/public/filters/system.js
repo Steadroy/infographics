@@ -34,7 +34,7 @@ angular.module('mean.system')
     .filter('clean', function () {
         return function (text, fallback) {
             var _clean = function(text){ 
-                return text.replace(/\[|\||\&|\;|\$|\%|\@|\"|<|>|\(|\)|\+|\,|\]|\s|\#/g, ''); 
+                return text.toLowerCase().replace(/\[|\-|\||\&|\;|\$|\%|\@|\"|<|>|\(|\)|\+|\,|\]|\s|\#/g, ''); 
             };
             return typeof text === 'string' ? _clean(text) : (fallback ? _clean(fallback) : text); 
         };

@@ -28,7 +28,7 @@ angular.module('mean.settings').config(['$stateProvider',
         $stateProvider
             .state('see settings', {
                 url: '/settings',
-                templateUrl: 'settings/views/edit.html',
+                templateUrl: 'settings/views/settings.html',
                 resolve: {
                     loggedin: checkLoggedin
                 }

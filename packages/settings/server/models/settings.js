@@ -38,7 +38,18 @@ var SettingSchema = new Schema({
                     default: 1
                 }
             }],
-            borders_frames: [{
+            borders: [{
+                hex: {
+                    type: String,
+                    required: true,
+                    trim: true
+                }, alpha: {
+                    type: Number,
+                    required: true,
+                    default: 1
+                }
+            }],
+            overlays: [{
                 hex: {
                     type: String,
                     required: true,
@@ -53,7 +64,8 @@ var SettingSchema = new Schema({
         default: {
             backgrounds: [],
             fonts: [],
-            borders_frames: []
+            borders: [],
+            overlays: []
         }
     },
     fonts: {
@@ -124,6 +136,88 @@ var SettingSchema = new Schema({
                     default: 'left'
                 }
             }    
+        }]
+    },
+    borders: {
+        type: [{
+            name: {
+                type: String,
+                required: true,
+                trim: true
+            },
+            style: {
+                'border-style': {
+                    type: String,
+                    required: true,
+                    trim: true,
+                    enum: ['dashed', 'dotted', 'solid', 'none'],
+                    default: 'solid'
+                },
+                'border-width': {
+                    type: String,
+                    required: true,
+                    trim: true,
+                    default: '1px'
+                },
+                'border-color': {
+                    hex: {
+                        type: String,
+                        required: true,
+                        trim: true,
+                        default: 'inherit'
+                    }, alpha: {
+                        type: Number,
+                        required: true,
+                        default: 1
+                    }
+                },
+                'border-radius': {
+                    type: String,
+                    required: true,
+                    trim: true,
+                    default: '0%'
+                }
+            }    
+        }]
+    },
+    overlays: {
+        type: [{
+            name: {
+                type: String,
+                required: true,
+                trim: true
+            },
+            style: {
+                type: {
+                    type: Number,
+                    required: true,
+                    default: 0
+                },
+                color0: {
+                    hex: {
+                        type: String,
+                        required: true,
+                        trim: true,
+                        default: 'inherit'
+                    }, alpha: {
+                        type: Number,
+                        required: true,
+                        default: 1
+                    }
+                },
+                color1: {
+                    hex: {
+                        type: String,
+                        required: true,
+                        trim: true,
+                        default: 'inherit'
+                    }, alpha: {
+                        type: Number,
+                        required: true,
+                        default: 1
+                    }
+                }
+            }
         }]
     }
 });

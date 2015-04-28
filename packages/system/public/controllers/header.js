@@ -6,11 +6,16 @@ angular.module('mean.system')
             $scope.global = Global;
             $scope.menus = {};
             $rootScope.constants = {
-                max_teams: 3,
-                max_backgrounds_colours: 6,
-                max_fonts_colours: 6,
-                max_borders_frames_colours: 3,
-                max_fonts: 5
+                max: {
+                    teams: 3,
+                    backgrounds_colours: 6,
+                    fonts_colours: 6,
+                    borders_colours: 3,
+                    overlays_colours: 4,
+                    fonts: 5,
+                    borders: 4,
+                    overlays: 4
+                }
             };
 
             // Default hard coded menu items for main menu
@@ -93,7 +98,7 @@ angular.module('mean.system')
             };
             
             $scope.create = function (isValid) {
-                if (isValid && $scope.teams.length < $scope.constants.max_teams) {
+                if (isValid && $scope.teams.length < $scope.constants.max.teams) {
                     new Settings().$save(function(response){
                         var team = new Teams({
                             name: $scope.team.name,
