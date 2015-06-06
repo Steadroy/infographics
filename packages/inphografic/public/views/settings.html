@@ -2,7 +2,7 @@
     <h1 class="setting_header" data-ng-controller="SettingsController" data-ng-init="init()">
         <form name="teamName" role="form" data-ng-submit="update(teamName.$valid, global.teamActive.name)" novalidate> 
             General settings for 
-            <input id="team_name" name="team_name" data-ng-model="global.teamActive.name" class="col-md-7" data-ng-blur="update(teamName.$valid, global.teamActive.name)"/>
+            <input id="team_name" name="team_name" data-ng-model="global.teamActive.name" class="col-md-7"/>
             <label class="btn btn-success pull-right" role="button" data-ng-click="clone()" data-ng-show="teams.length < constants.max.teams"> 
                 <i class="fa fa-copy"></i>
                 Clone Team

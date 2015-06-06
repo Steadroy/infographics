@@ -12,12 +12,12 @@ angular.module('mean.settings', ['colorpicker.module'])
                     var settings = $scope.global.teamActive.settings;
                     $scope.global.teamActive.$update(function(team){ 
                         $scope.global.teamActive.settings = settings;
+                        angular.element('#team_name').blur();
                     });
                 } else {
                     $scope.submitted = true;
                 }
             };
-            
             $scope.clone = function(){
                 if ($scope.teams.length < $scope.constants.max.teams) {
                     var new_team = angular.copy($scope.global.teamActive);
