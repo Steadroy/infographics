@@ -41,11 +41,11 @@ exports.create = function (req, res) {
 
 
 /**
- * Delete a tam
+ * Delete a team
  */
 exports.destroy = function (req, res) {
     var team = req.team;
-
+    
     team.remove(function (err) {
         if (err) {
             return res.status(500).json({

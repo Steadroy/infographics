@@ -1,5 +1,5 @@
 <section> 
-    <h1 class="setting_header" data-ng-controller="SettingsController" data-ng-init="init()">
+    <h1 class="setting_header col-md-12 col-sm-12" data-ng-controller="SettingsController" data-ng-init="init()">
         <form name="teamName" role="form" data-ng-submit="update(teamName.$valid, global.teamActive.name)" novalidate> 
             General settings for 
             <input id="team_name" name="team_name" data-ng-model="global.teamActive.name" class="col-md-7" data-ng-blur="update(teamName.$valid, global.teamActive.name)"/>
@@ -27,14 +27,14 @@
                         <div role="tabpanel" class="tab-pane" id="{{usage}}" data-ng-class="{active: usage === actives['colours']}" data-ng-repeat="usage in coloursUsage" > 
                             <h2>{{ usage | pretify}}</h2>
                             <hr/>
-                            <div class="container col-md-12 col-sm-12"> 
+                            <div> 
                                 <div class="col-md-2 col-sm-2 colour_container" data-ng-repeat="colour in global.teamActive.settings.colours[usage] track by $index">
                                     <input class="colour_input" colorpicker type="text" data-ng-model="colour.hex" style="background: {{colour | toRGBA}}" data-ng-blur="editColour()"/>
                                     <button tooltip="Remove {{colour.hex}}" tooltip-trigger="mouseenter" tooltip-placement="right" class="colour_remove" data-ng-click="removeColour(usage, $index)" role="button"><i class="fa fa-close"></i></button>
                                     <input tooltip="Alpha: {{colour.alpha| number:3}}" tooltip-trigger="mouseenter" tooltip-placement="bottom" type="range" min="0" max="1" step=".025" data-ng-model="colour.alpha" data-ng-blur="editColour()" />
                                 </div> 
-                                <div class="col-md-2 col-sm-2 colour_container colour_new" data-ng-show="global.teamActive.settings.colours[usage].length < constants.max[usage + '_colours']">
-                                    <input class="colour_input colour_new" colorpicker type="text" data-ng-model="newColour" style="background: {{newColour}}" data-ng-blur="addNewColour(usage, newColour); newColour = ''"/>
+                                <div class="col-md-2 col-sm-2 colour_container colour_new new_plus" data-ng-show="global.teamActive.settings.colours[usage].length < constants.max[usage + '_colours']">
+                                    <input class="colour_input colour_new new_plus" colorpicker type="text" data-ng-model="newColour" style="background: {{newColour}}" data-ng-blur="addNewColour(usage, newColour); newColour = ''"/>
                                 </div>
                             </div>
                         </div>
