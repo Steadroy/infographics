@@ -1,0 +1,41 @@
+<section data-ng-controller="MediaController" > 
+    <h1 class="media_header col-md-12" data-ng-init="init()">
+        Pre-approved library for <span>{{global.teamActive.name}}</span>
+    </h1>
+    <div role="tabpanel" class="col-md-12"> 
+        <form name="searchMedia" role="form" novalidate> 
+            <input id="search_input" class="search_input col-md-12" name="search_input" data-ng-model="search_query" placeholder='Search...'/>
+        </form>
+        <div class="media_container col-md-8"> 
+            <div class="col-md-3 media pull-left" data-ng-repeat="media in mediaFiles | filter:search_query">  
+                <div class="media_file" role="button" style="background-image: url(/static/{{media._id}})" data-ng-click="select(media)" data-ng-class="{selected: media._id === selected._id}">
+                    <button tooltip="Remove {{media.name}}" tooltip-trigger="mouseenter" tooltip-placement="right" class="media_remove" data-ng-click="removeMedia(media); $event.stopPropagation();" role="button"><i class="fa fa-close"></i></button>
+                </div>
+            </div> 
+            <div class="col-md-3 media pull-left" data-ng-show="progress > 0">  
+                <div class="progress">
+                    <div class="progress-bar" role="progressbar" aria-valuenow="{{progress}}" aria-valuemin="0" aria-valuemax="100" style="width: {{progress}}%;">
+                        {{progress}}% 
+                    </div>
+                </div>
+            </div> 
+            <div class="col-md-3 media new_file pull-left" >
+                <div ngf-drop data-ng-model="files" class="drop-box" ngf-drag-over-class="dragover" ngf-multiple="true" 
+                     ngf-select ngf-allow-dir="true" ngf-accept="'image/*,video/*'" ngf-change="upload(files)">
+                </div>
+            </div>
+        </div>
+        <div class='details col-md-4 pull-right' data-ng-show="mediaFiles.length > 0">
+            <form name="editDetails" role="form" data-ng-submit="update()" novalidate> 
+                <img class="thumbnail" data-ng-src="/static/{{selected._id}}" alt="{{selected.alt}}" />
+                <input id="media_name" name="media_name" placeholder="Name" class="col-md-12" type="text" data-ng-model="selected.name" data-ng-blur="update()" /> 
+                <input id="alt_text" name="alt_text" placeholder="Alt text" class="col-md-12" type="text" data-ng-model="selected.alt" data-ng-blur="update()" /> 
+            </form>
+            <div>
+                <tags-input placeholder="Tags..." ng-model="selected.tags" on-tag-added="update()" on-tag-removed="update()">
+                    <auto-complete source="loadTags($query)"></auto-complete>
+                </tags-input>
+            </div>
+        </div>
+    </div>
+</section>

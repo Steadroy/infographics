@@ -1,7 +1,7 @@
 'use strict';
 
 //Setting up route
-angular.module('mean.settings').config(['$stateProvider',
+angular.module('mean.media').config(['$stateProvider',
     function ($stateProvider) {
         // Check if the user is connected
         var checkLoggedin = function ($q, $timeout, $http, $location) {
@@ -26,9 +26,9 @@ angular.module('mean.settings').config(['$stateProvider',
 
         // states for my app
         $stateProvider
-            .state('see settings', {
-                url: '/settings',
-                templateUrl: 'settings/views/settings.html',
+            .state('see media', {
+                url: '/media',
+                templateUrl: 'media/views/media.html',
                 resolve: {
                     loggedin: checkLoggedin
                 }

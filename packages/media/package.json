@@ -1,7 +1,7 @@
 {
-  "name": "settings",
+  "name": "media",
   "version": "0.0.1",
-  "description": "Settings package",
+  "description": "Media package",
   "author": {
     "name": "Diego Lavayen"
   },
@@ -10,6 +10,6 @@
     "node": "0.10.x",
     "npm": "1.4.x"
   },
-  "dependencies": {},
+  "dependencies": ["ng-file-upload-shim", "angularjs", "ng-file-upload"],
   "license": "MIT"
 }
