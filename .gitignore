@@ -67,6 +67,8 @@ modules/views/
 /packages/custom/
 /packages/contrib/
 
+/upload/*
+
 # --------------------
 # vim Files
 # --------------------
