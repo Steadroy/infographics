@@ -26,7 +26,7 @@ angular.module('mean.templates').config(['$stateProvider',
 
         // states for my app
         $stateProvider
-            .state('all templates', {
+            .state('see templates', {
                 url: '/templates',
                 templateUrl: 'templates/views/list.html',
                 resolve: {
