@@ -22,13 +22,13 @@ Settings.register(function (app, auth, database) {
         'title': 'Settings',
         'link': 'see settings'
     });
-    /*
-     Settings.menus.add({
-     'roles': ['authenticated'],
-     'title': 'Create New Setting',
-     'link': 'create setting'
-     });
-     */
+
+    Settings.menus.add({
+        'roles': ['designer'], 
+        'title': 'Templates',
+        'link': 'see templates'
+    });
+
 
     //Settings.aggregateAsset('js','/packages/system/public/services/menus.js', {group:'footer', absolute:true, weight:-9999});
     //Settings.aggregateAsset('js', 'test.js', {group: 'footer', weight: -1});
@@ -50,9 +50,9 @@ Settings.register(function (app, auth, database) {
      //you now have the settings object
      });
      */
-    Settings.aggregateAsset('css', '../../../../../bower_components/angular-bootstrap-colorpicker/css/colorpicker.min.css');
-    Settings.aggregateAsset('js', '../../../../../bower_components/angular-bootstrap-colorpicker/js/bootstrap-colorpicker-module.min.js');
-    Settings.aggregateAsset('css', 'settings.css');
+    Settings.aggregateAsset('css', '../../../../../bower_components/angular-bootstrap-colorpicker/css/colorpicker.min.css', {group: 'footer', weight: -1});
+    Settings.aggregateAsset('js', '../../../../../bower_components/angular-bootstrap-colorpicker/js/bootstrap-colorpicker-module.min.js', {group: 'footer', weight: -1});
+    Settings.aggregateAsset('css', 'settings.css', {group: 'footer', weight: -1});
 
     return Settings;
 });

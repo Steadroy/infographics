@@ -18,6 +18,7 @@ angular.module('mean.settings', ['colorpicker.module'])
                     $scope.submitted = true;
                 }
             };
+            
             $scope.clone = function(){
                 if ($scope.teams.length < $scope.constants.max.teams) {
                     var new_team = angular.copy($scope.global.teamActive);
