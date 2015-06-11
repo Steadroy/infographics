@@ -5,42 +5,9 @@
     .border-radius(0) !important;
     outline: none !important;
 } 
-html{
-    &, body{
-        overflow: hidden;
-        height: 720px;
-
-        &:before, &:after{
-            content: "";
-            .rotate(-10deg);
-            position: absolute;
-            height: 60%;
-            z-index: -1;
-            .opacity(.15);
-        }
-        &:before{
-            left: -20%;
-            right: -20%;
-            top: -50%; 
-        }
-        &:after{
-            left: -20%;
-            right: -20%;
-            bottom: -50%;
-        }
-    }
-    &:before, &:after{
-        .rotate(10deg);
-        background: #3d6217;
-    }
-    body{
-        &:before, &:after{
-            .rotate(-10deg);
-            background: #ffdf43;
-        }
-    }
-}
 body{
+    padding-bottom: 60px;
+    
     a{
         cursor: pointer;
     }

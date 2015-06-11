@@ -2,50 +2,8 @@
   border-radius: 0 !important;
   outline: none !important;
 }
-html,
-html body {
-  overflow: hidden;
-  height: 720px;
-}
-html:before,
-html body:before,
-html:after,
-html body:after {
-  content: "";
-  -webkit-transform: rotate(-10deg);
-  -ms-transform: rotate(-10deg);
-  transform: rotate(-10deg);
-  position: absolute;
-  height: 60%;
-  z-index: -1;
-  opacity: 0.15;
-  filter: alpha(opacity=15);
-}
-html:before,
-html body:before {
-  left: -20%;
-  right: -20%;
-  top: -50%;
-}
-html:after,
-html body:after {
-  left: -20%;
-  right: -20%;
-  bottom: -50%;
-}
-html:before,
-html:after {
-  -webkit-transform: rotate(10deg);
-  -ms-transform: rotate(10deg);
-  transform: rotate(10deg);
-  background: #3d6217;
-}
-html body:before,
-html body:after {
-  -webkit-transform: rotate(-10deg);
-  -ms-transform: rotate(-10deg);
-  transform: rotate(-10deg);
-  background: #ffdf43;
+body {
+  padding-bottom: 60px;
 }
 body a {
   cursor: pointer;

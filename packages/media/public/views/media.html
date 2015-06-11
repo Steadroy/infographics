@@ -3,21 +3,18 @@
         Pre-approved library for <span>{{global.teamActive.name}}</span>
     </h1>
     <div role="tabpanel" class="col-md-12"> 
-        <form name="searchMedia" role="form" novalidate> 
+        <form name="searchMedia" class="searchMedia" role="form" novalidate> 
             <input id="search_input" class="search_input col-md-12" name="search_input" data-ng-model="search_query" placeholder='Search...'/>
         </form>
         <div class="media_container col-md-8"> 
             <div class="col-md-3 media pull-left" data-ng-repeat="media in mediaFiles | filter:search_query">  
                 <div class="media_file" role="button" style="background-image: url(/static/{{media._id}})" data-ng-click="select(media)" data-ng-class="{selected: media._id === selected._id}">
-                    <button tooltip="Remove {{media.name}}" tooltip-trigger="mouseenter" tooltip-placement="right" class="media_remove" data-ng-click="removeMedia(media); $event.stopPropagation();" role="button"><i class="fa fa-close"></i></button>
+                    <button tooltip="Remove" tooltip-trigger="mouseenter" tooltip-placement="right" class="media_remove" data-ng-click="removeMedia(media); $event.stopPropagation();" role="button"><i class="fa fa-close"></i></button>
+                    <div class="media_name">{{media.name}}</div>
                 </div>
             </div> 
             <div class="col-md-3 media pull-left" data-ng-show="progress > 0">  
-                <div class="progress">
-                    <div class="progress-bar" role="progressbar" aria-valuenow="{{progress}}" aria-valuemin="0" aria-valuemax="100" style="width: {{progress}}%;">
-                        {{progress}}% 
-                    </div>
-                </div>
+                <progressbar max="100" value="progress">{{progress}}% </progressbar>
             </div> 
             <div class="col-md-3 media new_file pull-left" >
                 <div ngf-drop data-ng-model="files" class="drop-box" ngf-drag-over-class="dragover" ngf-multiple="true" 
@@ -26,10 +23,30 @@
             </div>
         </div>
         <div class='details col-md-4 pull-right' data-ng-show="mediaFiles.length > 0">
-            <form name="editDetails" role="form" data-ng-submit="update()" novalidate> 
-                <img class="thumbnail" data-ng-src="/static/{{selected._id}}" alt="{{selected.alt}}" />
+            <form name="editDetails" class="editDetails" role="form" data-ng-submit="update()" novalidate> 
+                <img data-ng-show="selected.filetype === 'image'" class="thumbnail" data-ng-src="/static/{{selected._id}}" alt="{{selected.alt}}" />
+                <videogular data-ng-show="selected.filetype === 'video'" vg-theme="theme" class="thumbnail"> 
+			<vg-media vg-src='[{src: "/static/" + selected._id + "/true", type: selected.type}]'> </vg-media>
+
+			<vg-controls>
+				<vg-play-pause-button></vg-play-pause-button>
+				<vg-time-display>{{ currentTime | date:'mm:ss' }}</vg-time-display>
+				<vg-scrub-bar>
+					<vg-scrub-bar-current-time></vg-scrub-bar-current-time>
+				</vg-scrub-bar>
+				<vg-time-display>{{ timeLeft | date:'mm:ss' }}</vg-time-display>
+				<vg-volume>
+					<vg-mute-button></vg-mute-button>
+					<vg-volume-bar></vg-volume-bar>
+				</vg-volume>
+				<vg-fullscreen-button></vg-fullscreen-button>
+			</vg-controls>
+			<vg-overlay-play></vg-overlay-play>
+			<vg-poster vg-url='"/static/" + selected._id'></vg-poster>
+		</videogular>
                 <input id="media_name" name="media_name" placeholder="Name" class="col-md-12" type="text" data-ng-model="selected.name" data-ng-blur="update()" /> 
                 <input id="alt_text" name="alt_text" placeholder="Alt text" class="col-md-12" type="text" data-ng-model="selected.alt" data-ng-blur="update()" /> 
+                <input type="submit" style="position: absolute; left: -9999px; width: 1px; height: 1px;"/> 
             </form>
             <div>
                 <tags-input placeholder="Tags..." ng-model="selected.tags" on-tag-added="update()" on-tag-removed="update()">

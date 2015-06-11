@@ -3,19 +3,19 @@
 
 .set_header(media_header); 
 
-.media{
+body.media{
+    overflow: auto;
+    
     &, & .media{
         margin-top: 0;
     }
-    form{
+    form.searchMedia, form.editDetails{
         margin-bottom: 57px;
         .search_input{
             padding: 10px 15px;
         }
     }
-    .media_container{
-        overflow: auto;
-        
+    .media_container{        
         .media{
             float: left;
             height: 150px;
@@ -42,6 +42,26 @@
                 background-size: cover;
                 cursor: pointer;
                 position: relative;
+                
+                .media_name{
+                    position: absolute;
+                    bottom: 0;
+                    padding: 5px;
+                    background-color: #666;
+                    background-color: fade(#000, 50%);;
+                    left: 0;
+                    right: 0;
+                    font-weight: bold;
+                    color: @body-bg;
+                    .opacity(0);
+                    .transition(opacity .5s);
+                }
+                
+                &:hover{
+                    .media_name{
+                        .opacity(1);
+                    }
+                }
                 
                 &.selected{
                     border: 2px @btn-info-border solid;
@@ -70,6 +90,14 @@
             max-height: 220px;
             margin-left: auto;
             margin-right: auto;
+            padding: 0;
+            
+            &:fullscreen, &:-webkit-full-screen, &:-moz-full-screen, &:-ms-fullscreen{
+                max-height: 100%;
+            }
+        }
+        videogular.thumbnail{
+            background-color: #000;
         }
         form{
             height: 290px;

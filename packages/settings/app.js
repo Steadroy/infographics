@@ -50,9 +50,9 @@ Settings.register(function (app, auth, database) {
      //you now have the settings object
      });
      */
-    Settings.aggregateAsset('css', '../../../../../bower_components/angular-bootstrap-colorpicker/css/colorpicker.min.css');
-    Settings.aggregateAsset('js', '../../../../../bower_components/angular-bootstrap-colorpicker/js/bootstrap-colorpicker-module.min.js');
-    Settings.aggregateAsset('css', 'settings.css');
+    Settings.aggregateAsset('css', '../../../../../bower_components/angular-bootstrap-colorpicker/css/colorpicker.min.css', {group: 'footer'});
+    Settings.aggregateAsset('js', '../../../../../bower_components/angular-bootstrap-colorpicker/js/bootstrap-colorpicker-module.min.js', {group: 'footer'});
+    Settings.aggregateAsset('css', 'settings.css', {group: 'footer'});
 
     return Settings;
 });

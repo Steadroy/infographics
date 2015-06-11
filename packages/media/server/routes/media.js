@@ -22,11 +22,14 @@ module.exports = function (Media, app, auth) {
         .put(auth.isMongoId, auth.requiresLogin, hasAuthorization, media.update)
         .post(auth.isMongoId, auth.requiresLogin, hasAuthorization, media.update);
     
+    app.route('/static')
+        .get(media.show);
+
     app.route('/static/:mediaId')
         .get(media.show);
-    
-    // Finish with media up the mediaId param
-    app.param('mediaId', media.media);
+
+    app.route('/static/:mediaId/:video')
+        .get(media.show);
     
     // Upload
     var multipart = require('connect-multiparty'),
@@ -36,6 +39,9 @@ module.exports = function (Media, app, auth) {
         .post(multipartMiddleware, media.upload);
 
     // Tags
-    app.route('/tags/:query')
+    app.route('/tags/:team/:query')
         .get(multipartMiddleware, media.getTags);
+
+    // Finish with media up the mediaId param
+    app.param('mediaId', media.media);
 };

@@ -29,25 +29,14 @@ exports.media = function (req, res, next, id) {
  * Create a media
  */
 exports.create = function (req, res) {
-    var media = new Media(req.body)/*,
-        ffmpeg = require('fluent-ffmpeg')*/;
+    var media = new Media(req.body);
     
-    media.filetype = req.body.type.indexOf('image')>=0 ? 'image' : 'video';
+    media.poster = req.body.poster;
     media.type = req.body.type;
     media.creator = req.user;
     media.alt = req.body.name + ' [alt text]';
-    /*
-    if(media.filetype === 'video'){
-        ffmpeg(config.root + media.path)
-            .thumbnail({
-                count: 1,
-                timemarks: ['1'],
-                filename: config.root + media.path + '.png',
-                size: '100x100' 
-            });
-        media.poster = media.path + '.png';
-    }
-    */
+    media.filetype = req.body.type.indexOf('image')>=0 ? 'image' : 'video';
+    
     media.save(function (err) {
         if (err) {
             return res.status(500).json({
@@ -80,9 +69,21 @@ exports.update = function (req, res) {
  * Show a media
  */
 exports.show = function (req, res) {
-    var img = fs.readFileSync(config.root + req.media.path);
-    res.writeHead(200, {'Content-Type': req.media.type });
-    res.end(img, 'binary');
+    if(req.media){
+        var intervalID = setInterval(function(){
+            try{
+                var img = fs.readFileSync(config.root + ((req.media.filetype === 'video' && req.params.video) || (req.media.filetype === 'image')? req.media.path : req.media.poster));
+                res.writeHead(200, {'Content-Type': req.media.type});
+                res.end(img, 'binary');
+                clearInterval(intervalID);
+            } catch(err){ }
+        }, 750);
+    }
+    else{
+        var img = fs.readFileSync(config.root + '/upload/transparent.png');
+        res.writeHead(200, {'Content-Type': 'image/png'});
+        res.end(img, 'binary');
+    }
 };
 
 
@@ -99,6 +100,10 @@ exports.destroy = function (req, res) {
             });
         }
         fs.unlink(config.root + media.path);
+        
+        if(media.filetype === 'video'){
+            fs.unlink(config.root + media.poster);
+        }
         res.json(media);
     });
 };
@@ -121,23 +126,58 @@ exports.get = function (req, res) {
  * List of Medias
  */
 exports.getTags = function (req, res) {
-    res.json([[{ text: 'Tag1' }, { text: 'Tag2' }, { text: 'Tag3' }, { text: 'Tag4' }]]);
+    var reg_exp = new RegExp('.*' + req.params.query + '.*', 'i');
+    Media.find({'tags.text': reg_exp, team: req.params.team}, {'tags': true}).exec(function (err, medias) {
+        var _tags = {}, tags = [];
+        for (var i = 0; i < medias.length; i = i + 1) {
+            for (var j = 0; j < medias[i].tags.length; j = j + 1) {
+                if (reg_exp.test(medias[i].tags[j].text)) {
+                    //to avoid duplicates
+                    _tags[medias[i].tags[j].text] = true;
+                }
+            }
+        }
+        for (i in _tags) {
+            tags.push(i);
+        }
+        
+        if (err) {
+            return res.status(500).json({
+                error: 'Cannot list the medias'
+            });
+        }
+        res.json(tags);
+    });
 };
 
 
 
 /* Upload */
 function rename(file, dest, user, callback) {
-    fs.rename(file.path, config.root + dest + file.name, function(err) {
+    var file_name = new Date().getTime();
+    fs.rename(file.path, config.root + dest + file_name, function(err) {
         if (err) throw err;
-        else
+        else{
+            var poster = '';
+            
+            if(file.type.indexOf('video') >= 0){
+                var ffmpeg = require('fluent-ffmpeg'),
+                    poster_name = file_name + '.png';
+
+                ffmpeg(config.root + dest + file_name)
+                    .thumbnail({count: 1, timemarks: ['1'], filename: poster_name}, config.root + dest);
+            
+                poster = dest + poster_name;
+            }
+            
             callback({
                 success: true,
                 file: {
-                    src: dest + file.name,
+                    src: dest + file_name,
                     name: file.name,
                     size: file.size,
                     type: file.type,
+                    poster: poster,
                     created: Date.now(),
                     createor: (user) ? {
                         id: user.id,
@@ -145,6 +185,7 @@ function rename(file, dest, user, callback) {
                     } : {}
                 }
             });
+        }
     });
 }
 

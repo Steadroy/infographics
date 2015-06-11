@@ -78,11 +78,8 @@ angular.module('mean.system')
                         for (var i in $scope.teams) {
                             if ($scope.teams[i] === team) {
                                 $scope.teams.splice(i, 1);
-                                if(team === $scope.global.teamActive && $scope.teams.length){
-                                    if (i - 1 >= 0) {
-                                        $scope.changeTeamActive($scope.teams[i - 1]);
-                                    }
-                                    else{
+                                if($scope.teams.length){
+                                    if(team === $scope.global.teamActive){
                                         $scope.changeTeamActive($scope.teams[0]);
                                     }
                                 }

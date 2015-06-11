@@ -20,7 +20,7 @@ angular.module('mean.media')
                         {teamId: '@_id'},
                         {
                             'query': {method: 'GET', isArray: true },
-                            'tags': {method: 'GET', url:'tags/:query', isArray: true }
+                            'tags': {method: 'GET', url:'tags/:team/:query', isArray: true }
                         }
                 );
             }
