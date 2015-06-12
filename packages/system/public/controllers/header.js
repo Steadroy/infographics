@@ -35,7 +35,6 @@ angular.module('mean.system')
             queryMenu('main', defaultMainMenu);
             queryMenu('account', []);
 
-
             $scope.isCollapsed = false;
 
             $rootScope.$on('loggedin', function () {
@@ -47,7 +46,6 @@ angular.module('mean.system')
                     user: $rootScope.user
                 };
             });
-
         }
     ])
     .controller('TeamsController', ['$scope', '$rootScope', '$location', 'Global', 'Teams', 'Settings',

@@ -8,6 +8,23 @@
 body{
     padding-bottom: 60px;
     
+    & > header.navbar{
+        position: fixed;
+        width: 100%;
+        .transition(opacity .5s);
+        
+        &.translucent{
+            .opacity(.5);
+        }
+        &:hover{
+            &.translucent{
+                .opacity(1);
+            }
+        }
+    }
+    & > section.content{
+        padding-top: 50px;
+    }
     a{
         cursor: pointer;
     }

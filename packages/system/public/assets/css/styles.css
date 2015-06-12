@@ -5,6 +5,23 @@
 body {
   padding-bottom: 60px;
 }
+body > header.navbar {
+  position: fixed;
+  width: 100%;
+  -webkit-transition: opacity 0.5s;
+  transition: opacity 0.5s;
+}
+body > header.navbar.translucent {
+  opacity: 0.5;
+  filter: alpha(opacity=50);
+}
+body > header.navbar:hover.translucent {
+  opacity: 1;
+  filter: alpha(opacity=100);
+}
+body > section.content {
+  padding-top: 50px;
+}
 body a {
   cursor: pointer;
 }
