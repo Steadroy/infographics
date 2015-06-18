@@ -11,11 +11,11 @@ var hasAuthorization = function (req, res, next) {
 };
 
 module.exports = function (Media, app, auth) {
-    app.route('/media/:teamId')
+    app.route('/media/:teamId/:filetype')
         .get(auth.isMongoId, auth.requiresLogin, media.get);
 
     app.route('/media')
-        .post(auth.requiresLogin, media.create);
+        .post(auth.requiresLogin, hasAuthorization, media.create);
 
     app.route('/media/:mediaId')
         .delete(auth.isMongoId, auth.requiresLogin, hasAuthorization, media.destroy)

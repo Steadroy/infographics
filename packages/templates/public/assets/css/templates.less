@@ -1,0 +1,254 @@
+@import "../../../../../bower_components/bootstrap/less/mixins.less";
+@import "../../../../system/public/assets/less/mixins.less";
+
+.set_header(templates_header); 
+
+body.templates{
+    ul.nav.templates-list{ 
+        li{
+            &.active{
+                input.new_font{
+                    .placeholder(@body-bg);
+                }
+                .remove{
+                    color: @body-bg;
+                }
+            }
+            .hide-remove();
+        }
+        .search_template{
+            width: 100%;
+        }
+    }
+    .templates-steps-container{
+        &.infographic{
+            &.edit{
+                .infographic-container{
+                    position: relative;
+                    border-collapse: collapse;
+                    border: 1px solid @gray-light;
+
+                    .size{
+                        position: absolute;
+                        .transition-opacity(.5, 1);
+                        z-index: 100;
+                        text-shadow: 0 0 30px @body-bg;
+
+                        &:after{
+                            content: "px";
+                            position: absolute;
+                            right: 0;
+                            top: 0;
+                            width: 20px;
+                            text-align: right;
+                            background-color: transparent;
+                        }
+                        input{
+                            width: 100%;
+                            border: none;
+                            text-align: right;
+                            padding-right: 17px;
+                            margin-left: 0;
+                            background-color: transparent;
+                            background-color: rgba(255, 255, 255, 0);
+                        }
+                        &.width{
+                            bottom: 0;
+                            left: 50%;
+                            right: auto;
+                            margin: auto;
+                            width: 50px;
+                            margin-left: -25px;
+                        }
+                        &.height{
+                            bottom: 0;
+                            right: 5px;
+                            top: 50%;
+                            width: 60px;
+                            height: 20px;
+                            margin-top: -10px;
+                            text-align: right;
+                        }
+                        &.grid_width, &.grid_height{
+                            &:after{
+                                content: none;
+                            }
+                            input{
+                                padding-right: 0;
+                                text-align: center;
+                            }
+                        }
+                    }
+
+                    .toggle-settings{
+                        width: 52px;
+                        height: 52px;
+                        font-size: 2.5em;
+                        text-align: center;
+                        vertical-align: middle;
+                        cursor: pointer;
+                        .transition-opacity(.5, 1);
+                        text-shadow: 0 0 30px @body-bg;
+                        position: absolute;
+                        top: 0;
+                        left: 0;
+                        z-index: 100;
+                    }
+                    table{
+                        position: absolute;
+                        z-index: 2; /*over overlays*/
+                        border-spacing: 0;
+                        border-collapse: collapse;
+                        
+                        &.resize-edit{
+                            tr{
+                                td{
+                                    border: 2px dashed @body-bg;
+                                }
+                            }
+                        }
+                        tr{
+                            td{
+                                border: 1px solid @gray-lighter;
+                                background-color: #000;
+                                background-color: rgba(0, 0, 0, .5);
+                                position:relative;
+                                margin: 0;
+                                padding: 0;
+
+                                &:first-child{
+                                    border-left: none;
+                                }
+                                &:last-child{
+                                    border-right: none;
+                                }
+                                
+                                .cell-container{
+                                    width: 100%;
+                                    padding: 0;
+                                    height: 100%;
+                                    position: relative;
+                                    overflow: hidden;
+                                    
+                                    .toggle-settings{
+                                        font-size: 1.5em;
+                                        width: 30px;
+                                        height: 30px;
+                                    }
+                                }
+                            }
+                            &:first-child{
+                                td{
+                                    border-top: none;
+                                }
+                            }
+                            &:last-child{
+                                td{
+                                    border-bottom: none;
+                                }
+                            }
+                        }
+                    }
+                    .logo{
+                        width: 120px;
+                        height: 50px;
+                        background: yellow;
+                        position: absolute;
+                        z-index: 2;
+                        
+                        &.bottom-right{
+                            bottom: 0;
+                            right: 0;
+                        }
+                        &.bottom-left{
+                            bottom: 0;
+                            left: 0;
+                        }
+                        &.top-right{
+                            top: 0;
+                            right: 0;
+                        }
+                        &.top-left{
+                            top: 0;
+                            left: 0;
+                        }
+                    }
+                }
+            }
+        }
+        .pagination-container{
+            text-align: center;
+            clear: both;
+            
+            .pagination > li a{
+                margin: 10px;
+            }
+        }
+    }
+    .details-panel{
+        .colours, .images{
+            text-align: center;
+
+            .colour, .image{
+                width: 46px;
+                height: 46px;
+                cursor: pointer;
+                margin: 5px 3px 0 2px;
+                float: left;
+                background-position: 50%;
+                background-size: cover;
+                background-repeat: no-repeat;
+                border: 2px solid @gray-light;
+                
+                &.selected{
+                    border: 2px @btn-info-border solid;
+                }
+            }
+        }
+        .images{
+            .image{
+
+            }
+        }
+        .settings{
+            .btn-group[dropdown]{
+                margin-bottom: 10px; 
+                display: inline-block;
+                width: 100%;
+
+                button, ul{
+                    min-width: 100%;
+                    max-height: 170px;
+                    overflow: auto;
+                    li{
+                        a{
+                            padding: 10px;
+                        }
+                    }
+                }
+            }
+            > div{
+                text-align: center;
+                .background-position{
+                    .btn-group{
+                        vertical-align: middle;
+                        width: calc(25px * 3 + 10px);
+                        margin: auto;
+                    }
+                }
+            }
+            > .background-position{
+                .btn-group{
+                    label{
+                        width: 25px;
+                        height: 25px;
+                        margin: 1px;
+                        &:nth-of-type(3n+1){
+                            clear: left;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

@@ -4,35 +4,33 @@
  * Module dependencies.
  */
 var mongoose = require('mongoose'),
-    Template = mongoose.model('Template'),
+    Templates = mongoose.model('Templates'),
     _ = require('lodash');
 
-
 /**
- * Find template by id
+ * Find templates by id
  */
 exports.template = function (req, res, next, id) {
-    Template.load(id, function (err, template) {
+    Templates.load(id, function (err, templates) {
         if (err)
             return next(err);
-        if (!template)
-            return next(new Error('Failed to load template ' + id));
-        req.template = template;
+        if (!templates)
+            return next(new Error('Failed to load templates ' + id));
+        req.templates = templates;
         next();
     });
 };
 
 /**
- * Create a template
+ * Create a templates
  */
 exports.create = function (req, res) {
-    var template = new Template(req.body);
-    template.user = req.user;
-
+    var template = new Templates(req.body);
+    
     template.save(function (err) {
         if (err) {
             return res.status(500).json({
-                error: 'Cannot save the template'
+                error: 'Cannot save the templates'
             });
         }
         res.json(template);
@@ -40,17 +38,17 @@ exports.create = function (req, res) {
 };
 
 /**
- * Update a template
+ * Update a templates
  */
 exports.update = function (req, res) {
-    var template = req.template;
-
+    var template = req.templates;
+    
     template = _.extend(template, req.body);
-
+    
     template.save(function (err) {
         if (err) {
             return res.status(500).json({
-                error: 'Cannot update the template'
+                error: 'Cannot update the templates'
             });
         }
         res.json(template);
@@ -58,36 +56,30 @@ exports.update = function (req, res) {
 };
 
 /**
- * Delete a template
+ * Delete a tam
  */
 exports.destroy = function (req, res) {
-    var template = req.template;
-
+    var template = req.templates;
+    
     template.remove(function (err) {
         if (err) {
             return res.status(500).json({
-                error: 'Cannot delete the template'
+                error: 'Cannot delete the templates'
             });
         }
+        
         res.json(template);
     });
 };
 
 /**
- * Show a template
+ * List of Templatess
  */
-exports.show = function (req, res) {
-    res.json(req.template);
-};
-
-/**
- * List of Templates
- */
-exports.all = function (req, res) {
-    Template.find().sort('-created').populate('user', 'name username').exec(function (err, templates) {
+exports.get = function (req, res) {
+    Templates.find({team: req.team._id}).sort('created').exec(function (err, templates) {
         if (err) {
             return res.status(500).json({
-                error: 'Cannot list the templates'
+                error: 'Cannot list the templatess'
             });
         }
         res.json(templates);

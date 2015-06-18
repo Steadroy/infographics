@@ -10,6 +10,6 @@
     "node": "0.10.x",
     "npm": "1.4.x"
   },
-  "dependencies": ["ng-file-upload-shim", "angularjs", "ng-file-upload"],
+  "dependencies": ["ng-file-upload-shim", "angularjs", "ng-file-upload", "ng-tags-input", "angular-sanitize", "videogular"],
   "license": "MIT"
 }

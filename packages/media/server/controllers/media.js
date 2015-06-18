@@ -112,7 +112,13 @@ exports.destroy = function (req, res) {
  * List of Medias
  */
 exports.get = function (req, res) {
-    Media.find({team: req.team._id}).sort('created').exec(function (err, medias) {
+    var query = {team: req.team._id};
+    
+    if(req.params.filetype !== 'all'){
+        query.filetype = req.params.filetype;
+    }
+    
+    Media.find(query).sort('created').exec(function (err, medias) {
         if (err) {
             return res.status(500).json({
                 error: 'Cannot list the medias'

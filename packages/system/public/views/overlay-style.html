@@ -1,0 +1,10 @@
+<style type='text/css'>
+    .overlay[data-overlay="{{overlay.name | clean}}"][data-type="type_{{overlay.style.type}}"]:before,
+    .overlay[data-overlay="{{overlay.name | clean}}"][data-type="type_{{overlay.style.type}}"]:after{
+        background: {{overlay.style['color0'] | toRGBA}}
+    }
+    [data-overlay="{{overlay.name | clean}}"] .inner-overlay[data-type="type_{{overlay.style.type}}"]:before,
+    [data-overlay="{{overlay.name | clean}}"] .inner-overlay[data-type="type_{{overlay.style.type}}"]:after{
+        background: {{overlay.style['color1'] | toRGBA}}
+    }
+</style>

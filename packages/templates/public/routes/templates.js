@@ -28,28 +28,7 @@ angular.module('mean.templates').config(['$stateProvider',
         $stateProvider
             .state('see templates', {
                 url: '/templates',
-                templateUrl: 'templates/views/list.html',
-                resolve: {
-                    loggedin: checkLoggedin
-                }
-            })
-            .state('create template', {
-                url: '/templates/create',
-                templateUrl: 'templates/views/create.html',
-                resolve: {
-                    loggedin: checkLoggedin
-                }
-            })
-            .state('edit template', {
-                url: '/templates/:templateId/edit',
-                templateUrl: 'templates/views/edit.html',
-                resolve: {
-                    loggedin: checkLoggedin
-                }
-            })
-            .state('template by id', {
-                url: '/templates/:templateId',
-                templateUrl: 'templates/views/view.html',
+                templateUrl: 'templates/views/templates.html',
                 resolve: {
                     loggedin: checkLoggedin
                 }

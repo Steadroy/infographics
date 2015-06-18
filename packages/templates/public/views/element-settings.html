@@ -1,0 +1,100 @@
+<section data-ng-controller="ElementSettingsController" data-ng-show="global.togglePanel" class="col-md-3 details-panel">
+    <tabset> 
+        <tab> 
+            <tab-heading>
+                <i class="fa fa-paint-brush"></i>
+            </tab-heading> 
+            <div role="tabpanel" class="colours tabpanel">
+                <div data-ng-repeat="colour in global.teamActive.settings.colours.backgrounds"
+                     style="background: {{colour | toRGBA}}" class="colour"
+                     data-ng-class="{selected: colour.hex === active.config.background.background_color.hex && colour.alpha === active.config.background.background_color.alpha}"
+                     tooltip="{{colour.hex}} [alpha: {{colour.alpha | number:2}}]" tooltip-trigger="mouseenter" tooltip-placement="top" 
+                     role="button" data-ng-click="selectColour(colour)"
+                     >
+                </div> 
+            </div>
+        </tab>
+        <tab> 
+            <tab-heading>
+                <i class="fa fa-picture-o"></i>
+            </tab-heading> 
+            <div role="tabpanel" class="images tabpanel">
+                <input class="search_image" name="search_image" type="text" placeholder="Search Image..." data-ng-model="search_query_image"> 
+                <div data-ng-repeat="image in mediaFiles | filter:search_query_image" 
+                     style="background-image: url(/static/{{image._id}})" class="image"
+                     data-ng-class="{selected: image._id === active.config.background.background_image}"
+                     tooltip="{{image.name}}" tooltip-trigger="mouseenter" tooltip-placement="top" 
+                     role="button" data-ng-click="selectImage(image)">
+                </div> 
+            </div>
+        </tab>
+        <tab> 
+            <tab-heading>
+                <i class="fa fa-cog"></i>
+            </tab-heading> 
+            <div role="tabpanel" class="settings tabpanel">
+                <div data-ng-repeat="(key, settings) in config.background_settings" 
+                     class="btn-group" dropdown data-ng-show="key !== 'background_position'"
+                >
+                    <h5>{{key}}</h5>
+                    <button type="button" class="btn btn-primary dropdown-toggle" > 
+                        <span>{{active.config.background[key] === 'none' ? key : active.config.background[key]}}</span> 
+                        <span class="caret"></span> 
+                    </button>
+                    <ul class="dropdown-menu" role="menu">
+                        <li data-ng-repeat="i in settings" 
+                            data-ng-class="{active: active.config.background[key] === i}" 
+                        >
+                            <a href data-ng-click="changeSetting('background', key, i)">{{i}}</a>
+                        </li>
+                    </ul>
+                </div>
+                <div data-ng-repeat="(key, setting) in config.background_settings" 
+                     data-ng-show="key === 'background_position'"
+                     data-ng-class="{'background-position': key === 'background_position'}"
+                >
+                    <h5>{{key}}</h5>
+                    <div class="btn-group">
+                        <label data-ng-repeat="i in setting" 
+                               tooltip="{{i}}" tooltip-trigger="mouseenter" tooltip-placement="top" 
+                               class="btn btn-primary" data-ng-model="active.config.background[key]" btn-radio="'{{i}}'"
+                               data-ng-click="changeSetting('background', key, i)" >
+                        </label>
+                    </div>
+                </div>
+                <div class="borders">
+                    <h5>border</h5>
+                    <div class="btn-group" dropdown>
+                        <button type="button" class="btn btn-primary dropdown-toggle" > 
+                            <span>{{active.config.border.name}}</span> 
+                            <span class="caret"></span> 
+                        </button>
+                        <ul class="dropdown-menu" role="menu">
+                            <li data-ng-repeat="border in global.teamActive.settings.borders"
+                                data-ng-class="{active: active.config.border.name === border.name}" 
+                            >
+                                <a href data-ng-click="changeSetting('border', null, border)">{{border.name}}</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="overlays">
+                    <h5>overlays</h5>
+                    <div class="btn-group" dropdown>
+                        <button type="button" class="btn btn-primary dropdown-toggle" > 
+                            <span>{{active.config.overlay.name}}</span> 
+                            <span class="caret"></span> 
+                        </button>
+                        <ul class="dropdown-menu" role="menu">
+                            <li data-ng-repeat="overlay in global.teamActive.settings.overlays"
+                                data-ng-class="{active: active.config.overlay.name === overlay.name}" 
+                            >
+                                <a href data-ng-click="changeSetting('overlay', null, overlay)">{{overlay.name}}</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </tab>
+    </tabset>
+</section> 

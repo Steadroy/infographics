@@ -1,0 +1,39 @@
+<section 
+    data-ng-controller="TemplatesStep1Controller" data-ng-init="init()"
+    ng-class="{'col-md-9': global.togglePanel, 'col-md-12': !global.togglePanel}"
+>  
+    <overlay-style overlay="template.config.overlay"></overlay-style>
+    <div class="infographic-container"  
+         data-overlay='{{template.config.overlay.name | clean}}'
+         data-type='type_{{template.config.overlay.style.type}}' 
+         resizable on-resize="resize($evt, $ui)" on-resize-stop="resizeStop($evt, $ui)"
+         data-handler-east="{{true}}" data-handler-south="{{true}}" data-handler-south-east="{{true}}"
+         data-ng-class="{overlay: template.config.overlay.name !== 'none'}" 
+         data-ng-style="{
+            width: template.config.width, 
+            height: template.config.height, 
+            'background-color': (template.config.background['background_color'] | toRGBA),
+            'background-image': (template.config.background['background_image'] === 'none' ? 'none' : 'url(/static/' + template.config.background['background_image'] + ')'),
+            'background-repeat': template.config.background['background_repeat'],
+            'background-size': template.config.background['background_size'],
+            'background-position': template.config.background['background_position'],
+            'border-radius': template.config.border.style['border-radius'],
+            'border-style': template.config.border.style['border-style'],
+            'border-width': template.config.border.style['border-width'],
+            'border-color': (template.config.border.style['border-color'] | toRGBA)
+         }" >
+        <div class="inner-overlay" data-type='type_{{template.config.overlay.style.type}}'></div>
+        <div class="toggle-settings" role="button" data-ng-click="toggle($event)"><i class="fa fa-cogs"></i></div>
+        <form role="form" data-ng-submit="resizeStop()" novalidate>
+            <div class="size width">
+                <input data-ng-model="template.config.width" type="text" data-ng-blur="resizeStop()" />
+            </div>
+            <div class="size height">
+                <input data-ng-model="template.config.height" type="text" data-ng-blur="resizeStop()" />
+            </div>
+            <input type="submit" style="position: absolute; left: -9999px; width: 1px; height: 1px;"/> 
+        </form>
+        <div class="logo bottom-right"></div>
+    </div>
+</section>
+<element-settings active="template"></element-settings>

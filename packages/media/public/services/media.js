@@ -16,8 +16,8 @@ angular.module('mean.media')
         .factory('Media', ['$resource',
             function ($resource) {
                 return $resource(
-                        'media/:teamId',
-                        {teamId: '@_id'},
+                        'media/:teamId/:filetype',
+                        {teamId: '@_id', filetype: '@_filetype'},
                         {
                             'query': {method: 'GET', isArray: true },
                             'tags': {method: 'GET', url:'tags/:team/:query', isArray: true }

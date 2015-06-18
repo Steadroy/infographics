@@ -127,7 +127,7 @@ angular.module('mean.settings', ['colorpicker.module'])
             
             $scope.addNewColour = function(usage, newColour){
                 if(newColour){
-                    $scope.global.teamActive.settings.colours[usage].push({hex: newColour.toUpperCase(), alpha: 1}); 
+                    $scope.global.teamActive.settings.colours[usage].push({hex: newColour, alpha: 1}); 
                     $scope.global.teamActive.settings.$update(function(){ });
                 }
             };

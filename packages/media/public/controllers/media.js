@@ -27,7 +27,7 @@ angular.module('mean.media', [
                     $scope.mediaFiles = [];
                     $scope.progress = 0;
                     
-                    Media.query({teamId: $scope.global.teamActive._id}, function (media_files) {
+                    Media.query({teamId: $scope.global.teamActive._id, filetype: 'all'}, function (media_files) {
                         $scope.mediaFiles = media_files;
                         if($scope.mediaFiles.length > 0){
                             $scope.selected = $scope.mediaFiles[0];

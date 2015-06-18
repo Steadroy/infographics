@@ -92,3 +92,17 @@
     height: @grid-gutter-width;
     border: 3px solid @body-bg;
 }
+.transition-opacity(@from, @to){
+    opacity: @from;
+    -webkit-transition: opacity .5s, background .5s;
+    transition: opacity .5s, background .5s; 
+
+    &:hover, &:focus{
+        opacity: @to;
+        
+        input{
+            background-color: @body-bg;
+            background-color: rgba(255, 255, 255, 1);
+        }
+    }
+}

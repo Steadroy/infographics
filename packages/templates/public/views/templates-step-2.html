@@ -1,0 +1,47 @@
+<section 
+    data-ng-controller="TemplatesStep2Controller"
+    ng-class="{'col-md-9': global.togglePanel, 'col-md-12': !global.togglePanel}"
+>  
+    <overlay-style overlay="template.config.overlay"></overlay-style>
+    <div class="infographic-container"  
+         data-overlay='{{template.config.overlay.name | clean}}'
+         data-type='type_{{template.config.overlay.style.type}}' 
+         data-ng-class="{overlay: template.config.overlay.name !== 'none'}" 
+         data-ng-style="{
+            width: template.config.width, 
+            height: template.config.height, 
+            'background-color': (template.config.background['background_color'] | toRGBA),
+            'background-image': (template.config.background['background_image'] === 'none' ? 'none' : 'url(/static/' + template.config.background['background_image'] + ')'),
+            'background-repeat': template.config.background['background_repeat'],
+            'background-size': template.config.background['background_size'],
+            'background-position': template.config.background['background_position'],
+            'border-radius': template.config.border.style['border-radius'],
+            'border-style': template.config.border.style['border-style'],
+            'border-width': template.config.border.style['border-width'],
+            'border-color': (template.config.border.style['border-color'] | toRGBA)
+         }" >
+        <div class="inner-overlay" data-type='type_{{template.config.overlay.style.type}}'></div>
+        <table width="100%" height="100%" class="resize-edit"> 
+            <tr data-ng-repeat="h in template.config.grid_vertical track by $index" data-ng-style="{height: h+'%'}" >
+                <td data-ng-repeat="w in template.config.grid_horizontal track by $index" data-ng-style="{width: w+'%'}" 
+                    resizable on-resize="resize($evt, $ui, $index, $parent.$index)" on-resize-stop="resizeStop($evt, $ui)" 
+                    data-handler-east='{{$index < template.config.grid_horizontal.length-1}}'
+                    data-handler-south='{{$parent.$index < template.config.grid_vertical.length-1}}'
+                    data-handler-south-east='{{false}}'
+                    data-grid="5"
+                > </td>
+            </tr>
+        </table>
+        <form role="form" data-ng-submit="changeGrid()" novalidate>
+            <div class="size grid_width width">
+                <input data-ng-model="grid_width" type="text" data-ng-blur="changeGrid()" />
+            </div>
+            <div class="size grid_height height">
+                <input data-ng-model="grid_height" type="text" data-ng-blur="changeGrid()" />
+            </div>
+            <input type="submit" style="position: absolute; left: -9999px; width: 1px; height: 1px;"/> 
+        </form>
+        <div class="logo bottom-right"></div>
+    </div>
+</section>
+<element-settings active="template"></element-settings>

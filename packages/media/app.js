@@ -18,7 +18,7 @@ Media.register(function (app, auth, database) {
     //We are adding a link to the main menu for all authenticated users
 
     Media.menus.add({
-        'roles': ['designer'],
+        'roles': ['designer', 'journalist'],
         'title': 'Media Library',
         'link': 'see media'
     });

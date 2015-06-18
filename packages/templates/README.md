@@ -1,1 +1,1 @@
-README: templates
+README: settings

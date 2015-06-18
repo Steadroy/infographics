@@ -1,7 +1,7 @@
 @import "../../../../../bower_components/bootstrap/less/mixins.less";
 @import "../less/mixins.less";
 
-*:not(.box) {
+*:not(.box):not(.infographic-container) { 
     .border-radius(0) !important;
     outline: none !important;
 } 
@@ -59,11 +59,11 @@ body{
         &:before, &:after{
             content: "";
             position: absolute;
-            height: 60%;
-            z-index: -1;
+            height: 60%; 
+            z-index: 1;
         }
 
-        &.type_0, &.type_1, &.type_2{
+        &[data-type="type_0"], &[data-type="type_1"], &[data-type="type_2"]{
             &:before, &:after{
                 left: -50%;
                 right: -60%;
@@ -75,17 +75,17 @@ body{
                 bottom: -60%;
             }
         }
-        &.type_0, &.type_2{
+        &[data-type="type_0"], &[data-type="type_2"]{
             &:before, &:after{
                 .rotate(-8deg);
             }
         }
-        &.type_1, .type_2{
+        &[data-type="type_1"], [data-type="type_2"]{
             &:before, &:after{
                 .rotate(15deg);
             }
         }
-        &.type_3, &.type_5{
+        &[data-type="type_3"], &[data-type="type_5"]{
             &:before, &:after{
                 height: 25px;
                 width: 100%;
@@ -101,7 +101,7 @@ body{
                 top: auto; 
             }
         }
-        &.type_4, .type_5{
+        &[data-type="type_4"], [data-type="type_5"]{
             &:before, &:after{
                 height: 100%;
                 width: 25px;
@@ -122,12 +122,20 @@ body{
         width: 100%;
         height: 100%;
         border: none;
+        position: absolute;
     }
     .type_0, .type_1, .type_3, .type_4{
         .inner-overlay{
             &:before, &:after{
                 content: none;
             }
+        }
+    }
+    
+    /*INFOGRAPHIC STYLES*/
+    .infographic{
+        .infographic-container{
+            margin: auto;
         }
     }
 }
