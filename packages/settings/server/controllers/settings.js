@@ -7,8 +7,20 @@ var mongoose = require('mongoose'),
     Setting = mongoose.model('Setting'),
     _ = require('lodash'),
     populate = [
-        { path: 'colours.backgrounds' },
-        { path: 'colours.fonts' }
+        'colours.backgrounds',
+        'colours.fonts',
+        'colours.borders',
+        'colours.overlays',
+        
+        'fonts',
+        'fonts.color',
+        
+        'borders',
+        'borders.border_color',
+        
+        'overlays',
+        'overlays.color_0',
+        'overlays.color_1'
     ];
 
 /**
@@ -17,8 +29,13 @@ var mongoose = require('mongoose'),
 exports.setting = function (req, res, next, id) {
     Setting
         .findById(id)
-        .populate(populate)
+        .deepPopulate(populate)
         .exec(function(err, setting){
+            if (err)
+                return next(err);
+            if (!setting)
+                return next(new Error('Failed to load setting ' + id));
+            
             req.setting = setting;
             next();
         });
@@ -55,7 +72,7 @@ exports.update = function (req, res) {
             });
         }
         Setting
-            .populate(setting, populate,function(err, setting){
+            .deepPopulate(setting, populate,function(err, setting){
                 res.json(setting);
             });
     });

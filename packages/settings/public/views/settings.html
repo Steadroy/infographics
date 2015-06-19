@@ -1,5 +1,5 @@
 <section> 
-    <h1 class="setting_header col-md-12 col-sm-12" data-ng-controller="SettingsController" data-ng-init="init()">
+    <h1 class="setting_header col-md-12 col-sm-12" data-ng-controller="SettingsController">
         <form name="teamName" role="form" data-ng-submit="update(teamName.$valid, global.teamActive.name)" novalidate> 
             General settings for 
             <input id="team_name" name="team_name" data-ng-model="global.teamActive.name" class="col-md-7" data-ng-blur="update(teamName.$valid, global.teamActive.name)"/>
@@ -11,7 +11,7 @@
     </h1>
     <div role="tabpanel" class="col-md-12 col-sm-12"> 
         <tabset> 
-            <tab data-ng-controller="ColoursController" active="tabs['colours']" data-ng-init="init()" > 
+            <tab data-ng-controller="ColoursController" active="tabs['colours']"> 
                 <tab-heading>
                     <i class="fa fa-paint-brush"></i> Colours
                 </tab-heading> 
@@ -29,19 +29,19 @@
                             <hr/>
                             <div> 
                                 <div class="col-md-2 col-sm-2 colour_container" data-ng-repeat="colour in global.teamActive.settings.colours[usage]" >
-                                    <input class="colour_input" colorpicker type="text" data-ng-model="colour.hex" style="background: {{colour | toRGBA}}" data-ng-blur="editColour(colour)"/>
-                                    <button tooltip="Remove {{colour.hex}}" tooltip-trigger="mouseenter" tooltip-placement="right" class="colour_remove" data-ng-click="removeColour(usage, colour)" role="button"><i class="fa fa-close"></i></button>
-                                    <input tooltip="Alpha: {{colour.alpha | number:3}}" tooltip-trigger="mouseenter" tooltip-placement="bottom" type="range" min="0" max="1" step=".025" data-ng-model="colour.alpha" data-ng-blur="editColour(colour)" />
+                                    <input class="colour_input" colorpicker type="text" data-ng-model="colour.hex" style="background: {{colour | toRGBA}}" data-ng-blur="update(colour)"/>
+                                    <button tooltip="Remove {{colour.hex | uppercase}}" tooltip-trigger="mouseenter" tooltip-placement="right" class="colour_remove" data-ng-click="remove(colour)" role="button"><i class="fa fa-close"></i></button>
+                                    <input tooltip="Alpha: {{colour.alpha | number:3}}" tooltip-trigger="mouseenter" tooltip-placement="bottom" type="range" min="0" max="1" step=".025" data-ng-model="colour.alpha" data-ng-blur="update(colour)" />
                                 </div> 
                                 <div class="col-md-2 col-sm-2 colour_container colour_new new_plus" data-ng-show="global.teamActive.settings.colours[usage].length < constants.max[usage + '_colours']">
-                                    <input class="colour_input colour_new new_plus" colorpicker type="text" data-ng-model="newColour" style="background: {{newColour}}" data-ng-blur="addNewColour(usage, newColour); newColour = ''"/>
+                                    <input class="colour_input colour_new new_plus" colorpicker type="text" data-ng-model="newColour" style="background: {{newColour}}" data-ng-blur="create(usage, newColour); newColour = ''"/>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </tab>
-            <tab data-ng-controller="FontsController" data-ng-init="init()" active="tabs['fonts']">
+            <tab data-ng-controller="FontsController" active="tabs['fonts']">
                 <tab-heading>
                     <i class="fa fa-font"></i> Fonts
                 </tab-heading>
@@ -51,11 +51,11 @@
                 </div>
                 <div role="tabpanel" class="fonts_panel tabpanel" data-ng-show="global.teamActive.settings.colours.fonts.length > 0"> 
                     <ul class="nav nav-pills nav-stacked col-md-3 col-sm-3" role="tablist">
-                        <li role="presentation" data-ng-class="{active: font.name === actives['fonts']}" data-ng-repeat="font in global.teamActive.settings.fonts" >
-                            <a href aria-controls="{{font.name}}" role="tab" data-toggle="tab" data-ng-click="changeSubtabActive('fonts', font.name)">
+                        <li role="presentation" data-ng-class="{active: font._id === actives['fonts']}" data-ng-repeat="font in global.teamActive.settings.fonts" >
+                            <a href aria-controls="{{font.name}}" role="tab" data-toggle="tab" data-ng-click="changeSubtabActive('fonts', font._id)">
                                 {{font.name}}
                             </a>
-                            <a role="button" data-ng-click="remove(font, 'fonts')" class="remove"><i class="fa fa-remove"></i></a>
+                            <a role="button" data-ng-click="remove(font)" class="remove"><i class="fa fa-remove"></i></a>
                         </li>
                         <li role="presentation" data-ng-show="global.teamActive.settings.colours.fonts.length > 0 && global.teamActive.settings.fonts.length < constants.max.fonts"> 
                             <a role="menuitem" class="new_element_hover_plus"> 
@@ -66,46 +66,54 @@
                         </li>
                     </ul>
                     <div class="tab-content col-md-9 col-sm-9">
-                        <div role="tabpanel" class="tab-pane" id="{{font.name}}" data-ng-class="{active: font.name === actives['fonts']}" data-ng-repeat="font in global.teamActive.settings.fonts">
+                        <div role="tabpanel" class="tab-pane" id="{{font._id}}" data-ng-class="{active: font._id === actives['fonts']}" data-ng-repeat="font in global.teamActive.settings.fonts">
                             <div class="example">
                                 <h2>
-                                    <form name="fontName" role="form" data-ng-submit="updateElementName('fonts', fontName.$valid, temporal_ref_name, $index)" novalidate data-ng-init="temporal_ref_name = font.name"> 
-                                        <input id="fonts_name{{$index}}" data-ng-model="temporal_ref_name" class="col-md-10"/>
-                                        <label class="btn btn-success" role="button" data-ng-click="cloneElement('fonts', $index)" data-ng-show="global.teamActive.settings.fonts.length < constants.max.fonts">
+                                    <form name="fontName" role="form" data-ng-submit="update(font)" novalidate> 
+                                        <input id="fonts_name_{{font._id}}" data-ng-model="font.name" class="col-md-10"/>
+                                        <label class="btn btn-success" role="button" data-ng-click="clone(font)" data-ng-show="global.teamActive.settings.fonts.length < constants.max.fonts">
                                             <i class="fa fa-copy"></i>
                                             Clone Font
                                         </label>
                                     </form>
                                 </h2>
                                 <hr/>
-                                <div style="{{font.style| parse}}">
+                                <div style="{{font | parse}}">
                                     <p>The quick brown fox jumps over the lazy dog</p>
                                 </div>
                                 <hr/>
                             </div>
                             <div class="controls">
                                 <div class="btn-group" data-ng-repeat="group in buttonGroups">
-                                    <label class="btn btn-primary" data-ng-repeat="button in group" role="button" data-ng-class="{active: font.style[button.style] === button.highlight || font.style[button.style].hex === button.highlight}" data-ng-click="toggleValue(button.style, $parent.$parent.$index, $parent.$index, $index, font.style[button.style] === button.highlight || font.style[button.style].hex === button.highlight, font.name)"><i class="fa {{button.icon}}"></i></label> 
+                                    <label data-ng-repeat="button in group" role="button" 
+                                           data-ng-class="{active: font[button.style] === button.highlight}" class="btn btn-primary" 
+                                           data-ng-click="toggleValue(font, button, font[button.style] === button.highlight)"
+                                           >
+                                        <i class="fa {{button.icon}}"></i>
+                                    </label> 
                                 </div>
                                 <div class="btn-group dd-{{dd.style}}" dropdown data-ng-repeat='dd in buttonGroup2'>
-                                    <button type="button" class="btn btn-primary dropdown-toggle" data-ng-click="scroll(('fonts-id-' + font.name + '-' + dd.style | clean), ('fonts-id-' + font.name + '-' + font.style[dd.style] | clean: font.style[dd.style].hex))"> 
-                                        <span data-ng-show="dd.style !== 'color'">{{font.style[dd.style]}} </span>
+                                    <button type="button" class="btn btn-primary dropdown-toggle" data-ng-click="scroll(('fonts-id-' + font._id + '-' + dd.style | clean), ('fonts-id-' + font._id + '-' + (font[dd.style]._id ? font[dd.style]._id : font[dd.style]) | clean))"> 
+                                        <span data-ng-show="dd.style !== 'color'">{{font[dd.style]}} </span>
                                         <span data-ng-show="dd.style === 'color'">
-                                            <span class='dd-color' style='background: {{font.style[dd.style]| toRGBA}}'> </span> {{font.style[dd.style].hex}}
-                                        </span>
+                                            <span class='dd-color' style='background: {{font[dd.style] | toRGBA}}'> </span> {{font[dd.style].hex | uppercase}}
+                                        </span> 
                                         <span class="caret"></span> 
                                     </button>
-                                    <ul id="{{('fonts-id-' + font.name + '-' + dd.style) | clean}}" class="dropdown-menu" role="menu">
-                                        <li id="{{('fonts-id-' + font.name + '-' + option) | clean: option.hex}}" data-ng-class="{active: option === font.style[dd.style]}" data-ng-repeat="option in (dd.options === 'colours.fonts' ? global.teamActive.settings.colours.fonts : dd.options)">
-                                            <a href data-ng-click="changeElementStyle('fonts', option, dd.style, $parent.$parent.$index, font.name)" > 
-                                                <span data-ng-show="dd.style === 'font-family'" style='font-family: {{option}}'>
+                                    <ul id="{{('fonts-id-' + font._id + '-' + dd.style) | clean}}" class="dropdown-menu" role="menu">
+                                        <li data-ng-repeat="option in (dd.options === 'colours.fonts' ? global.teamActive.settings.colours.fonts : dd.options)"
+                                            id="{{('fonts-id-' + font._id + '-' + (option._id ? option._id : option)) | clean}}"
+                                            data-ng-class="{active: (option === font[dd.style] && dd.options !== 'colours.fonts') || (option._id === font[dd.style]._id && dd.options === 'colours.fonts')}"
+                                            >
+                                            <a href data-ng-click="change(font, dd.style, option)" > 
+                                                <span data-ng-show="dd.style === 'font_family'" style='font-family: {{option}}'>
                                                     {{option}}
                                                 </span>
-                                                <span data-ng-show="dd.style === 'font-size'">
+                                                <span data-ng-show="dd.style === 'font_size'">
                                                     {{option}}
                                                 </span>
                                                 <span data-ng-show="dd.style === 'color'">
-                                                    <span class='dd-color' style='background: {{option| toRGBA}}'> </span> {{option.hex}}
+                                                    <span class='dd-color' style='background: {{option | toRGBA}}'> </span> {{option.hex | uppercase}}
                                                 </span>
                                             </a>
                                         </li>  
@@ -116,7 +124,7 @@
                     </div>
                 </div>
             </tab>
-            <tab data-ng-controller="BordersController" data-ng-init="init()" active="tabs['borders']">
+            <tab data-ng-controller="BordersController" active="tabs['borders']">
                 <tab-heading>
                     <i class="fa fa-th"></i> Borders
                 </tab-heading>
@@ -126,11 +134,11 @@
                 </div> 
                 <div role="tabpanel" class="borders_panel tabpanel" data-ng-show="global.teamActive.settings.colours.borders.length > 0"> 
                     <ul class="nav nav-pills nav-stacked col-md-3 col-sm-3" role="tablist">
-                        <li role="presentation" data-ng-class="{active: border.name === actives['borders']}" data-ng-repeat="border in global.teamActive.settings.borders" >
-                            <a href aria-controls="{{border.name}}" role="tab" data-toggle="tab" data-ng-click="changeSubtabActive('borders', border.name)">
+                        <li role="presentation" data-ng-class="{active: border._id === actives['borders']}" data-ng-repeat="border in global.teamActive.settings.borders" >
+                            <a href aria-controls="{{border.name}}" role="tab" data-toggle="tab" data-ng-click="changeSubtabActive('borders', border._id)">
                                 {{border.name}}
                             </a>
-                            <a role="button" data-ng-click="remove(border, 'borders')" class="remove"><i class="fa fa-remove"></i></a>
+                            <a role="button" data-ng-click="remove(border)" class="remove"><i class="fa fa-remove"></i></a>
                         </li>
                         <li role="presentation" data-ng-show="global.teamActive.settings.colours.borders.length > 0 && global.teamActive.settings.borders.length < constants.max.borders"> 
                             <a role="menuitem" class="new_element_hover_plus"> 
@@ -141,42 +149,45 @@
                         </li>
                     </ul>
                     <div class="tab-content col-md-9 col-sm-9">
-                        <div role="tabpanel" class="tab-pane" id="{{border.name}}" data-ng-class="{active: border.name === actives['borders']}" data-ng-repeat="border in global.teamActive.settings.borders">
+                        <div role="tabpanel" class="tab-pane" id="{{border._id}}" data-ng-class="{active: border._id === actives['borders']}" data-ng-repeat="border in global.teamActive.settings.borders">
                             <div class="example">
                                 <h2>
-                                    <form name="borderName" role="form" data-ng-submit="updateElementName('borders', borderName.$valid, temporal_ref_name, $index)" novalidate data-ng-init="temporal_ref_name = border.name"> 
-                                        <input id="borders_name{{$index}}" data-ng-model="temporal_ref_name" class="col-md-10"/>
-                                        <label class="btn btn-success" role="button" data-ng-click="cloneElement('borders', $index)" data-ng-show="global.teamActive.settings.borders.length < constants.max.borders">
+                                    <form name="borderName" role="form" data-ng-submit="update(border)" novalidate> 
+                                        <input id="borders_name_{{border._id}}" data-ng-model="border.name" class="col-md-10"/>
+                                        <label class="btn btn-success" role="button" data-ng-click="clone(border)" data-ng-show="global.teamActive.settings.borders.length < constants.max.borders">
                                             <i class="fa fa-copy"></i>
                                             Clone Border
                                         </label>
                                     </form>
                                 </h2>
                                 <hr/>
-                                <div class="box" style="{{border.style| parse}}">
+                                <div class="box" style="{{border | parse}}">
                                 </div>
                                 <hr/>
                             </div>
                             <div class="controls">
                                 <div class="btn-group dd-{{dd.style}}" dropdown data-ng-repeat='dd in buttonGroup'>
-                                    <button type="button" class="btn btn-primary dropdown-toggle" data-ng-click="scroll(('borders-id-' + border.name + '-' + dd.style | clean), ('borders-id-' + border.name + '-' + border.style[dd.style] | clean: border.style[dd.style].hex))"> 
-                                        <span data-ng-show="dd.style !== 'border-color'">{{border.style[dd.style]}} </span>
-                                        <span data-ng-show="dd.style === 'border-color'">
-                                            <span class='dd-color' style='background: {{border.style[dd.style]| toRGBA}}'> </span> {{border.style[dd.style].hex}} 
+                                    <button type="button" class="btn btn-primary dropdown-toggle" data-ng-click="scroll(('borders-id-' + border._id + '-' + dd.style | clean), ('borders-id-' + border._id + '-' + (border[dd.style]._id ? border[dd.style]._id : border[dd.style]) | clean))"> 
+                                        <span data-ng-show="dd.style !== 'border_color'">{{border[dd.style]}} </span>
+                                        <span data-ng-show="dd.style === 'border_color'">
+                                            <span class='dd-color' style='background: {{border[dd.style] | toRGBA}}'> </span> {{border[dd.style].hex | uppercase}} 
                                         </span>
                                         <span class="caret"></span>
                                     </button>
-                                    <ul id="{{('borders-id-' + border.name + '-' + dd.style) | clean}}" class="dropdown-menu" role="menu">
-                                        <li id="{{('borders-id-' + border.name + '-' + option) | clean: option.hex}}" data-ng-class="{active: option === border.style[dd.style]}" data-ng-repeat="option in (dd.options === 'colours.borders' ? global.teamActive.settings.colours.borders : dd.options)">
-                                            <a href data-ng-click="changeElementStyle('borders', option, dd.style, $parent.$parent.$index, border.name)" ><!-- check why not this: changeElementStyle('fonts', option, dd.style, $parent.$parent.$index, font.name) -->
-                                                <span data-ng-show="dd.style === 'border-style'">
-                                                    <span class="dropelement dd-border-style" style='border-style: {{option}}'> </span>
+                                    <ul id="{{('borders-id-' + border._id + '-' + dd.style) | clean}}" class="dropdown-menu" role="menu">
+                                        <li data-ng-repeat="option in (dd.options === 'colours.borders' ? global.teamActive.settings.colours.borders : dd.options)"
+                                            id="{{('borders-id-' + border._id + '-' + (option._id ? option._id : option)) | clean}}" 
+                                            data-ng-class="{active: (option === border[dd.style]) || (option._id === border[dd.style]._id && dd.options === 'colours.borders')}"
+                                            >
+                                            <a href data-ng-click="change(border, dd.style, option)">
+                                                <span data-ng-show="dd.style === 'border_style'">
+                                                    <span class="dropelement dd-border_style" style='border-style: {{option}}'> </span>
                                                 </span>
-                                                <span data-ng-show="['border-width', 'border-radius'].indexOf(dd.style) >= 0">
+                                                <span data-ng-show="['border_width', 'border_radius'].indexOf(dd.style) >= 0">
                                                     {{option}}
                                                 </span>
-                                                <span data-ng-show="dd.style === 'border-color'">
-                                                    <span class='dd-color' style='background: {{option| toRGBA}}'> </span> {{option.hex}}
+                                                <span data-ng-show="dd.style === 'border_color'">
+                                                    <span class='dd-color' style='background: {{option| toRGBA}}'> </span> {{option.hex | uppercase}}
                                                 </span>
                                             </a>
                                         </li>
@@ -187,7 +198,7 @@
                     </div>
                 </div>
             </tab>
-            <tab data-ng-controller="OverlaysController" data-ng-init="init()" active="tabs['overlays']">
+            <tab data-ng-controller="OverlaysController" active="tabs['overlays']">
                 <tab-heading>
                     <i class="fa fa-square"></i> Overlays
                 </tab-heading>
@@ -197,8 +208,8 @@
                 </div> 
                 <div role="tabpanel" class="overlays_panel tabpanel" data-ng-show="global.teamActive.settings.colours.overlays.length > 0"> 
                     <ul class="nav nav-pills nav-stacked col-md-3 col-sm-3" role="tablist">
-                        <li role="presentation" data-ng-class="{active: overlay.name === actives['overlays']}" data-ng-repeat="overlay in global.teamActive.settings.overlays" >
-                            <a href aria-controls="{{overlay.name}}" role="tab" data-toggle="tab" data-ng-click="changeSubtabActive('overlays', overlay.name)">
+                        <li role="presentation" data-ng-class="{active: overlay._id === actives['overlays']}" data-ng-repeat="overlay in global.teamActive.settings.overlays" >
+                            <a href aria-controls="{{overlay.name}}" role="tab" data-toggle="tab" data-ng-click="changeSubtabActive('overlays', overlay._id)">
                                 {{overlay.name}}
                             </a>
                             <a role="button" data-ng-click="remove(overlay, 'overlays')" class="remove"><i class="fa fa-remove"></i></a>
@@ -212,12 +223,12 @@
                         </li>
                     </ul>
                     <div class="tab-content col-md-9 col-sm-9">
-                        <div role="tabpanel" class="tab-pane" id="{{overlay.name}}" data-ng-class="{active: overlay.name === actives['overlays']}" data-ng-repeat="overlay in global.teamActive.settings.overlays">
+                        <div role="tabpanel" class="tab-pane" id="{{overlay._id}}" data-ng-class="{active: overlay._id === actives['overlays']}" data-ng-repeat="overlay in global.teamActive.settings.overlays">
                             <div class="example">
                                 <h2>
-                                    <form name="overlayName" role="form" data-ng-submit="updateElementName('overlays', overlayName.$valid, temporal_ref_name, $index)" novalidate data-ng-init="temporal_ref_name = overlay.name"> 
-                                        <input id="overlays_name{{$index}}" data-ng-model="temporal_ref_name" class="col-md-10"/>
-                                        <label class="btn btn-success" role="button" data-ng-click="cloneElement('overlays', $index)" data-ng-show="global.teamActive.settings.overlays.length < constants.max.overlays">
+                                    <form name="overlayName" role="form" data-ng-submit="update(overlay)" novalidate> 
+                                        <input id="overlays_name_{{overlay._id}}" data-ng-model="overlay.name" class="col-md-10"/> 
+                                        <label class="btn btn-success" role="button" data-ng-click="clone(overlay)" data-ng-show="global.teamActive.settings.overlays.length < constants.max.overlays">
                                             <i class="fa fa-copy"></i>
                                             Clone Overlay
                                         </label>
@@ -225,26 +236,29 @@
                                 </h2>
                                 <hr/> 
                                 <overlay-style overlay="overlay"></overlay-style>
-                                <div class="box overlay" data-type='type_{{overlay.style.type}}' data-overlay='{{overlay.name | clean}}'><div class="inner-overlay" data-type='type_{{overlay.style.type}}'></div></div>
+                                <div class="box overlay" data-type='type_{{overlay.type}}' data-overlay='{{overlay.name | clean}}'><div class="inner-overlay" data-type='type_{{overlay.type}}'></div></div>
                                 <hr/>
                             </div>
                             <div class="controls"> 
                                 <div class="btn-group dd-{{dd.style}}" dropdown data-ng-repeat='dd in buttonGroup'>
-                                    <button type="button" class="btn btn-primary dropdown-toggle" data-ng-click="scroll(('overlays-id-' + overlay.name + '-' + dd.style | clean), ('overlays-id-' + overlay.name + '-' + overlay.style[dd.style] | clean: overlay.style[dd.style].hex))" data-ng-class="{disabled: dd.style === 'color1' && [2, 5].indexOf(overlay.style['type']) < 0}">
-                                        <span data-ng-show="['color0', 'color1'].indexOf(dd.style) < 0">{{overlay.style[dd.style] | mapOverlayTypes}} </span> 
-                                        <span data-ng-show="['color0', 'color1'].indexOf(dd.style) >= 0">
-                                            <span class='dd-color' style='background: {{overlay.style[dd.style]| toRGBA}}'> </span> {{overlay.style[dd.style].hex}} 
+                                    <button type="button" class="btn btn-primary dropdown-toggle" data-ng-class="{disabled: dd.style === 'color_1' && [2, 5].indexOf(overlay['type']) < 0}" data-ng-click="scroll(('overlays-id-' + overlay._id + '-' + dd.style | clean), ('overlays-id-' + overlay._id + '-' + (overlay[dd.style]._id ? overlay[dd.style]._id : overlay[dd.style]) | clean))">
+                                        <span data-ng-show="['color_0', 'color_1'].indexOf(dd.style) < 0">{{overlay[dd.style] | mapOverlayTypes}} </span> 
+                                        <span data-ng-show="['color_0', 'color_1'].indexOf(dd.style) >= 0">
+                                            <span class='dd-color' style='background: {{overlay[dd.style]| toRGBA}}'> </span> {{overlay[dd.style].hex | uppercase}} 
                                         </span>
                                         <span class="caret"></span>
                                     </button>
-                                    <ul id="{{('overlays-id-' + overlay.name + '-' + dd.style) | clean}}" class="dropdown-menu" role="menu">
-                                        <li id="{{('overlays-id-' + overlay.name + '-' + option) | clean: option.hex}}" data-ng-class="{active: option === overlay.style[dd.style]}" data-ng-repeat="option in (dd.options === 'colours.overlays' ? global.teamActive.settings.colours.overlays : dd.options)">
-                                            <a href data-ng-click="changeElementStyle('overlays', option, dd.style, $parent.$parent.$index, overlay.name)" ><!-- check why not this: changeElementStyle('fonts', option, dd.style, $parent.$parent.$index, font.name) -->
+                                    <ul id="{{('overlays-id-' + overlay._id + '-' + dd.style) | clean}}" class="dropdown-menu" role="menu">
+                                        <li data-ng-repeat="option in (dd.options === 'colours.overlays' ? global.teamActive.settings.colours.overlays : dd.options)"
+                                            id="{{('overlays-id-' + overlay._id + '-' + (option._id ? option._id : option)) | clean}}" 
+                                            data-ng-class="{active: (option === overlay[dd.style]) || (option._id === overlay[dd.style]._id && dd.options === 'colours.overlays')}"
+                                            >
+                                            <a href data-ng-click="change(overlay, dd.style, option)" >
                                                 <span data-ng-show="dd.style === 'type'">
                                                     {{option | mapOverlayTypes}} 
                                                 </span>
-                                                <span data-ng-show="['color0', 'color1'].indexOf(dd.style) >= 0">
-                                                    <span class='dd-color' style='background: {{option| toRGBA}}'> </span> {{option.hex}}
+                                                <span data-ng-show="['color_0', 'color_1'].indexOf(dd.style) >= 0">
+                                                    <span class='dd-color' style='background: {{option | toRGBA}}'> </span> {{option.hex | uppercase}}
                                                 </span>
                                             </a>
                                         </li>

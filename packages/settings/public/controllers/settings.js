@@ -35,20 +35,12 @@ angular.module('mean.settings', ['colorpicker.module'])
                 }
             };
             
-            $scope.init = function(){
-                $timeout(function () {
-                    if(!$scope.global.teamActive){
-                        $location.url('/');
-                        $scope.$apply();
-                    }
-                }, 0, false);
-            }; 
-            
             /* Used in the other controllers */
             $rootScope.scroll = function(id, anchor){
                 $timeout(function () {
                     var container = angular.element('#' + id), scrollTo = angular.element('#' + anchor);
-                    container.scrollTop(scrollTo.offset().top - container.offset().top + container.scrollTop());
+                    if(container.length && scrollTo.length)
+                        container.scrollTop(scrollTo.offset().top - container.offset().top + container.scrollTop());
                 }, 0, false);
             };
             
@@ -65,57 +57,6 @@ angular.module('mean.settings', ['colorpicker.module'])
                 $rootScope.actives[tab] = active;
             };
             
-            $rootScope.remove = function (element, key) {
-                if (element) {
-                    var found = -1, refocus = false;
-                    
-                    for(var i in $scope.global.teamActive.settings[key]){
-                        if($scope.global.teamActive.settings[key][i] === element){
-                            $scope.global.teamActive.settings[key].splice(i, 1);
-                            refocus = element.name === $scope.actives[key];
-                            found = i;
-                        }
-                    }
-                    if(found >= 0){
-                        $scope.global.teamActive.settings.$update(function(a){ 
-                            if(refocus && $scope.global.teamActive.settings[key].length){
-                                $scope.changeSubtabActive(key, $scope.global.teamActive.settings[key][found > $scope.global.teamActive.settings[key].length - 1 ? found - 1: found].name);
-                            }
-                        });
-                    }
-                }
-            };
-            
-            $rootScope.updateElementName = function (key, isValid, newName, index) {
-                if (isValid) {
-                    $scope.global.teamActive.settings[key][index].name = newName;
-                    $scope.changeSubtabActive(key, newName);
-                    $scope.global.teamActive.settings.$update(function(a){ 
-                        angular.element('#' + key + '_name' + index).blur();
-                    });
-                } else {
-                    $scope.submitted = true;
-                }
-            };
-            $rootScope.cloneElement = function(key, i){
-                if($scope.global.teamActive.settings[key].length < $scope.constants.max[key]){
-                    var new_element = angular.copy($scope.global.teamActive.settings[key][i]);
-                    new_element.name = new_element.name + ' [Clone]';
-                    delete new_element._id; 
-
-                    $scope.global.teamActive.settings[key].push(new_element);
-                    $scope.global.teamActive.settings.$update(function(a){ 
-                        $scope.changeSubtabActive(key, new_element.name);
-                    });
-                }
-            };
-            $rootScope.changeElementStyle = function(key, value, style, border_idx, active){ 
-                $scope.global.teamActive.settings[key][border_idx].style[style] = value;
-                $scope.global.teamActive.settings.$update(function(a){ 
-                    $scope.changeSubtabActive(key, active);
-                });
-            };
-            
             $rootScope.open('colours');
         }
     ])
@@ -125,7 +66,7 @@ angular.module('mean.settings', ['colorpicker.module'])
             $scope.coloursUsage = ['backgrounds', 'fonts', 'borders', 'overlays'];
             $scope.newColour = '';
             
-            $scope.addNewColour = function(usage, newColour){
+            $scope.create = function(usage, newColour){
                 if(newColour){
                     new Colour({hex: newColour}).$save(function(colour){
                         $scope.global.teamActive.settings.colours[usage].push(colour._id);
@@ -136,264 +77,316 @@ angular.module('mean.settings', ['colorpicker.module'])
                 }
             };
             
-            $scope.editColour = function(colour){ 
+            $scope.update = function(colour){ 
                 new Colour(colour).$update(function(){ 
                     $rootScope.changeTeamActive($scope.global.teamActive);
                 });
             };
             
-            $scope.removeColour = function(usage, colour){ 
+            $scope.remove = function(colour){ 
                 new Colour(colour).$remove(function(){ 
                     $rootScope.changeTeamActive($scope.global.teamActive);
                 });
             };
             
-            $scope.init = function(){
+            $scope.$watch('global.teamActive._id', function(){
                 $scope.changeSubtabActive('colours', $scope.coloursUsage[0]);
-            };
+            });
         }
     ])
-    .controller('FontsController', ['$scope', '$stateParams', '$timeout', '$location', 'Global',
-        function ($scope, $stateParams, $timeout, $location, Global) {
+    .controller('FontsController', ['$scope', '$rootScope', '$stateParams', '$timeout', '$location', 'Global', 'Font',
+        function ($scope, $rootScope, $stateParams, $timeout, $location, Global, Font) {
             var sizes = Array.apply(null, new Array(21)).map(function(i, j) { return 10 + j + 'px'; });
+            
             $scope.global = Global;
             $scope.font = {};
 
             $scope.buttonGroups = [[{
-                    style: 'font-weight',
+                    style: 'font_weight',
                     default: 'normal',
                     highlight: 'bold',
                     icon: 'fa-bold'
                 }, {
-                    style: 'font-style',
+                    style: 'font_style',
                     default: 'normal',
                     highlight: 'italic',
                     icon: 'fa-italic'
                 }, {
-                    style: 'text-decoration',
+                    style: 'text_decoration',
                     default: 'none',
                     highlight: 'underline',
                     icon: 'fa-underline'
                 }, {
-                    style: 'text-transform',
+                    style: 'text_transform',
                     default: 'none',
                     highlight: 'uppercase',
                     icon: 'fa-text-height'
                 }
             ], [{
-                    style: 'text-align',
+                    style: 'text_align',
                     default: 'left',
                     highlight: 'left',
                     icon: 'fa-align-left'
                 }, {
-                    style: 'text-align',
+                    style: 'text_align',
                     default: 'left',
                     highlight: 'center',
                     icon: 'fa-align-center'
                 }, {
-                    style: 'text-align',
+                    style: 'text_align',
                     default: 'left',
                     highlight: 'right',
                     icon: 'fa-align-right'
                 }, {
-                    style: 'text-align',
+                    style: 'text_align',
                     default: 'left',
                     highlight: 'justify',
                     icon: 'fa-align-justify'
                 }
             ]]; 
-        
-            $scope.loadButtonGroup2 = function(){
-                $scope.buttonGroup2 = [{
-                        style: 'font-family',
-                        options: [
-                            'Arial, Helvetica, sans-serif',
-                            '"Arial Black", Gadget, sans-serif',
-                            'Impact, Charcoal, sans-serif',
-                            '"Lucida Sans Unicode", "Lucida Grande", sans-serif',
-                            'Tahoma, Geneva, sans-serif',
-                            'Verdana, Geneva, sans-serif',
-                            '"Courier New", Courier, monospace',
-                            '"Lucida Console", Monaco, monospace',
-                            'Georgia, serif',
-                            '"Palatino Linotype", "Book Antiqua", Palatino, serif',
-                            '"Times New Roman", Times, serif'
-                        ]
-                    }, {
-                        style: 'font-size',
-                        options: sizes
-                    }, {
-                        style: 'color',
-                        //it's here because of this
-                        options: 'colours.fonts'
-                }];
-            };
-            
+            $scope.buttonGroup2 = [{
+                style: 'font_family',
+                    options: [
+                        'Arial, Helvetica, sans-serif',
+                        '"Arial Black", Gadget, sans-serif',
+                        'Impact, Charcoal, sans-serif',
+                        '"Lucida Sans Unicode", "Lucida Grande", sans-serif',
+                        'Tahoma, Geneva, sans-serif',
+                        'Verdana, Geneva, sans-serif',
+                        '"Courier New", Courier, monospace',
+                        '"Lucida Console", Monaco, monospace',
+                        'Georgia, serif',
+                        '"Palatino Linotype", "Book Antiqua", Palatino, serif',
+                        '"Times New Roman", Times, serif'
+                    ]
+                }, {
+                    style: 'font_size',
+                    options: sizes
+                }, {
+                    style: 'color',
+                    options: 'colours.fonts'
+            }];
             $scope.create = function (isValid) { 
                 if (isValid && $scope.global.teamActive.settings.fonts.length < $scope.constants.max.fonts) {
                     var name = $scope.font.name;
                     $scope.font.name = '';
-                    $scope.global.teamActive.settings.fonts.push({name: name, style: {color: $scope.global.teamActive.settings.colours.fonts[0]}});
-                    $scope.global.teamActive.settings.$update(function(a){ 
-                        $scope.loadButtonGroup2();
-                        $scope.changeSubtabActive('fonts', name);
+                    
+                    new Font({name: name, color: $scope.global.teamActive.settings.colours.fonts[0]._id}).$save(function(font){
+                        $scope.global.teamActive.settings.fonts.push(font._id);
+                        $scope.global.teamActive.settings.$update(function(settings){ 
+                            $scope.global.teamActive.settings = settings;
+                            $scope.changeSubtabActive('fonts', font._id);
+                        });
                     });
                 } else {
                     $scope.submitted = true;
                 }
             };
-            
-            $scope.update = function (isValid, newName, index) {
-                if (isValid) {
-                    $scope.global.teamActive.settings.fonts[index].name = newName;
-                    $scope.changeSubtabActive('fonts', newName);
-                    $scope.global.teamActive.settings.$update(function(a){ 
-                        angular.element('#font_name' + index).blur();
-                    });
-                } else {
-                    $scope.submitted = true;
-                }
-            };
-            
-            $scope.toggleValue = function(style, font_idx, group_idx, style_idx, state, active){
-                var value = 0;
-                if(state){
-                    value = $scope.buttonGroups[group_idx][style_idx].default;
-                }
-                else{
-                    value = $scope.buttonGroups[group_idx][style_idx].highlight;
-                }
-                $scope.global.teamActive.settings.fonts[font_idx].style[style] = value;
-                $scope.global.teamActive.settings.$update(function(a){ 
-                    $scope.changeSubtabActive('fonts', active);
+            $scope.remove = function(font){ 
+                new Font(font).$remove(function(){ 
+                    $rootScope.changeTeamActive($scope.global.teamActive);
+                    if(font._id === $scope.actives.fonts && $scope.global.teamActive.settings.fonts.length){
+                        $scope.changeSubtabActive('fonts', $scope.global.teamActive.settings.fonts[0]._id);
+                    }
                 });
             };
-            
-            $scope.init = function(){
-                $timeout(function () {
-                    if($scope.global.teamActive.settings.fonts.length){
-                        $scope.changeSubtabActive('fonts', $scope.global.teamActive.settings.fonts[0].name);
-                        $scope.loadButtonGroup2();
-                    }
-                }, 500, false);
+            $scope.update = function(font){ 
+                new Font(font).$update(function(){ 
+                    $rootScope.changeTeamActive($scope.global.teamActive);
+                });
             };
+            $scope.clone = function(font){
+                if($scope.global.teamActive.settings.fonts.length < $scope.constants.max.fonts){
+                    var _new = angular.extend({}, font);
+                    delete _new._id;
+                    _new.color = font.color._id;
+                    _new.name = font.name + ' [Clone]';
+                    
+                    new Font(_new).$save(function(_new){
+                        $scope.global.teamActive.settings.fonts.push(_new._id);
+                        $scope.global.teamActive.settings.$update(function(settings){ 
+                            $scope.global.teamActive.settings = settings;
+                            $scope.changeSubtabActive('fonts', _new._id);
+                        });
+                    });
+                }
+            };
+            $scope.toggleValue = function(_font, button, state){
+                var font = new Font(_font);
+                
+                font[button.style] = state ? button.default : button.highlight;
+                font.$update(function(){ 
+                    $rootScope.changeTeamActive($scope.global.teamActive);
+                });
+            };
+            $scope.change = function(_font, style, option){
+                var font = new Font(_font);
+
+                font[style] = (style === 'color' ? option._id : option);
+                
+                font.$update(function(){ 
+                    $rootScope.changeTeamActive($scope.global.teamActive);
+                });
+            };
+            $timeout(function () {
+                if($scope.global.teamActive.settings.fonts.length)
+                    $scope.changeSubtabActive('fonts', $scope.global.teamActive.settings.fonts[0]._id);
+            }, 500, false);
         }
     ])
-    .controller('BordersController', ['$scope', '$stateParams', '$timeout', '$location', 'Global',
-        function ($scope, $stateParams, $timeout, $location, Global) {
+    .controller('BordersController', ['$scope', '$rootScope', '$stateParams', '$timeout', '$location', 'Global', 'Border',
+        function ($scope, $rootScope, $stateParams, $timeout, $location, Global, Border) {
             var widths = Array.apply(null, new Array(6)).map(function(i, j) { return j + 'px'; }),
-                radius = Array.apply(null, new Array(11)).map(function(i, j) { return (10*j) + '%'; });
+                radius = Array.apply(null, new Array(11)).map(function(i, j) { return (10*j) + 'px'; });
             $scope.global = Global;
             $scope.border = {};
-            
-            $scope.loadButtonGroup = function(){
-                $scope.buttonGroup = [{
-                    style: 'border-style',
+            $scope.buttonGroup = [{
+                    style: 'border_style',
                     options: ['dashed', 'dotted', 'solid', 'none']
                 }, {
-                    style: 'border-width',
+                    style: 'border_width',
                     options: widths
                 }, {
-                    style: 'border-color',
-                    //it's here because of this
+                    style: 'border_color',
                     options: 'colours.borders'
                 }, {
-                    style: 'border-radius',
+                    style: 'border_radius',
                     options: radius
                 }];
-            };
             
             $scope.create = function (isValid) { 
                 if (isValid && $scope.global.teamActive.settings.borders.length < $scope.constants.max.borders) {
                     var name = $scope.border.name;
                     $scope.border.name = '';
-                    $scope.global.teamActive.settings.borders.push({name: name, style: {'border-color': $scope.global.teamActive.settings.colours.borders[0]}});
-                    $scope.global.teamActive.settings.$update(function(a){ 
-                        $scope.loadButtonGroup();
-                        $scope.changeSubtabActive('borders', name);
+                    
+                    new Border({name: name, border_color: $scope.global.teamActive.settings.colours.borders[0]._id}).$save(function(border){
+                        $scope.global.teamActive.settings.borders.push(border._id);
+                        $scope.global.teamActive.settings.$update(function(settings){ 
+                            $scope.global.teamActive.settings = settings;
+                            $scope.changeSubtabActive('borders', border._id);
+                        });
                     });
                 } else {
                     $scope.submitted = true;
                 }
             };
-            
-            $scope.toggleValue = function(style, border_idx, group_idx, style_idx, state, active){
-                var value = 0;
-                if(state){
-                    value = $scope.buttonGroups[group_idx][style_idx].default;
-                }
-                else{
-                    value = $scope.buttonGroups[group_idx][style_idx].highlight;
-                }
-                $scope.global.teamActive.settings.borders[border_idx].style[style] = value;
-                $scope.global.teamActive.settings.$update(function(a){ 
-                    $scope.changeSubtabActive('borders', active);
+            $scope.remove = function(border){ 
+                new Border(border).$remove(function(){ 
+                    $rootScope.changeTeamActive($scope.global.teamActive);
+                    if(border._id === $scope.actives.borders && $scope.global.teamActive.settings.borders.length){
+                        $scope.changeSubtabActive('borders', $scope.global.teamActive.settings.borders[0]._id);
+                    }
                 });
             };
-            
-            $scope.init = function(){
-                $timeout(function () {
-                    if($scope.global.teamActive.settings.borders.length){
-                        $scope.changeSubtabActive('borders', $scope.global.teamActive.settings.borders[0].name); 
-                        $scope.loadButtonGroup();
-                    }
-                }, 500, false);
+            $scope.update = function(border){ 
+                new Border(border).$update(function(){ 
+                    $rootScope.changeTeamActive($scope.global.teamActive);
+                });
             };
+            $scope.clone = function(border){
+                if($scope.global.teamActive.settings.borders.length < $scope.constants.max.borders){
+                    var _new = angular.extend({}, border);
+                    delete _new._id;
+                    _new.border_color = border.border_color._id;
+                    _new.name = border.name + ' [Clone]';
+                    
+                    new Border(_new).$save(function(_new){
+                        $scope.global.teamActive.settings.borders.push(_new._id);
+                        $scope.global.teamActive.settings.$update(function(settings){ 
+                            $scope.global.teamActive.settings = settings;
+                            $scope.changeSubtabActive('borders', _new._id);
+                        });
+                    });
+                }
+            };
+            $scope.change = function(_border, style, option){
+                var border = new Border(_border);
+                
+                border[style] = (style === 'border_color' ? option._id : option);
+                
+                border.$update(function(){ 
+                    $rootScope.changeTeamActive($scope.global.teamActive);
+                });
+            };
+            $timeout(function () {
+                if($scope.global.teamActive.settings.borders.length)
+                    $scope.changeSubtabActive('borders', $scope.global.teamActive.settings.borders[0]._id);
+            }, 500, false);
         }
     ])
-    .controller('OverlaysController', ['$scope', '$stateParams', '$timeout', '$location', 'Global',
-        function ($scope, $stateParams, $timeout, $location, Global) {
+    .controller('OverlaysController', ['$scope', '$rootScope', '$stateParams', '$timeout', '$location', 'Global', 'Overlay',
+        function ($scope, $rootScope, $stateParams, $timeout, $location, Global, Overlay) {
             $scope.global = Global;
             $scope.overlay = {};
             
-            $scope.loadButtonGroup = function(){
-                $scope.buttonGroup = [{
-                    style: 'type',
-                    options: [0, 1, 2, 3, 4, 5]
-                }, {
-                    style: 'color0',
-                    options: 'colours.overlays'
-                }, {
-                    style: 'color1', 
-                    options: 'colours.overlays'
-                }];
-            };
-            
+            $scope.buttonGroup = [{
+                style: 'type',
+                options: [0, 1, 2, 3, 4, 5]
+            }, {
+                style: 'color_0',
+                options: 'colours.overlays'
+            }, {
+                style: 'color_1', 
+                options: 'colours.overlays'
+            }];
             $scope.create = function (isValid) { 
                 if (isValid && $scope.global.teamActive.settings.overlays.length < $scope.constants.max.overlays) {
                     var name = $scope.overlay.name;
                     $scope.overlay.name = '';
-                    $scope.global.teamActive.settings.overlays.push({name: name, style: {'color0': $scope.global.teamActive.settings.colours.overlays[0], 'color1': $scope.global.teamActive.settings.colours.overlays.length > 0 ? $scope.global.teamActive.settings.colours.overlays[1]: $scope.global.teamActive.settings.colours.overlays[0]}});
-                    $scope.global.teamActive.settings.$update(function(a){ 
-                        $scope.loadButtonGroup();
-                        $scope.changeSubtabActive('overlays', name);
+
+                    new Overlay({name: name, color_0: $scope.global.teamActive.settings.colours.overlays[0]._id, color_1: $scope.global.teamActive.settings.colours.overlays.length > 1 ? $scope.global.teamActive.settings.colours.overlays[1]._id: $scope.global.teamActive.settings.colours.overlays[0]._id}).$save(function(overlay){
+                        $scope.global.teamActive.settings.overlays.push(overlay._id);
+                        $scope.global.teamActive.settings.$update(function(settings){ 
+                            $scope.global.teamActive.settings = settings;
+                            $scope.changeSubtabActive('overlays', overlay._id);
+                        });
                     });
                 } else {
                     $scope.submitted = true;
                 }
             };
-            
-            $scope.toggleValue = function(style, overlay_idx, group_idx, style_idx, state, active){
-                var value = 0;
-                if(state){
-                    value = $scope.buttonGroups[group_idx][style_idx].default;
-                }
-                else{
-                    value = $scope.buttonGroups[group_idx][style_idx].highlight;
-                }
-                $scope.global.teamActive.settings.overlays[overlay_idx].style[style] = value;
-                $scope.global.teamActive.settings.$update(function(a){ 
-                    $scope.changeSubtabActive('overlays', active);
+            $scope.remove = function(overlay){ 
+                new Overlay(overlay).$remove(function(){ 
+                    $rootScope.changeTeamActive($scope.global.teamActive);
+                    if(overlay._id === $scope.actives.overlays && $scope.global.teamActive.settings.overlays.length){
+                        $scope.changeSubtabActive('overlays', $scope.global.teamActive.settings.overlays[0]._id);
+                    }
                 });
             };
-            
-            $scope.init = function(){
-                $timeout(function () {
-                    if($scope.global.teamActive.settings.overlays.length){
-                        $scope.changeSubtabActive('overlays', $scope.global.teamActive.settings.overlays[0].name); 
-                        $scope.loadButtonGroup();
-                    }
-                }, 500, false);
+            $scope.update = function(overlay){ 
+                new Overlay(overlay).$update(function(){ 
+                    $rootScope.changeTeamActive($scope.global.teamActive);
+                });
             };
+            $scope.clone = function(overlay){
+                if($scope.global.teamActive.settings.overlays.length < $scope.constants.max.overlays){
+                    var _new = angular.extend({}, overlay);
+                    delete _new._id;
+                    _new.color_0 = overlay.color_0._id;
+                    _new.color_1 = overlay.color_1._id;
+                    _new.name = overlay.name + ' [Clone]';
+                    
+                    new Overlay(_new).$save(function(_new){
+                        $scope.global.teamActive.settings.overlays.push(_new._id);
+                        $scope.global.teamActive.settings.$update(function(settings){ 
+                            $scope.global.teamActive.settings = settings;
+                            $scope.changeSubtabActive('overlays', _new._id);
+                        });
+                    });
+                }
+            };
+            $scope.change = function(_overlay, style, option){
+                var overlay = new Overlay(_overlay);
+                
+                overlay[style] = (style === 'overlay_0' || style === 'overlay_1' ? option._id : option);
+                
+                overlay.$update(function(){ 
+                    $rootScope.changeTeamActive($scope.global.teamActive);
+                });
+            };
+            $timeout(function () {
+                if($scope.global.teamActive.settings.overlays.length)
+                    $scope.changeSubtabActive('overlays', $scope.global.teamActive.settings.overlays[0]._id);
+            }, 500, false);
         }
     ]);

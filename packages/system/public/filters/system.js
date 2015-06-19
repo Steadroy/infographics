@@ -26,7 +26,9 @@ angular.module('mean.system')
         return function (style) {
             var output = '';
             for (var i in style) {
-                output = output + i + ':' + (typeof style[i] === 'string' ? style[i] : toRGBAFilter(style[i])) + ';';
+                if (['__v', '_id', 'name', 'created'].indexOf(i) >= 0)
+                    continue;
+                output = output + i.replace('_', '-') + ':' + (typeof style[i] === 'string' ? style[i] : toRGBAFilter(style[i])) + ';';
             }
             return output;
         };

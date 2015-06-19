@@ -36,151 +36,21 @@ var SettingSchema = new Schema({
             ref: 'Colour'
         }]
     },
-    fonts: {
-        type: [{
-            name: {
-                type: String,
-                required: true,
-                trim: true
-            },
-            style: {
-                'font-weight': {
-                    type: String,
-                    required: true,
-                    trim: true,
-                    enum: ['normal', 'bold'],
-                    default: 'normal'
-                },
-                'font-style': {
-                    type: String,
-                    required: true,
-                    trim: true,
-                    enum: ['normal', 'italic'],
-                    default: 'normal'
-                },
-                'text-decoration': {
-                    type: String,
-                    required: true,
-                    trim: true,
-                    enum: ['none', 'underline'],
-                    default: 'none'
-                },
-                'text-transform': {
-                    type: String,
-                    required: true,
-                    trim: true,
-                    enum: ['none', 'uppercase'],
-                    default: 'none'
-                },
-                'font-family': {
-                    type: String,
-                    required: true,
-                    trim: true,
-                    default: 'Arial, Helvetica, sans-serif'
-                },
-                'font-size': {
-                    type: String,
-                    required: true,
-                    trim: true,
-                    default: '14px'
-                },
-                color: {
-                    type: Schema.Types.ObjectId,
-                    require: true,
-                    ref: 'Colour'
-                },
-                'text-align': {
-                    type: String,
-                    required: true,
-                    trim: true,
-                    enum: ['left', 'right', 'center', 'justify'],
-                    default: 'left'
-                }
-            }    
-        }]
-    },
-    borders: {
-        type: [{
-            name: {
-                type: String,
-                required: true,
-                trim: true
-            },
-            style: {
-                'border-style': {
-                    type: String,
-                    required: true,
-                    trim: true,
-                    enum: ['dashed', 'dotted', 'solid', 'none'],
-                    default: 'solid'
-                },
-                'border-width': {
-                    type: String,
-                    required: true,
-                    trim: true,
-                    default: '1px'
-                },
-                'border-color': {
-                    hex: {
-                        type: String,
-                        required: true,
-                        trim: true,
-                        default: 'inherit'
-                    }, alpha: {
-                        type: Number,
-                        required: true,
-                        default: 1
-                    }
-                },
-                'border-radius': {
-                    type: String,
-                    required: true,
-                    trim: true,
-                    default: '0%'
-                }
-            }    
-        }]
-    },
-    overlays: {
-        type: [{
-            name: {
-                type: String,
-                required: true,
-                trim: true
-            },
-            style: {
-                type: {
-                    type: Number,
-                    required: true,
-                    default: 0
-                },
-                color0: {
-                    hex: {
-                        type: String,
-                        required: true,
-                        trim: true,
-                        default: 'inherit'
-                    }, alpha: {
-                        type: Number,
-                        required: true,
-                        default: 1
-                    }
-                },
-                color1: {
-                    hex: {
-                        type: String,
-                        required: true,
-                        trim: true,
-                        default: 'inherit'
-                    }, alpha: {
-                        type: Number,
-                        required: true,
-                        default: 1
-                    }
-                }
-            }
-        }]
-    }
+    fonts: [{
+        type: Schema.Types.ObjectId,
+        require: true,
+        ref: 'Font'
+    }],
+    borders: [{
+        type: Schema.Types.ObjectId,
+        require: true,
+        ref: 'Border'
+    }],
+    overlays: [{
+        type: Schema.Types.ObjectId,
+        require: true,
+        ref: 'Overlay'
+    }]
 });
 
 /**
@@ -191,5 +61,8 @@ SettingSchema.statics.load = function (id, cb) {
         _id: id
     }).exec(cb);
 };
+
+var deepPopulate = require('mongoose-deep-populate');
+SettingSchema.plugin(deepPopulate);
 
 mongoose.model('Setting', SettingSchema);

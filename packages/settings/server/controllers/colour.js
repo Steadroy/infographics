@@ -5,7 +5,6 @@
  */
 var mongoose = require('mongoose'),
     Colour = mongoose.model('Colour'),
-    //Settings = mongoose.model('Setting'),
     _ = require('lodash');
 
 
@@ -53,6 +52,7 @@ exports.update = function (req, res) {
                 error: 'Cannot update the colour' 
             });
         }
+        res.json(colour);
     });
 };
 

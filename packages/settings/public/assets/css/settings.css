@@ -158,25 +158,25 @@
   top: 14px;
   position: absolute;
 }
-.tabpanel .tab-content .controls .btn-group.dd-font-family > *,
-.tabpanel .tab-content .controls .btn-group.dd-font-family > ul *,
-.tabpanel .tab-content .controls .btn-group.dd-type > * {
+.tabpanel .tab-content .controls .btn-group.dd-font_family > *,
+.tabpanel .tab-content .controls .btn-group.dd-font_family > ul *,
+.tabpanel .tab-content .controls .btn-group.dd_type > * {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
   width: 180px;
   min-width: 180px;
 }
-.tabpanel .tab-content .controls .btn-group.dd-font-size > *,
-.tabpanel .tab-content .controls .btn-group.dd-border-width > *,
-.tabpanel .tab-content .controls .btn-group.dd-border-radius > * {
+.tabpanel .tab-content .controls .btn-group.dd-font_size > *,
+.tabpanel .tab-content .controls .btn-group.dd-border_width > *,
+.tabpanel .tab-content .controls .btn-group.dd-border_radius > * {
   width: 70px;
   min-width: 70px;
 }
 .tabpanel .tab-content .controls .btn-group.dd-color > *,
-.tabpanel .tab-content .controls .btn-group.dd-border-color > *,
-.tabpanel .tab-content .controls .btn-group.dd-color0 > *,
-.tabpanel .tab-content .controls .btn-group.dd-color1 > * {
+.tabpanel .tab-content .controls .btn-group.dd-border_color > *,
+.tabpanel .tab-content .controls .btn-group.dd-color_0 > *,
+.tabpanel .tab-content .controls .btn-group.dd-color_1 > * {
   width: 110px;
   min-width: 110px;
 }
@@ -184,7 +184,7 @@
   max-height: 132px;
   overflow: auto;
 }
-.tabpanel .tab-content .controls .btn-group.open ul.dropdown-menu .dropelement.dd-border-style {
+.tabpanel .tab-content .controls .btn-group.open ul.dropdown-menu .dropelement.dd-border_style {
   display: block;
   height: 20px;
   width: 80%;
