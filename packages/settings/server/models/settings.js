@@ -4,7 +4,7 @@
  * Module dependencies.
  */
 var mongoose = require('mongoose'),
-        Schema = mongoose.Schema;
+    Schema = mongoose.Schema;
 
 /**
  * Setting Schema
@@ -15,58 +15,26 @@ var SettingSchema = new Schema({
         default: Date.now
     },
     colours: {
-        type: {
-            backgrounds: [{
-                hex: {
-                    type: String,
-                    required: true,
-                    trim: true
-                }, alpha: {
-                    type: Number,
-                    required: true,
-                    default: 1
-                }
-            }],
-            fonts: [{
-                hex: {
-                    type: String,
-                    required: true,
-                    trim: true
-                }, alpha: {
-                    type: Number,
-                    required: true,
-                    default: 1
-                }
-            }],
-            borders: [{
-                hex: {
-                    type: String,
-                    required: true,
-                    trim: true
-                }, alpha: {
-                    type: Number,
-                    required: true,
-                    default: 1
-                }
-            }],
-            overlays: [{
-                hex: {
-                    type: String,
-                    required: true,
-                    trim: true
-                }, alpha: {
-                    type: Number,
-                    required: true,
-                    default: 1
-                }
-            }]
-        },
-        default: {
-            backgrounds: [],
-            fonts: [],
-            borders: [],
-            overlays: []
-        }
+        backgrounds: [{
+            type: Schema.Types.ObjectId,
+            require: true,
+            ref: 'Colour'
+        }],
+        fonts: [{
+            type: Schema.Types.ObjectId,
+            require: true,
+            ref: 'Colour'
+        }],
+        borders: [{
+            type: Schema.Types.ObjectId,
+            require: true,
+            ref: 'Colour'
+        }],
+        overlays: [{
+            type: Schema.Types.ObjectId,
+            require: true,
+            ref: 'Colour'
+        }]
     },
     fonts: {
         type: [{
@@ -117,16 +85,9 @@ var SettingSchema = new Schema({
                     default: '14px'
                 },
                 color: {
-                    hex: {
-                        type: String,
-                        required: true,
-                        trim: true,
-                        default: 'inherit'
-                    }, alpha: {
-                        type: Number,
-                        required: true,
-                        default: 1
-                    }
+                    type: Schema.Types.ObjectId,
+                    require: true,
+                    ref: 'Colour'
                 },
                 'text-align': {
                     type: String,

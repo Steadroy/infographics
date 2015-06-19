@@ -2,13 +2,16 @@
 
 //Settings service used for settings REST endpoint
 angular.module('mean.settings')
-    .factory('Settings', ['$resource',
+    .factory('Colour', ['$resource',
         function ($resource) {
-            return $resource('settings/:settingId', {
-                settingId: '@_id'
+            return $resource('colour/:colourId', {
+                colourId: '@_id'
             }, {
                 update: {
                     method: 'PUT'
+                },
+                remove: {
+                    method: 'DELETE'
                 }
             });
         }

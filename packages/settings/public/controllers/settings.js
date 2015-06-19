@@ -119,26 +119,33 @@ angular.module('mean.settings', ['colorpicker.module'])
             $rootScope.open('colours');
         }
     ])
-    .controller('ColoursController', ['$scope', '$rootScope', 'Global',
-        function ($scope, $rootScope, Global) {
+    .controller('ColoursController', ['$scope', '$rootScope', 'Global', 'Colour',
+        function ($scope, $rootScope, Global, Colour) {
             $scope.global = Global;
             $scope.coloursUsage = ['backgrounds', 'fonts', 'borders', 'overlays'];
             $scope.newColour = '';
             
             $scope.addNewColour = function(usage, newColour){
                 if(newColour){
-                    $scope.global.teamActive.settings.colours[usage].push({hex: newColour, alpha: 1}); 
-                    $scope.global.teamActive.settings.$update(function(){ });
+                    new Colour({hex: newColour}).$save(function(colour){
+                        $scope.global.teamActive.settings.colours[usage].push(colour._id);
+                        $scope.global.teamActive.settings.$update(function(settings){ 
+                            $scope.global.teamActive.settings = settings;
+                        });
+                    });
                 }
             };
             
-            $scope.editColour = function(){ 
-                $scope.global.teamActive.settings.$update(function(){  });
+            $scope.editColour = function(colour){ 
+                new Colour(colour).$update(function(){ 
+                    $rootScope.changeTeamActive($scope.global.teamActive);
+                });
             };
             
-            $scope.removeColour = function(usage, index){ 
-                $scope.global.teamActive.settings.colours[usage].splice(index, 1);
-                $scope.global.teamActive.settings.$update(function(){ });
+            $scope.removeColour = function(usage, colour){ 
+                new Colour(colour).$remove(function(){ 
+                    $rootScope.changeTeamActive($scope.global.teamActive);
+                });
             };
             
             $scope.init = function(){

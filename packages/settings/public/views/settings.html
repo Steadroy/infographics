@@ -28,10 +28,10 @@
                             <h2>{{ usage | pretify}}</h2>
                             <hr/>
                             <div> 
-                                <div class="col-md-2 col-sm-2 colour_container" data-ng-repeat="colour in global.teamActive.settings.colours[usage] track by $index">
-                                    <input class="colour_input" colorpicker type="text" data-ng-model="colour.hex" style="background: {{colour | toRGBA}}" data-ng-blur="editColour()"/>
-                                    <button tooltip="Remove {{colour.hex}}" tooltip-trigger="mouseenter" tooltip-placement="right" class="colour_remove" data-ng-click="removeColour(usage, $index)" role="button"><i class="fa fa-close"></i></button>
-                                    <input tooltip="Alpha: {{colour.alpha | number:3}}" tooltip-trigger="mouseenter" tooltip-placement="bottom" type="range" min="0" max="1" step=".025" data-ng-model="colour.alpha" data-ng-blur="editColour()" />
+                                <div class="col-md-2 col-sm-2 colour_container" data-ng-repeat="colour in global.teamActive.settings.colours[usage]" >
+                                    <input class="colour_input" colorpicker type="text" data-ng-model="colour.hex" style="background: {{colour | toRGBA}}" data-ng-blur="editColour(colour)"/>
+                                    <button tooltip="Remove {{colour.hex}}" tooltip-trigger="mouseenter" tooltip-placement="right" class="colour_remove" data-ng-click="removeColour(usage, colour)" role="button"><i class="fa fa-close"></i></button>
+                                    <input tooltip="Alpha: {{colour.alpha | number:3}}" tooltip-trigger="mouseenter" tooltip-placement="bottom" type="range" min="0" max="1" step=".025" data-ng-model="colour.alpha" data-ng-blur="editColour(colour)" />
                                 </div> 
                                 <div class="col-md-2 col-sm-2 colour_container colour_new new_plus" data-ng-show="global.teamActive.settings.colours[usage].length < constants.max[usage + '_colours']">
                                     <input class="colour_input colour_new new_plus" colorpicker type="text" data-ng-model="newColour" style="background: {{newColour}}" data-ng-blur="addNewColour(usage, newColour); newColour = ''"/>
