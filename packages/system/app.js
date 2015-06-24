@@ -19,7 +19,11 @@ SystemPackage.register(function (app, auth, database) {
 
     SystemPackage.aggregateAsset('css', 'common.css', {group: 'footer'});
     SystemPackage.aggregateAsset('css', 'styles.css', {group: 'footer'});
-    SystemPackage.angularDependencies(['ui.router', 'mean-factory-interceptor']);
+    
+    SystemPackage.aggregateAsset('js', '../../../../../bower_components/ng-file-upload/ng-file-upload-shim.min.js', {group: 'footer'});
+    SystemPackage.aggregateAsset('js', '../../../../../bower_components/ng-file-upload/ng-file-upload.min.js', {group: 'footer'});
+    
+    SystemPackage.angularDependencies(['ui.router', 'mean-factory-interceptor', 'ng-file-upload']);
 
     // The middleware in config/express will run before this code
 

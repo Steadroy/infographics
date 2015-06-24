@@ -1,8 +1,8 @@
 'use strict';
 
-angular.module('mean.system')
-    .controller('HeaderController', ['$scope', '$rootScope', 'Global', 'Menus',
-        function ($scope, $rootScope, Global, Menus) {
+angular.module('mean.system', ['ngFileUpload'])
+    .controller('HeaderController', ['$scope', 'Upload', '$rootScope', 'Global', 'Menus',
+        function ($scope, Upload, $rootScope, Global, Menus) {
             $scope.global = Global;
             $scope.menus = {};
             $rootScope.constants = {
@@ -46,6 +46,25 @@ angular.module('mean.system')
                     user: $rootScope.user
                 };
             });
+            
+            $scope.upload = function (files) {
+                if (files && files.length) {
+                    var sucess = function(data, status, headers, config){
+                            $scope.global.teamActive.logo = data.file.filename;
+                            $scope.global.teamActive.$update();
+                        };
+                    for (var i = 0; i < files.length; i = i + 1) {
+                        var file = files[i];
+                        Upload
+                            .upload({
+                                url: '/upload',
+                                fields: {'dest': '/upload/' + $scope.global.teamActive._id + '/', delete: $scope.global.teamActive.logo},
+                                file: file
+                            })
+                            .success(sucess);
+                    }
+                }
+            };
         }
     ])
     .controller('TeamsController', ['$scope', '$rootScope', '$location', 'Global', 'Teams', 'Settings',
@@ -111,15 +130,6 @@ angular.module('mean.system')
             };
             
             $rootScope.changeTeamActive = function (team){
-                /*
-                var user = new Users($scope.global.user);
-                user.lastTeamAccessed = team;
-                user.$update(function(response){
-                    $scope.global.user = response;
-                    $scope.global.teamActive = team;
-                    console.log($scope.global.user.lastTeamAccessed);
-                });*/
-                
                 $scope.global.teamActive = team;
                 Settings.get({
                     settingId: typeof team.settings === 'object' ? team.settings._id : team.settings

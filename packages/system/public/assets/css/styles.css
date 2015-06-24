@@ -20,6 +20,9 @@ body > header.navbar:hover.translucent {
   opacity: 1;
   filter: alpha(opacity=100);
 }
+body > header.navbar #logo img {
+  max-height: 20px;
+}
 body > section.content {
   padding-top: 50px;
 }

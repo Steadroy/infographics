@@ -159,7 +159,7 @@ exports.getTags = function (req, res) {
 
 
 /* Upload */
-function rename(file, dest, user, callback) {
+function rename(req, file, dest, user, callback) {
     var file_name = new Date().getTime();
     fs.rename(file.path, config.root + dest + file_name, function(err) {
         if (err) throw err;
@@ -176,9 +176,20 @@ function rename(file, dest, user, callback) {
                 poster = dest + poster_name;
             }
             
+            if(req.body.delete){
+                var previous_path = config.root + dest + req.body.delete;
+                
+                fs.exists(previous_path, function (exists) {
+                    if (exists) {
+                        fs.unlink(previous_path);
+                    }
+                });
+            }
+            
             callback({
                 success: true,
                 file: {
+                    filename: file_name,
                     src: dest + file_name,
                     name: file.name,
                     size: file.size,
@@ -224,12 +235,12 @@ exports.upload = function(req, res) {
     var path = config.root + req.body.dest;
     if (!fs.existsSync(path)) {
         mkdir_p(path, function(err) {
-            rename(req.files.file, req.body.dest, req.user, function(data) {
+            rename(req, req.files.file, req.body.dest, req.user, function(data) {
                 res.jsonp(data);
             });
         });
     } else {
-        rename(req.files.file, req.body.dest, req.user, function(data) {
+        rename(req, req.files.file, req.body.dest, req.user, function(data) {
             res.jsonp(data);
         });
     }

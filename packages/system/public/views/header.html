@@ -6,7 +6,21 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
         </button>
-        <a class="navbar-brand" ui-sref="home" mean-token="'site-title'">Infographics [{{global.teamActive.name}}]</a>
+        <a class="navbar-brand" ui-sref="home" mean-token="'site-title'">
+            Infographics
+        </a>
+        <a class="navbar-brand" title="logo" data-ng-show='global.teamActive._id'>
+            <span id="logo" ngf-drop data-ng-model="files" class="drop-box" 
+                 ngf-drag-over-class="dragover" ngf-multiple="false" 
+                 ngf-select ngf-allow-dir="true" ngf-accept="'image/png'" ngf-change="upload(files)">
+                <span data-ng-show='global.teamActive.logo'>
+                    <img data-ng-src="/logo/{{global.teamActive._id}}/{{global.teamActive.logo}}" alt='LOGO' />
+                </span>
+                <span data-ng-show='!global.teamActive.logo'>
+                    [ {{global.teamActive.name}} ]
+                </span>
+            </span>
+        </a>
     </div>
 
     <nav class="collapse navbar-collapse navbar-collapse">

@@ -19,6 +19,11 @@ var TeamSchema = new Schema({
         required: true,
         trim: true
     },
+    logo: {
+        type: String,
+        required: false,
+        trim: true
+    },
     settings: {
         type: Schema.Types.ObjectId,
         ref: 'Setting'
