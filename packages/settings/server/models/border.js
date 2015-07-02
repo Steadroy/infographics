@@ -23,7 +23,25 @@ var BorderSchema = new Schema({
         enum: ['dashed', 'dotted', 'solid', 'none'],
         default: 'solid'
     },
-    border_width: {
+    border_top_width: {
+        type: String,
+        required: true,
+        trim: true,
+        default: '1px'
+    },
+    border_right_width: {
+        type: String,
+        required: true,
+        trim: true,
+        default: '1px'
+    },
+    border_bottom_width: {
+        type: String,
+        required: true,
+        trim: true,
+        default: '1px'
+    },
+    border_left_width: {
         type: String,
         required: true,
         trim: true,

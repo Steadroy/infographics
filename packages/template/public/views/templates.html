@@ -1,17 +1,17 @@
-<section data-ng-controller="TemplatesController" > 
-    <h1 class="templates_header col-md-12" data-ng-init="init()">
-        Templates for <span>{{global.teamActive.name}}</span>
+<section data-ng-controller="TemplateController" > 
+    <h1 class="template_header col-md-12">
+        Template for <span>{{global.teamActive.name}}</span>
     </h1>
     <div class="col-md-12"> 
-        <ul class="nav nav-pills nav-stacked col-md-3 col-sm-3 templates-list" role="tablist">
-            <li role="presentation" data-ng-show="templates.length > 0"> 
+        <ul class="nav nav-pills nav-stacked col-md-3 col-sm-3 template-list" role="tablist">
+            <li role="presentation" data-ng-show="template.length > 0"> 
                 <a role="menuitem"> 
                     <form name="searchTemplate" role="form" novalidate="">
                         <input class="search_template" name="search_template" type="text" placeholder="Search Template..." data-ng-model="search_query">
                     </form>
-                </a>
+                </a> 
             </li>
-            <li role="presentation" data-ng-repeat="template in templates | filter:search_query" data-ng-class="{active: template._id == active._id}">
+            <li role="presentation" data-ng-repeat="template in template | filter:search_query" data-ng-class="{active: template._id === active._id}">
                 <a href data-ng-click="select(template)">{{template.name}}</a>
                 <a role="button" data-ng-click="remove(template)" class="remove"><i class="fa fa-remove"></i></a>
             </li>
@@ -23,15 +23,21 @@
                 </a>
             </li>
         </ul>
-        <div class="templates-steps-container infographic edit col-md-9" data-ng-show="active" >
-            <h2>Template: {{active.name}}</h2>
-            <template-step step="1" template="active" data-ng-show="currentStep === 1"> </template-step>
-            <template-step step="2" template="active" data-ng-show="currentStep === 2"> </template-step>
-            <template-step step="3" template="active" data-ng-show="currentStep === 3"> </template-step>
-            
-            <div class="pagination-container">
-                <pagination direction-links="false" total-items="totalSteps" items-per-page="1" ng-model="currentStep" ng-change="pageChanged()"></pagination>
-            </div>
+        
+        <div class="template-container infographic edit col-md-9" data-ng-show="active._id" >
+            <h2 class="template_header_name">
+                <form name="templateName" role="form" data-ng-submit="update(active)" novalidate> 
+                    <input id="templates_name_{{active._id}}" data-ng-model="active.name" class="col-md-9"/>
+                    <label class="btn btn-success" role="button" data-ng-click="clone(active)"> 
+                        <i class="fa fa-copy"></i>
+                        Clone Template
+                    </label>
+                </form> 
+            </h2> 
+            <section class="template-edit template" data-ng-class="{'col-md-9': active_dom, 'col-md-12': !active_dom}">
+                <dom-element data-ng-repeat="dom in active.doms" dom="dom"></dom-element>
+            </section>
+            <dom-settings data-ng-class="{'col-md-3': active_dom, 'hidden': !active_dom}"></dom-settings>
         </div>
     </div>
 </section>

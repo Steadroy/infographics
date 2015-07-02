@@ -4,28 +4,28 @@
  * Defining the Package
  */
 var Module = require('meanio').Module;
-var Templates = new Module('templates');
+var Template = new Module('template');
 
 /*
  * All MEAN packages require registration
  * Dependency injection is used to define required modules
  */
-Templates.register(function (app, auth, database) {
+Template.register(function (app, auth, database) {
 
     //We enable routing. By default the Package Object is passed to the routes
-    Templates.routes(app, auth, database);
+    Template.routes(app, auth, database);
 
     //We are adding a link to the main menu for all authenticated users
 
-    Templates.menus.add({
+    Template.menus.add({
         'roles': ['designer'],
-        'title': 'Templates',
-        'link': 'see templates'
+        'title': 'Template',
+        'link': 'see template'
     });
     
-    //Templates.aggregateAsset('js', '../../../../../bower_components/ng-resize/ngresize.min.js', {group: 'footer'});
-    //Templates.aggregateAsset('js', 'colResizable-1.5.min.js', {group: 'footer'});
-    Templates.aggregateAsset('css', 'templates.css', {group: 'footer'});
+    //Template.aggregateAsset('js', '../../../../../bower_components/ng-resize/ngresize.min.js', {group: 'footer'});
+    //Template.aggregateAsset('js', 'colResizable-1.5.min.js', {group: 'footer'});
+    Template.aggregateAsset('css', 'template.css', {group: 'footer'});
 
-    return Templates;
+    return Template;
 });

@@ -1,7 +1,7 @@
 {
-  "name": "templates",
+  "name": "template",
   "version": "0.0.1",
-  "description": "Templates package",
+  "description": "Template package",
   "author": {
     "name": "Diego Lavayen"
   },

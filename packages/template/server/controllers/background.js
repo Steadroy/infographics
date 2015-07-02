@@ -4,74 +4,78 @@
  * Module dependencies.
  */
 var mongoose = require('mongoose'),
-    Font = mongoose.model('Font'),
-    _ = require('lodash');
+    Background = mongoose.model('Background'),
+    _ = require('lodash'),
+    populate = ['background_color'];
 
 
 /**
- * Find font by id
+ * Find background by id
  */
-exports.font = function (req, res, next, id) {
-    Font
+exports.background = function (req, res, next, id) {
+    Background
         .findById(id)
-        .deepPopulate('color')
-        .exec(function(err, font){
+        .deepPopulate(populate)
+        .exec(function(err, background){
             if (err)
                 return next(err);
-            if (!font)
-                return next(new Error('Failed to load font ' + id));
+            if (!background)
+                return next(new Error('Failed to load background ' + id));
             
-            req.font = font;
+            req.background = background;
             next();
         });
 };
 
 /**
- * Create a font
+ * Create a background
  */
 exports.create = function (req, res) {
-    var font = new Font(req.body);
+    var background = new Background(req.body);
     
-    font.save(function (err) {
+    background.save(function (err) {
         if (err) {
             return res.status(500).json({
-                error: 'Cannot save the font'
+                error: 'Cannot save the background'
             });
         }
-        res.json(font);
+        res.json(background);
     });
 };
 
 /**
- * Update a font
+ * Update a background
  */
 exports.update = function (req, res) {
-    var font = req.font;
+    var background = req.background;
     
-    font = _.extend(font, req.body);
+    background = _.extend(background, req.body);
     
-    font.save(function (err) {
+    background.save(function (err) {
         if (err) {
             return res.status(500).json({
-                error: 'Cannot update the font' 
+                error: 'Cannot update the background' 
             });
         }
-        res.json(font);
+        Background
+            .deepPopulate(background, populate,function(err, background){
+                res.json(background);
+            });
     });
 };
 
 /**
- * Delete a team
+ * Delete a background
  */
 exports.destroy = function (req, res) {
-    var font = req.font;
+    var background = req.background;
     
-    font.remove(function (err) {
+    background.remove(function (err) {
         if (err) {
             return res.status(500).json({
-                error: 'Cannot delete the font'
+                error: 'Cannot delete the background'
             });
         }
-        res.json(font);
+        res.json(background);
     });
 };

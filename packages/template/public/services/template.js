@@ -1,26 +1,22 @@
 'use strict';
 
-//Templates service used for templates REST endpoint
-angular.module('mean.templates')
-        .factory('Templates', ['$resource',
-            function ($resource) {
-                return $resource('templates/:templatesId', {
-                    templatesId: '@_id'
-                }, {
-                    update: {
-                        method: 'POST'
-                    }
-                });
-            }
-        ])
-        .factory('Templates', ['$resource',
-            function ($resource) {
-                return $resource(
-                        'templates/:teamId',
-                        {teamId: '@_id'},
-                        {
-                            'query': {method: 'GET', isArray: true }
-                        }
-                );
-            }
-        ]);
+//Settings service used for settings REST endpoint
+angular.module('mean.settings')
+    .factory('Template', ['$resource',
+        function ($resource) {
+            return $resource('template/:templateId', {
+                templateId: '@_id'
+            }, {
+                update: {
+                    method: 'PUT'
+                },
+                remove: {
+                    method: 'DELETE'
+                },
+                get: {
+                    method: 'GET',
+                    isArray: true
+                }
+            });
+        }
+    ]);

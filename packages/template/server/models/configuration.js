@@ -6,80 +6,71 @@
 var mongoose = require('mongoose'),
     Schema = mongoose.Schema;
 
-var FontSchema = new Schema({
+var ConfigurationSchema = new Schema({
     created: {
         type: Date,
         default: Date.now
     },
-    name: {
-        type: String,
+    top: {
+        type: Number,
         required: true,
-        trim: true
+        default: 0
     },
-    font_weight: {
-        type: String,
+    left: {
+        type: Number,
         required: true,
-        trim: true,
-        enum: ['normal', 'bold'],
-        default: 'normal'
+        default: 0
     },
-    font_style: {
-        type: String,
+    width: {
+        type: Number,
         required: true,
-        trim: true,
-        enum: ['normal', 'italic'],
-        default: 'normal'
+        default: 585
     },
-    text_decoration: {
-        type: String,
+    height: {
+        type: Number,
         required: true,
-        trim: true,
-        enum: ['none', 'underline'],
-        default: 'none'
+        default: 360
     },
-    text_transform: {
+    logo_position: {
         type: String,
         required: true,
         trim: true,
-        enum: ['none', 'uppercase'],
-        default: 'none'
+        enum: ['bottom-right', 'bottom-left', 'top-right', 'top-left'],
+        default: 'bottom-right'
     },
-    font_family: {
-        type: String,
-        required: true,
-        trim: true,
-        default: 'Arial, Helvetica, sans-serif'
-    },
-    font_size: {
-        type: String,
-        required: true,
-        trim: true,
-        default: '14px'
-    },
-    text_align: {
-        type: String,
-        required: true,
-        trim: true,
-        enum: ['left', 'right', 'center', 'justify'],
-        default: 'left'
-    },
-    color: {
+    background: {
         type: Schema.Types.ObjectId,
         require: true,
-        ref: 'Colour'
-    }
+        ref: 'Background'
+    },
+    border: {
+        type: Schema.Types.ObjectId,
+        require: true,
+        ref: 'Border'
+    },
+    font: {
+        type: Schema.Types.ObjectId,
+        require: true,
+        ref: 'Font'
+    },
+    overlay: {
+        type: Schema.Types.ObjectId,
+        require: true,
+        ref: 'Overlay'
+    },
+    //overwrite: {}
 });
 
 /**
  * Statics
  */
-FontSchema.statics.load = function (id, cb) {
+ConfigurationSchema.statics.load = function (id, cb) {
     this.findOne({
         _id: id
     }).exec(cb);
 };
 
 var deepPopulate = require('mongoose-deep-populate');
-FontSchema.plugin(deepPopulate);
+ConfigurationSchema.plugin(deepPopulate);
 
-mongoose.model('Font', FontSchema);
+mongoose.model('Configuration', ConfigurationSchema);

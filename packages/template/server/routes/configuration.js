@@ -1,25 +1,25 @@
 'use strict';
 
-var font = require('../controllers/font');
+var configuration = require('../controllers/configuration');
 
-// Font authorization helpers
+// Configuration authorization helpers
 var hasAuthorization = function (req, res, next) {
-    if (!req.user.isAdmin && req.font.team.creator.id !== req.user.id) {
+    if (!req.user.isAdmin && req.configuration.team.creator.id !== req.user.id) {
         return res.status(401).send('User is not authorized');
     }
     next();
 };
 
-module.exports = function (Font, app, auth) {
+module.exports = function (Configuration, app, auth) {
 
-    app.route('/font')
-        .get(auth.isMongoId, font.font)
-        .post(auth.isMongoId, auth.requiresLogin, font.create);
+    app.route('/configuration')
+        .get(auth.isMongoId, configuration.configuration)
+        .post(auth.isMongoId, auth.requiresLogin, configuration.create);
 
-    app.route('/font/:fontId')
-        .put(auth.isMongoId, auth.requiresLogin, hasAuthorization, font.update)
-        .delete(auth.isMongoId, auth.requiresLogin, hasAuthorization, font.destroy);
+    app.route('/configuration/:configurationId')
+        .put(auth.isMongoId, auth.requiresLogin, hasAuthorization, configuration.update)
+        .delete(auth.isMongoId, auth.requiresLogin, hasAuthorization, configuration.destroy);
     
-    // Finish with font up the fontId param
-    app.param('fontId', font.font);
+    // Finish with configuration up the configurationId param
+    app.param('configurationId', configuration.configuration);
 };

@@ -1,28 +1,26 @@
 'use strict';
 
-var templates = require('../controllers/templates');
+var template = require('../controllers/template');
 
-// Media authorization helpers
+// Element authorization helpers
 var hasAuthorization = function (req, res, next) {
-    if (!req.user.isAdmin && req.templates.team.creator.id !== req.user.id) {
+    if (!req.user.isAdmin && req.template.team.creator.id !== req.user.id) {
         return res.status(401).send('User is not authorized');
     }
     next();
 };
 
-module.exports = function (Media, app, auth) {
-    app.route('/templates/:teamId')
-        .get(auth.isMongoId, auth.requiresLogin, templates.get);
+module.exports = function (Element, app, auth) {
 
-    app.route('/templates')
-        .post(auth.requiresLogin, hasAuthorization, templates.create);
+    app.route('/template')
+        .get(auth.isMongoId, template.get)
+        .post(auth.isMongoId, auth.requiresLogin, template.create);
 
-    app.route('/templates/:templatesId')
-        .get(auth.isMongoId, auth.requiresLogin, hasAuthorization, templates.get)
-        .delete(auth.isMongoId, auth.requiresLogin, hasAuthorization, templates.destroy)
-        .post(auth.isMongoId, auth.requiresLogin, hasAuthorization, templates.update)
-        .put(auth.isMongoId, auth.requiresLogin, hasAuthorization, templates.update);
-    
-    // Finish with templates up the templatesId param
-    app.param('templatesId', templates.template);
+    app.route('/template/:templateId')
+        .post(auth.isMongoId, auth.requiresLogin, template.create) //clone
+        .put(auth.isMongoId, auth.requiresLogin, hasAuthorization, template.update)
+        .delete(auth.isMongoId, auth.requiresLogin, hasAuthorization, template.destroy);
+
+    // Finish with template up the templateId param
+    app.param('templateId', template.template);
 };

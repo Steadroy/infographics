@@ -1,17 +1,86 @@
-<section data-ng-controller="ElementSettingsController" data-ng-show="global.togglePanel" class="col-md-3 details-panel">
+<section class="details-panel">
     <tabset> 
         <tab> 
             <tab-heading>
-                <i class="fa fa-paint-brush"></i>
+                <i class="fa fa-cog"></i>
             </tab-heading> 
-            <div role="tabpanel" class="colours tabpanel">
-                <div data-ng-repeat="colour in global.teamActive.settings.colours.backgrounds"
-                     style="background: {{colour | toRGBA}}" class="colour"
-                     data-ng-class="{selected: colour.hex === active.config.background.background_color.hex && colour.alpha === active.config.background.background_color.alpha}"
-                     tooltip="{{colour.hex}} [alpha: {{colour.alpha | number:2}}]" tooltip-trigger="mouseenter" tooltip-placement="top" 
-                     role="button" data-ng-click="selectColour(colour)"
-                     >
-                </div> 
+            <div role="tabpanel" class="settings tabpanel">
+                <div class="logo_position" data-ng-if="!active_dom.parent_dom_id">
+                    <h5>logo_position</h5>
+                    <div class="btn-group">
+                        <label data-ng-repeat="i in config.logo_position" 
+                               tooltip="{{i}}" tooltip-trigger="mouseenter" tooltip-placement="top" 
+                               class="btn btn-primary {{i}}" 
+                               data-ng-model="active_dom.configuration.logo_position" btn-radio="'{{i}}'"
+                               data-ng-click="changeSetting('logo_position', null, i)">
+                        </label>
+                    </div>
+                </div>
+                <div class="font" data-ng-if="active_dom.type === 'text'">
+                    <h5>font</h5>
+                    <div class="btn-group" dropdown>
+                        <button type="button" class="btn btn-primary dropdown-toggle" > 
+                            <span>
+                                {{active_dom.configuration.font ? active_dom.configuration.font.name : 'none'}}
+                            </span> 
+                            <span class="caret"></span> 
+                        </button>
+                        <ul class="dropdown-menu" role="menu">
+                            <li data-ng-class="{active: !active_dom.configuration.font}">
+                                <a href data-ng-click="changeSetting('font', null, null)">none</a>
+                            </li>
+                            <li data-ng-repeat="font in global.teamActive.settings.fonts"
+                                data-ng-class="{active: active_dom.configuration.font._id === font._id}" 
+                            >
+                                <a href data-ng-click="changeSetting('font', null, font)">{{font.name}}</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="borders">
+                    <h5>border</h5>
+                    <div class="btn-group" dropdown>
+                        <button type="button" class="btn btn-primary dropdown-toggle" > 
+                            <span>{{active_dom.configuration.border ? active_dom.configuration.border.name : 'none'}}</span> 
+                            <span class="caret"></span> 
+                        </button>
+                        <ul class="dropdown-menu" role="menu">
+                            <li data-ng-class="{active: !active_dom.configuration.border}">
+                                <a href data-ng-click="changeSetting('border', null, null)">none</a>
+                            </li>
+                            <li data-ng-repeat="border in global.teamActive.settings.borders"
+                                data-ng-class="{active: active_dom.configuration.border._id === border._id}" 
+                            >
+                                <a href data-ng-click="changeSetting('border', null, border)">{{border.name}}</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="overlays" data-ng-if="!active_dom.parent_dom_id">
+                    <h5>overlay</h5>
+                    <div class="btn-group" dropdown>
+                        <button type="button" class="btn btn-primary dropdown-toggle" > 
+                            <span>{{active_dom.configuration.overlay ? active_dom.configuration.overlay.name : 'none'}}</span> 
+                            <span class="caret"></span> 
+                        </button>
+                        <ul class="dropdown-menu" role="menu">
+                            <li data-ng-class="{active: !active_dom.configuration.overlay}">
+                                <a href data-ng-click="changeSetting('overlay', null, null)">none</a>
+                            </li>
+                            <li data-ng-repeat="overlay in global.teamActive.settings.overlays"
+                                data-ng-class="{active: active_dom.configuration.overlay._id === overlay._id}" 
+                            >
+                                <a href data-ng-click="changeSetting('overlay', null, overlay)">{{overlay.name}}</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <button data-ng-if="active_dom.parent_dom_id"
+                        class="remove btn btn-danger" 
+                        data-ng-click="removeDom(active_dom)"
+                    >
+                    Remove
+                </button> 
             </div>
         </tab>
         <tab> 
@@ -19,79 +88,108 @@
                 <i class="fa fa-picture-o"></i>
             </tab-heading> 
             <div role="tabpanel" class="images tabpanel">
-                <input class="search_image" name="search_image" type="text" placeholder="Search Image..." data-ng-model="search_query_image"> 
-                <div data-ng-repeat="image in mediaFiles | filter:search_query_image" 
-                     style="background-image: url(/static/{{image._id}})" class="image"
-                     data-ng-class="{selected: image._id === active.config.background.background_image}"
-                     tooltip="{{image.name}}" tooltip-trigger="mouseenter" tooltip-placement="top" 
-                     role="button" data-ng-click="selectImage(image)">
-                </div> 
+                <div class="pictures-container">
+                    <input class="search_image" name="search_image" type="text" placeholder="Search Image..." data-ng-model="search_query_image"> 
+                    <div data-ng-repeat="image in mediaFiles | filter:search_query_image | limitTo:6" 
+                         style="background-image: url(/static/{{image._id}})" class="image"
+                         data-ng-class="{selected: image._id === active_dom.configuration.background.background_image}"
+                         role="button" data-ng-click="selectImage(image)">
+                    </div> 
+                    <span 
+                        data-ng-if="mediaFiles.length > 6"
+                        tooltip="more, please use the search bar" tooltip-trigger="mouseenter" tooltip-placement="top" 
+                    >
+                        <i class="fa fa-ellipsis-h"></i>
+                    </span>
+                </div>
+                <div class="overwritable">
+                    <h5>it can be overwritten?</h5>
+                    <input type="checkbox" />
+                </div>
+                <div class="background-settings">
+                    <div data-ng-repeat="(key, setting) in config.background_settings" 
+                         data-ng-if="key === 'background_position' && active_dom.configuration.background.background_image !== 'none'"
+                         data-ng-class="{'background-position': key === 'background_position'}"
+                         >
+                        <h5>{{key}}</h5>
+                        <div class="btn-group">
+                            <label data-ng-repeat="i in setting" 
+                                   tooltip="{{i}}" tooltip-trigger="mouseenter" tooltip-placement="top" 
+                                   class="btn btn-primary" data-ng-model="active_dom.configuration.background[key]" btn-radio="'{{i}}'"
+                                   data-ng-click="changeSetting('background', key, i)" >
+                            </label>
+                        </div>
+                    </div>
+                    <div data-ng-repeat="(key, settings) in config.background_settings" 
+                         data-ng-if="key === 'background_color' || (key !== 'background_position' && active_dom.configuration.background.background_image !== 'none')"
+                         class="btn-group" dropdown 
+                         >
+                        <h5>{{key}}</h5>
+                        <button type="button" class="btn btn-primary dropdown-toggle" > 
+                            <span>
+                                <span data-ng-if="key === 'background_color'" class='dd-color' style='background: {{active_dom.configuration.background[key] | toRGBA}}'> </span>
+                                <span data-ng-if="key === 'background_color'" >{{active_dom.configuration.background[key] ? active_dom.configuration.background[key].hex : 'none'}}</span>
+                                <span data-ng-if="key !== 'background_color'" >{{active_dom.configuration.background[key]}}</span>
+                            </span> 
+                            <span class="caret"></span> 
+                        </button>
+                        <ul class="dropdown-menu" role="menu">
+                            <li data-ng-if="key === 'background_color'" data-ng-class="{active: !active_dom.configuration.background.background_color}">
+                                <a href data-ng-click="changeSetting('background', 'background_color', null)">
+                                    <span class='dd-color'> </span>
+                                    none
+                                </a>
+                            </li>
+                            <li data-ng-repeat="i in settings" 
+                                data-ng-class="{active: active_dom.configuration.background[key] === i}" 
+                                >
+                                <a href data-ng-click="changeSetting('background', key, i)">
+                                    <span data-ng-if="key === 'background_color'" class='dd-color' style='background: {{i | toRGBA}}'> </span>
+                                    <span data-ng-if="key === 'background_color'">{{i.hex | uppercase}}</span>
+                                    <span data-ng-if="key !== 'background_color'">{{i}}</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
             </div>
         </tab>
         <tab> 
             <tab-heading>
-                <i class="fa fa-cog"></i>
+                <i class="fa fa-plus"></i>
             </tab-heading> 
-            <div role="tabpanel" class="settings tabpanel">
-                <div data-ng-repeat="(key, settings) in config.background_settings" 
-                     class="btn-group" dropdown data-ng-show="key !== 'background_position'"
-                >
-                    <h5>{{key}}</h5>
-                    <button type="button" class="btn btn-primary dropdown-toggle" > 
-                        <span>{{active.config.background[key] === 'none' ? key : active.config.background[key]}}</span> 
-                        <span class="caret"></span> 
-                    </button>
-                    <ul class="dropdown-menu" role="menu">
-                        <li data-ng-repeat="i in settings" 
-                            data-ng-class="{active: active.config.background[key] === i}" 
-                        >
-                            <a href data-ng-click="changeSetting('background', key, i)">{{i}}</a>
-                        </li>
-                    </ul>
-                </div>
-                <div data-ng-repeat="(key, setting) in config.background_settings" 
-                     data-ng-show="key === 'background_position'"
-                     data-ng-class="{'background-position': key === 'background_position'}"
-                >
-                    <h5>{{key}}</h5>
-                    <div class="btn-group">
-                        <label data-ng-repeat="i in setting" 
-                               tooltip="{{i}}" tooltip-trigger="mouseenter" tooltip-placement="top" 
-                               class="btn btn-primary" data-ng-model="active.config.background[key]" btn-radio="'{{i}}'"
-                               data-ng-click="changeSetting('background', key, i)" >
-                        </label>
+            <div role="tabpanel" class="add tabpanel">
+                <div class="add-element">
+                    <div class="form-group add add_container" data-ng-click="addDom('container')">
+                        <div class="input-group">
+                            <span class="form-control">Container</span>
+                            <div class="input-group-addon"><i class="fa fa-plus"></i></div>
+                        </div>
                     </div>
-                </div>
-                <div class="borders">
-                    <h5>border</h5>
-                    <div class="btn-group" dropdown>
-                        <button type="button" class="btn btn-primary dropdown-toggle" > 
-                            <span>{{active.config.border.name}}</span> 
-                            <span class="caret"></span> 
-                        </button>
+                    <div class="form-group btn-group add add_text" dropdown>
+                        <div class="input-group dropdown-toggle">
+                            <span class="form-control">Text</span>
+                            <div class="input-group-addon"><i class="fa fa-plus"></i></div>
+                        </div>
                         <ul class="dropdown-menu" role="menu">
-                            <li data-ng-repeat="border in global.teamActive.settings.borders"
-                                data-ng-class="{active: active.config.border.name === border.name}" 
-                            >
-                                <a href data-ng-click="changeSetting('border', null, border)">{{border.name}}</a>
+                            <li data-ng-repeat="font in global.teamActive.settings.fonts">
+                                <a href="#" data-ng-click="addDom('text', font._id)">
+                                    {{font.name}}
+                                </a>
                             </li>
                         </ul>
                     </div>
-                </div>
-                <div class="overlays">
-                    <h5>overlays</h5>
-                    <div class="btn-group" dropdown>
-                        <button type="button" class="btn btn-primary dropdown-toggle" > 
-                            <span>{{active.config.overlay.name}}</span> 
-                            <span class="caret"></span> 
-                        </button>
-                        <ul class="dropdown-menu" role="menu">
-                            <li data-ng-repeat="overlay in global.teamActive.settings.overlays"
-                                data-ng-class="{active: active.config.overlay.name === overlay.name}" 
-                            >
-                                <a href data-ng-click="changeSetting('overlay', null, overlay)">{{overlay.name}}</a>
-                            </li>
-                        </ul>
+                    <div class="form-group add add_media" data-ng-click="addDom('media')">
+                        <div class="input-group">
+                            <span class="form-control">Media</span>
+                            <div class="input-group-addon"><i class="fa fa-plus"></i></div>
+                        </div>
+                    </div>
+                    <div class="form-group add add_chart" data-ng-click="addDom('chart')">
+                        <div class="input-group">
+                            <span class="form-control">Chart</span>
+                            <div class="input-group-addon"><i class="fa fa-plus"></i></div>
+                        </div>
                     </div>
                 </div>
             </div>

@@ -1,10 +1,10 @@
 <style type='text/css'>
-    .overlay[data-overlay="{{overlay.name | clean}}"][data-type="type_{{overlay.type}}"]:before,
-    .overlay[data-overlay="{{overlay.name | clean}}"][data-type="type_{{overlay.type}}"]:after{
+    .overlay[data-overlay="{{overlay._id}}"][data-type="type_{{overlay.type}}"]:before,
+    .overlay[data-overlay="{{overlay._id}}"][data-type="type_{{overlay.type}}"]:after{ 
         background: {{overlay.color_0 | toRGBA}}
     }
-    [data-overlay="{{overlay.name | clean}}"] .inner-overlay[data-type="type_{{overlay.type}}"]:before,
-    [data-overlay="{{overlay.name | clean}}"] .inner-overlay[data-type="type_{{overlay.type}}"]:after{
+    [data-overlay="{{overlay._id}}"] .inner-overlay[data-type="type_{{overlay.type}}"]:before,
+    [data-overlay="{{overlay._id}}"] .inner-overlay[data-type="type_{{overlay.type}}"]:after{
         background: {{overlay.color_1 | toRGBA}}
     }
 </style>

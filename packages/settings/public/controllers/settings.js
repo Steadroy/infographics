@@ -143,6 +143,25 @@ angular.module('mean.settings', ['colorpicker.module'])
                     highlight: 'justify',
                     icon: 'fa-align-justify'
                 }
+            ], [{
+                    style: 'vertical_align',
+                    default: 'top',
+                    highlight: 'top',
+                    extra: 'top',
+                    icon: 'fa-minus'
+                }, {
+                    style: 'vertical_align',
+                    default: 'top',
+                    highlight: 'middle',
+                    extra: 'middle',
+                    icon: 'fa-minus'
+                }, {
+                    style: 'vertical_align',
+                    default: 'top',
+                    highlight: 'bottom',
+                    extra: 'bottom',
+                    icon: 'fa-minus'
+                }
             ]]; 
             $scope.buttonGroup2 = [{
                 style: 'font_family',
@@ -244,7 +263,16 @@ angular.module('mean.settings', ['colorpicker.module'])
                     style: 'border_style',
                     options: ['dashed', 'dotted', 'solid', 'none']
                 }, {
-                    style: 'border_width',
+                    style: 'border_top_width',
+                    options: widths
+                }, {
+                    style: 'border_right_width',
+                    options: widths
+                }, {
+                    style: 'border_bottom_width',
+                    options: widths
+                }, {
+                    style: 'border_left_width',
                     options: widths
                 }, {
                     style: 'border_color',

@@ -4,74 +4,91 @@
  * Module dependencies.
  */
 var mongoose = require('mongoose'),
-    Font = mongoose.model('Font'),
-    _ = require('lodash');
+    Configuration = mongoose.model('Configuration'),
+    _ = require('lodash'),
+    populate = [
+        'background', 
+        'background.background_color', 
+        
+        'border', 
+        'border.border_color', 
+        
+        'font', 
+        
+        'overlay',
+        'overlay.color_0',
+        'overlay.color_1'
+    ];
 
 
 /**
- * Find font by id
+ * Find configuration by id
  */
-exports.font = function (req, res, next, id) {
-    Font
+exports.configuration = function (req, res, next, id) {
+    Configuration
         .findById(id)
-        .deepPopulate('color')
-        .exec(function(err, font){
+        .deepPopulate(populate)
+        .exec(function(err, configuration){
             if (err)
                 return next(err);
-            if (!font)
-                return next(new Error('Failed to load font ' + id));
+            if (!configuration)
+                return next(new Error('Failed to load configuration ' + id));
             
-            req.font = font;
+            req.configuration = configuration;
             next();
         });
 };
 
 /**
- * Create a font
+ * Create a configuration
  */
 exports.create = function (req, res) {
-    var font = new Font(req.body);
+    var configuration = new Configuration(req.body);
     
-    font.save(function (err) {
+    configuration.save(function (err) {
         if (err) {
             return res.status(500).json({
-                error: 'Cannot save the font'
+                error: 'Cannot save the configuration'
             });
         }
-        res.json(font);
+        res.json(configuration);
     });
 };
 
 /**
- * Update a font
+ * Update a configuration
  */
 exports.update = function (req, res) {
-    var font = req.font;
+    var configuration = req.configuration;
     
-    font = _.extend(font, req.body);
+    configuration = _.extend(configuration, req.body);
     
-    font.save(function (err) {
+    configuration.save(function (err) {
         if (err) {
+            console.log(err);
             return res.status(500).json({
-                error: 'Cannot update the font' 
+                error: 'Cannot update the configuration' 
             });
         }
-        res.json(font);
+        Configuration
+            .deepPopulate(configuration, populate,function(err, configuration){
+                res.json(configuration);
+            });
     });
 };
 
 /**
- * Delete a team
+ * Delete a configuration
  */
 exports.destroy = function (req, res) {
-    var font = req.font;
+    var configuration = req.configuration;
     
-    font.remove(function (err) {
+    configuration.remove(function (err) {
         if (err) {
             return res.status(500).json({
-                error: 'Cannot delete the font'
+                error: 'Cannot delete the configuration'
             });
         }
-        res.json(font);
+        res.json(configuration);
     });
 };

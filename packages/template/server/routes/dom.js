@@ -1,25 +1,25 @@
 'use strict';
 
-var font = require('../controllers/font');
+var dom = require('../controllers/dom');
 
-// Font authorization helpers
+// Dom authorization helpers
 var hasAuthorization = function (req, res, next) {
-    if (!req.user.isAdmin && req.font.team.creator.id !== req.user.id) {
+    if (!req.user.isAdmin && req.dom.team.creator.id !== req.user.id) {
         return res.status(401).send('User is not authorized');
     }
     next();
 };
 
-module.exports = function (Font, app, auth) {
+module.exports = function (Dom, app, auth) {
 
-    app.route('/font')
-        .get(auth.isMongoId, font.font)
-        .post(auth.isMongoId, auth.requiresLogin, font.create);
+    app.route('/dom')
+        .get(auth.isMongoId, dom.dom)
+        .post(auth.isMongoId, auth.requiresLogin, dom.create);
 
-    app.route('/font/:fontId')
-        .put(auth.isMongoId, auth.requiresLogin, hasAuthorization, font.update)
-        .delete(auth.isMongoId, auth.requiresLogin, hasAuthorization, font.destroy);
+    app.route('/dom/:domId')
+        .put(auth.isMongoId, auth.requiresLogin, hasAuthorization, dom.update)
+        .delete(auth.isMongoId, auth.requiresLogin, hasAuthorization, dom.destroy);
     
-    // Finish with font up the fontId param
-    app.param('fontId', font.font);
+    // Finish with dom up the domId param
+    app.param('domId', dom.dom);
 };

@@ -78,7 +78,7 @@
                                     </form>
                                 </h2>
                                 <hr/>
-                                <div style="{{font | parse}}">
+                                <div class="sample" style="{{font | parse}}" vertical-align="{{font.vertical_align}}">
                                     <p>The quick brown fox jumps over the lazy dog</p>
                                 </div>
                                 <hr/>
@@ -86,7 +86,7 @@
                             <div class="controls">
                                 <div class="btn-group" data-ng-repeat="group in buttonGroups">
                                     <label data-ng-repeat="button in group" role="button" 
-                                           data-ng-class="{active: font[button.style] === button.highlight}" class="btn btn-primary" 
+                                           data-ng-class="{active: font[button.style] === button.highlight}" class="btn btn-primary {{button.extra}}" 
                                            data-ng-click="toggleValue(font, button, font[button.style] === button.highlight)"
                                            >
                                         <i class="fa {{button.icon}}"></i>
@@ -183,8 +183,8 @@
                                                 <span data-ng-show="dd.style === 'border_style'">
                                                     <span class="dropelement dd-border_style" style='border-style: {{option}}'> </span>
                                                 </span>
-                                                <span data-ng-show="['border_width', 'border_radius'].indexOf(dd.style) >= 0">
-                                                    {{option}}
+                                                <span data-ng-show="['border_top_width', 'border_right_width', 'border_bottom_width', 'border_left_width', 'border_radius'].indexOf(dd.style) >= 0">
+                                                    {{option}} 
                                                 </span>
                                                 <span data-ng-show="dd.style === 'border_color'">
                                                     <span class='dd-color' style='background: {{option| toRGBA}}'> </span> {{option.hex | uppercase}}
@@ -236,7 +236,7 @@
                                 </h2>
                                 <hr/> 
                                 <overlay-style overlay="overlay"></overlay-style>
-                                <div class="box overlay" data-type='type_{{overlay.type}}' data-overlay='{{overlay.name | clean}}'><div class="inner-overlay" data-type='type_{{overlay.type}}'></div></div>
+                                <div class="box overlay" data-type='type_{{overlay.type}}' data-overlay='{{overlay._id}}'><div class="inner-overlay" data-type='type_{{overlay.type}}'></div></div>
                                 <hr/>
                             </div>
                             <div class="controls"> 

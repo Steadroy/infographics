@@ -24,13 +24,25 @@ angular.module('mean.system')
     })
     .filter('parse', function (toRGBAFilter) {
         return function (style) {
-            var output = '';
-            for (var i in style) {
-                if (['__v', '_id', 'name', 'created'].indexOf(i) >= 0)
-                    continue;
-                output = output + i.replace('_', '-') + ':' + (typeof style[i] === 'string' ? style[i] : toRGBAFilter(style[i])) + ';';
-            }
-            return output;
+            var _parse = function(style){
+                var output = '';
+                for (var i in style) {
+                    if (['font', 'border'].indexOf(i) >= 0){
+                        output = output + _parse(style[i]);
+                    }
+                    if (
+                        ['__v', '_id', 'name', 'created', 'background', 'logo_position', 'font', 'border', 'overlay'].indexOf(i) >= 0 ||
+                        style[i] === null || 
+                        typeof style[i] === 'function'
+                    ){
+                        continue;
+                    }
+
+                    output = output + i.replace(/\_/g, '-') + ':' + (typeof style[i] === 'string' ? (i === 'background_image' ? 'url(/static/' + style[i] + ')': style[i]) : toRGBAFilter(style[i])) + (['top', 'left', 'width', 'height', 'padding_top', 'padding_right', 'padding_bottom', 'padding_left'].indexOf(i) >= 0 ? 'px' : '') +';';
+                }
+                return output;
+            };
+            return _parse(style);
         };
     })
     .filter('clean', function () {
@@ -39,6 +51,11 @@ angular.module('mean.system')
                 return text.toLowerCase().replace(/\[|\-|\||\&|\;|\$|\%|\@|\"|<|>|\(|\)|\+|\,|\]|\s|\#/g, ''); 
             };
             return typeof text === 'string' ? _clean(text) : (fallback ? _clean(fallback) : text); 
+        };
+    })
+    .filter('cleanID', function () {
+        return function (text) {
+            return text.replace(/\#/g, ''); 
         };
     })
     .filter('toRGBA', function () {

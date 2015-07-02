@@ -4,74 +4,110 @@
  * Module dependencies.
  */
 var mongoose = require('mongoose'),
-    Font = mongoose.model('Font'),
-    _ = require('lodash');
+    Dom = mongoose.model('Dom'),
+    Background = mongoose.model('Background'),
+    Configuration = mongoose.model('Configuration'),
+    _ = require('lodash'),
+    populate = [
+        'configuration',
+        'configuration.background',
+        'configuration.background.background_color',
+        
+        'configuration.font',
+        'configuration.font.color',
+        
+        'configuration.border',
+        'configuration.border.border_color',
+        
+        'configuration.overlay',
+        'configuration.overlay.color_0',
+        'configuration.overlay.color_1'
+    ];
 
 
 /**
- * Find font by id
+ * Find dom by id
  */
-exports.font = function (req, res, next, id) {
-    Font
+exports.dom = function (req, res, next, id) {
+    Dom
         .findById(id)
-        .deepPopulate('color')
-        .exec(function(err, font){
+        .deepPopulate(populate)
+        .exec(function(err, dom){
             if (err)
                 return next(err);
-            if (!font)
-                return next(new Error('Failed to load font ' + id));
+            if (!dom)
+                return next(new Error('Failed to load dom ' + id));
             
-            req.font = font;
+            req.dom = dom;
             next();
         });
 };
 
 /**
- * Create a font
+ * Create a dom
  */
 exports.create = function (req, res) {
-    var font = new Font(req.body);
-    
-    font.save(function (err) {
-        if (err) {
-            return res.status(500).json({
-                error: 'Cannot save the font'
+    var dom = new Dom(req.body),
+        background = new Background(),
+        configuration = new Configuration(),
+        _err = function(message, res){
+            return res.status(500).json({ error: message });
+        };
+
+    background.save(function(err){
+        if (err)
+            return _err('Cannot create a new background element', res);
+
+        configuration.background = background;
+        configuration.save(function(err){
+            if (err)
+                return _err('Cannot create a new configuration', res);
+
+            dom.dom_id = '#dom-' + Date.now();
+            dom.configuration = configuration;
+            dom.save(function(err){
+                if (err)
+                    return _err('Cannot create a new node', res);
+
+                Dom
+                    .deepPopulate(dom, populate, function(err, dom){
+                        res.json(dom);
+                    });
             });
-        }
-        res.json(font);
+        });
     });
 };
 
 /**
- * Update a font
+ * Update a dom
  */
 exports.update = function (req, res) {
-    var font = req.font;
+    var dom = req.dom;
     
-    font = _.extend(font, req.body);
+    dom = _.extend(dom, req.body);
     
-    font.save(function (err) {
+    dom.save(function (err) {
         if (err) {
             return res.status(500).json({
-                error: 'Cannot update the font' 
+                error: 'Cannot update the dom' 
             });
         }
-        res.json(font);
+        res.json(dom);
     });
 };
 
 /**
- * Delete a team
+ * Delete a dom
  */
 exports.destroy = function (req, res) {
-    var font = req.font;
+    var dom = req.dom;
     
-    font.remove(function (err) {
+    dom.remove(function (err) {
         if (err) {
             return res.status(500).json({
-                error: 'Cannot delete the font'
+                error: 'Cannot delete the dom'
             });
         }
-        res.json(font);
+        res.json(dom);
     });
 };

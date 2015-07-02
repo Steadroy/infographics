@@ -15,14 +15,19 @@ var mongoose = require('mongoose'),
  * Find media by id
  */
 exports.media = function (req, res, next, id) {
-    Media.load(id, function (err, media) {
-        if (err)
-            return next(err);
-        if (!media)
-            return next(new Error('Failed to load media ' + id));
-        req.media = media;
+    if(id === 'none'){
         next();
-    });
+    }
+    else{
+        Media.load(id, function (err, media) {
+            if (err)
+                return next(err);
+            if (!media)
+                return next(new Error('Failed to load media ' + id));
+            req.media = media;
+            next();
+        });
+    }
 };
 
 /**

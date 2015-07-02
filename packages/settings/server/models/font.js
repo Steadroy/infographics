@@ -23,6 +23,13 @@ var FontSchema = new Schema({
         enum: ['normal', 'bold'],
         default: 'normal'
     },
+    vertical_align: {
+        type: String,
+        required: true,
+        trim: true,
+        enum: ['top', 'middle', 'bottom'],
+        default: 'top'
+    },
     font_style: {
         type: String,
         required: true,

@@ -1,45 +1,36 @@
 'use strict';
 
-angular.module('mean.templates', [])
-    .controller('TemplatesController', ['$scope', '$timeout', '$location', 'Global', 'Templates',
-        function ($scope, $timeout, $location, Global, Templates) {
+angular.module('mean.template', [])
+    .controller('TemplateController', ['$scope', 'Global', 'Template', 'Configuration', 'Dom',
+        function ($scope, Global, Template, Configuration, Dom) {
             $scope.global = Global;
-            $scope.global.togglePanel = false;
+            $scope.active = {};
             
-            $scope.init = function () {
-                $timeout(function () {
-                    if (!$scope.global.teamActive) {
-                        $location.url('/');
-                        $scope.$apply();                            
-                    }
-                }, 0, false);
-            };
-
             $scope.$watch('global.teamActive._id', function(){
+                $scope.active_dom = null;
                 $scope.search_query = '';
-                $scope.templates = [];
+                $scope.template = [];
                 
-                $scope.currentStep = 1;
-                $scope.totalSteps = 3;
-                
-                Templates.query({teamId: $scope.global.teamActive._id}, function (templates) {
-                    $scope.templates = templates;
-                    if ($scope.templates.length > 0) {
-                        $scope.active = $scope.templates[0];
+                Template.get({teamId: $scope.global.teamActive._id}, function (template) {
+                    $scope.template = template;
+                    if ($scope.template.length > 0) {
+                        $scope.active = $scope.template[0];
                     }
                 });
             });
 
             $scope.select = function(template) {
                 $scope.active = template;
+                $scope.active_dom = null;
             };
             
             $scope.create = function(isValid){
                 if (isValid) {
-                    new Templates({name: $scope.template_name, team: $scope.global.teamActive._id}).$save(function(response){
-                        $scope.templates.push(response);
-                        $scope.active = response;
+                    new Template({name: $scope.template_name, team: $scope.global.teamActive._id}).$save(function(template){
+                        $scope.template.push(template);
+                        $scope.active = template;
                         $scope.template_name = '';
+                        $scope.active_dom = null;
                     });
                 } else {
                     $scope.submitted = true;
@@ -48,36 +39,84 @@ angular.module('mean.templates', [])
             
             $scope.remove = function(template){
                 template.$remove(function(response){
-                    for(var i = 0; i < $scope.templates.length; i = i + 1){
-                        if($scope.templates[i] === response){
-                            $scope.templates.splice(i, 1);
+                    for(var i = 0; i < $scope.template.length; i = i + 1){
+                        if($scope.template[i] === response){
+                            $scope.template.splice(i, 1);
                         }
                     }
-                    if(response === $scope.active && $scope.templates.length){
-                        $scope.active = $scope.templates[0];
+                    if(response === $scope.active && $scope.template.length){
+                        $scope.active = $scope.template[0];
                     }
-                    if(!$scope.templates.length){
-                        $scope.active = null;
+                    if(!$scope.template.length){
+                        $scope.active = {};
                     }
                 });
             };
-            
-            $scope.pageChanged = function(){
-                $scope.global.togglePanel = false;
+            $scope.update = function(template){ 
+                new Template(template).$update(function(){ });
+            };
+            $scope.clone = function(template){
+                new Template(template).$save({clone: true}, function(new_template){
+                    $scope.template.push(new_template);
+                });
+            };
+            $scope.resize = function (evt, ui, dom) {
+                dom.configuration.height = ui.size.height;
+                dom.configuration.width = ui.size.width;
+            };
+            $scope.resizeStop = function (evt, ui, dom) {
+                new Configuration(dom.configuration).$update(function(){});
+            };
+            $scope.drag = function (evt, ui, dom) {
+                dom.configuration.top = ui.position.top; 
+                dom.configuration.left = ui.position.left;
+            };
+            $scope.dragStop = function (evt, ui, dom) {
+                new Configuration(dom.configuration).$update(function(){});
+            };
+            $scope.toggle = function(dom){
+                if(!$scope.active_dom){
+                    $scope.active_dom = dom;
+                }
+                else{
+                    $scope.active_dom = null;
+                }
+            };
+            $scope.toggle = function(dom){
+                if($scope.active_dom && dom._id === $scope.active_dom._id){
+                    $scope.active_dom = null;
+                }
+                else{
+                    $scope.active_dom = dom;
+                }
+            };
+            $scope.removeDom = function(dom){
+                for(var i = 0; i < $scope.active.doms.length; i = i + 1){
+                    if($scope.active.doms[i] === dom){
+                        new Dom(dom).$remove();
+                        $scope.active.doms.splice(i, 1);
+                    }
+                }
+                $scope.active_dom = null;
             };
         }
     ])
-    .controller('ElementSettingsController', ['$scope', '$timeout', '$location', 'Global', 'Media',
-        function ($scope, $timeout, $location, Global, Media) {
+    .controller('DomSettingsController', ['$scope', 'Global', 'Dom', 'Media', 'Template', 'Configuration', 'Background', 
+        function ($scope, Global, Dom, Media, Template, Configuration, Background) {
             $scope.global = Global;
+            $scope.configuration = null;
             
             $scope.$watch('global.teamActive._id', function(){
                 $scope.search_query_media = '';
                 $scope.mediaFiles = [];
                 $scope.config = {
+                    'logo_position': [
+                        'top-left',
+                        'top-right',
+                        'bottom-left',
+                        'bottom-right'
+                    ],
                     'background_settings': {
-                        'background_repeat': ['no-repeat', 'repeat-x', 'repeat-y', 'repeat'],
-                        'background_size': ['contain', 'cover', 'inherit', '10%', '20%', '30%', '40%', '50%', '60%', '70%', '80%', '90%', '100%'],
                         'background_position': [
                                 'left top',
                                 'center top',
@@ -90,105 +129,84 @@ angular.module('mean.templates', [])
                                 'left bottom',
                                 'center bottom',
                                 'right bottom'
-                            ]
+                            ],
+                        'background_repeat': ['no-repeat', 'repeat-x', 'repeat-y', 'repeat'],
+                        'background_size': ['contain', 'cover', 'inherit', '10%', '20%', '30%', '40%', '50%', '60%', '70%', '80%', '90%', '100%'],
+                        'background_color': $scope.global.teamActive.settings.colours.backgrounds
                     }
                 };
                 Media.query({teamId: $scope.global.teamActive._id, filetype: 'image'}, function (media_files) {
                     $scope.mediaFiles = media_files;
                 });
             });
-            $scope.selectColour = function(colour){ 
-                if($scope.active.config.background.background_color.hex === colour.hex && $scope.active.config.background.background_color.alpha === colour.alpha){
-                    $scope.active.config.background.background_color.hex = 'inherit';
-                    $scope.active.config.background.background_color.alpha = 1;
-                }
-                else{
-                    $scope.active.config.background.background_color = colour;
-                }
-                $scope.active.$save();
-            };
             $scope.selectImage = function(image){ 
-                if($scope.active.config.background.background_image === image._id){
-                    $scope.active.config.background.background_image = 'none';
-                    $scope.active.config.background.background_repeat = 'none';
-                    $scope.active.config.background.background_position = 'center center';
+                var background = new Background($scope.active_dom.configuration.background);
+                
+                if(background.background_image === image._id){
+                    background.background_image = 'none';
+                    background.background_repeat = 'no-repeat';
+                    background.background_position = 'center center';
+                    background.background_size = 'inherit';
                 }
                 else{
-                    $scope.active.config.background.background_image = image._id;
+                    background.background_image = image._id;
                 }
-                $scope.active.$save();
+                background.$update(function(response){
+                    $scope.active_dom.configuration.background = response;
+                });
             };
             $scope.changeSetting = function(setting, key, value){
-                if(setting === 'border' || setting === 'overlay'){ 
-                    $scope.active.config[setting] = value;
+                if(setting === 'background'){
+                    var background = new Background($scope.active_dom.configuration.background);
+                    
+                    background[key] = typeof value === 'string' || !value ? value : value._id;
+                    
+                    background.$update(function(response){
+                        $scope.active_dom.configuration.background = response;
+                    });
                 }
-                else{
-                    $scope.active.config[setting][key] = value;
+                else if(['logo_position', 'font', 'border', 'overlay'].indexOf(setting) >= 0){
+                    var configuration = new Configuration($scope.active_dom.configuration);
+                    
+                    configuration[setting] = typeof value === 'string' || !value ? value : value._id;
+                    configuration.$update(function(response){
+                        $scope.active_dom.configuration = response;
+                    });
                 }
-                $scope.active.$save();
             };
-        }])
-    .controller('TemplatesStep1Controller', ['$scope', '$timeout', '$location', 'Global', 'Templates',
-        function ($scope, $timeout, $location, Global, Templates) {
-            $scope.global = Global;
-            $scope.global.togglePanel = false;
             
-            $scope.toggle = function($event){
-                $scope.global.togglePanel = !$scope.global.togglePanel;
-            };
-            $scope.resize = function (evt, ui) {
-                var template = $scope.template;
+            $scope.addDom = function(type, _id){
+                var active_temp = $scope.active_dom,
+                    dom = new Dom({type: type, parent_dom_id:active_temp.dom_id}),
+                    getDimension = function (number) {
+                        var grid = 5.0, value;
+                        if (number > 0)
+                            value = Math.ceil(number / grid) * grid;
+                        else if (number < 0)
+                            value = Math.floor(number / grid) * grid;
+                        else
+                            value = grid;
+                        return parseInt(value);
+                    };
                 
-                template.config.height = ui.size.height + 2;
-                template.config.width = ui.size.width + 2;
+                
+                dom.$save(function(dom){
+                    $scope.active.doms.push(dom);
+                    new Template($scope.active).$update(function(template){ 
+                        $scope.active = template;
+                        var configuration = new Configuration(dom.configuration);
+                        configuration.height = getDimension(active_temp.configuration.height / 2);
+                        configuration.width = getDimension(active_temp.configuration.width / 2);
+                        configuration.top = active_temp.configuration.top;
+                        configuration.left = active_temp.configuration.left;
+                        
+                        if(type === 'text' && _id)
+                            configuration.font = _id;
+                        
+                        configuration.$update(function(configuration){
+                            $scope.active.doms[$scope.active.doms.length - 1].configuration = configuration;
+                        });
+                    });
+                });
             };
-            $scope.resizeStop = function (evt, ui) {
-                $scope.template.$save(function(){ });
-            };
-        }
-    ])
-    .controller('TemplatesStep2Controller', ['$scope', '$timeout', '$location', 'Global', 'Templates',
-        function ($scope, $timeout, $location, Global, Templates) {
-            $scope.global = Global;
-            $scope.global.togglePanel = false;
-            
-            $scope.$watch('template', function(){
-                $timeout(function () {
-                    $scope.grid_width = $scope.template.config.grid_horizontal.length;
-                    $scope.grid_height = $scope.template.config.grid_vertical.length;
-                }, 500, false);
-            });
-            $scope.resize = function (evt, ui, i, j) {
-                var template = $scope.template, diff, perc; 
-                if(ui.originalSize.width !== ui.size.width){
-                    perc = 100 * ui.size.width / template.config.width;
-                    diff = template.config.grid_horizontal[i] - perc;
-                    template.config.grid_horizontal[i] = perc;
-                    template.config.grid_horizontal[i+1] = template.config.grid_horizontal[i+1] + diff;
-                }
-                if(ui.originalSize.height !== ui.size.height){
-                    perc = 100 * ui.size.height / template.config.height;
-                    diff = template.config.grid_vertical[j] - perc;
-                    template.config.grid_vertical[j] = perc;
-                    template.config.grid_vertical[j+1] = template.config.grid_vertical[j+1] + diff;
-                }
-            };
-            $scope.resizeStop = function (evt, ui) {
-                $scope.template.$save(function(){ });
-            };
-            $scope.changeGrid = function(){
-                if($scope.grid_width !== $scope.template.config.grid_horizontal.length){
-                    $scope.template.config.grid_horizontal = Array.apply(null, new Array(+$scope.grid_width)).map(function(i, j) { return 100/$scope.grid_width; });
-                }
-                if($scope.grid_height !== $scope.template.config.grid_vertical.length){
-                    $scope.template.config.grid_vertical = Array.apply(null, new Array(+$scope.grid_height)).map(function(i, j) { return 100/$scope.grid_height; });
-                }
-                $scope.template.$save(function(){ });
-            };
-        }
-    ])
-    .controller('TemplatesStep3Controller', ['$scope', '$timeout', '$location', 'Global', 'Templates',
-        function ($scope, $timeout, $location, Global, Templates) {
-
-        }
-    ]);
+        }]);

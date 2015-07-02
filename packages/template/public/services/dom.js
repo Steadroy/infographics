@@ -1,11 +1,11 @@
 'use strict';
 
-//Settings service used for settings REST endpoint
-angular.module('mean.settings')
-    .factory('Overlay', ['$resource',
+//Settings service used for template REST endpoint
+angular.module('mean.template')
+    .factory('Dom', ['$resource',
         function ($resource) {
-            return $resource('overlay/:overlayId', {
-                overlayId: '@_id'
+            return $resource('dom/:domId', {
+                domId: '@_id'
             }, {
                 update: {
                     method: 'PUT'

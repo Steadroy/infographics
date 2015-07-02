@@ -1,7 +1,7 @@
 'use strict';
 
 //Setting up route
-angular.module('mean.templates').config(['$stateProvider',
+angular.module('mean.template').config(['$stateProvider',
     function ($stateProvider) {
         // Check if the user is connected
         var checkLoggedin = function ($q, $timeout, $http, $location) {
@@ -26,9 +26,9 @@ angular.module('mean.templates').config(['$stateProvider',
 
         // states for my app
         $stateProvider
-            .state('see templates', {
-                url: '/templates',
-                templateUrl: 'templates/views/templates.html',
+            .state('see template', {
+                url: '/template',
+                templateUrl: 'template/views/templates.html',
                 resolve: {
                     loggedin: checkLoggedin
                 }

@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('mean.system', ['ngFileUpload'])
+angular.module('mean.system')
     .controller('HeaderController', ['$scope', 'Upload', '$rootScope', 'Global', 'Menus',
         function ($scope, Upload, $rootScope, Global, Menus) {
             $scope.global = Global;
