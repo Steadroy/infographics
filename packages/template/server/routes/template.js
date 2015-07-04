@@ -11,7 +11,7 @@ var hasAuthorization = function (req, res, next) {
 };
 
 module.exports = function (Element, app, auth) {
-
+    
     app.route('/template')
         .get(auth.isMongoId, template.get)
         .post(auth.isMongoId, auth.requiresLogin, template.create);
@@ -20,6 +20,9 @@ module.exports = function (Element, app, auth) {
         .post(auth.isMongoId, auth.requiresLogin, template.create) //clone
         .put(auth.isMongoId, auth.requiresLogin, hasAuthorization, template.update)
         .delete(auth.isMongoId, auth.requiresLogin, hasAuthorization, template.destroy);
+
+    app.route('/poster/:teamId/:templateId')
+            .get(template.poster);
 
     // Finish with template up the templateId param
     app.param('templateId', template.template);

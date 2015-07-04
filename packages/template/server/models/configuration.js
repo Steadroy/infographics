@@ -58,7 +58,28 @@ var ConfigurationSchema = new Schema({
         require: true,
         ref: 'Overlay'
     },
-    //overwrite: {}
+    overwrite: {
+        padding_top: {
+            type: Number,
+            required: true,
+            default: 0 
+        },
+        padding_right: {
+            type: Number,
+            required: true,
+            default: 0
+        },
+        padding_bottom: {
+            type: Number,
+            required: true,
+            default: 0
+        },
+        padding_left: {
+            type: Number,
+            required: true,
+            default: 0
+        }
+    }
 });
 
 /**

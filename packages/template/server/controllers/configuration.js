@@ -10,10 +10,11 @@ var mongoose = require('mongoose'),
         'background', 
         'background.background_color', 
         
+        'font', 
+        'font.color',
+        
         'border', 
         'border.border_color', 
-        
-        'font', 
         
         'overlay',
         'overlay.color_0',
@@ -65,7 +66,6 @@ exports.update = function (req, res) {
     
     configuration.save(function (err) {
         if (err) {
-            console.log(err);
             return res.status(500).json({
                 error: 'Cannot update the configuration' 
             });

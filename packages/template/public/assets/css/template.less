@@ -26,8 +26,13 @@ body.template{
             padding-top: 0; 
             margin-top: 0;
             label{
-                margin-top: 0;
+                margin: 4px 1px !important;
                 vertical-align: 5px;
+                float: right;
+                
+                &.col-md-3{
+                    width: 24%;
+                }
             }
         }
         .template-edit{
@@ -45,7 +50,7 @@ body.template{
                 .editing{
                     box-shadow: 0 0 10px blue;
                     opacity: 1;
-                    z-index: 100;
+                    z-index: 100 !important;
                     .show_dom();
                 }
                 &:hover{
@@ -53,11 +58,24 @@ body.template{
                         opacity: .35;
                         outline: 1px solid @gray !important;
                     }
+                    .active{
+                        *{
+                            opacity: 1 !important;
+                            outline: none !important;
+                        }
+                    }
+                }
+                .active{
+                    *{
+                        opacity: 1 !important;
+                        outline: none !important;
+                    }
                 }
                 .infographic-container, .infographic-element{
                     position: absolute;
                     border-collapse: collapse;
                     opacity: 1;
+                    outline: 1px solid @gray-lighter;
                     
                     &:hover{
                         .show_dom();
@@ -162,6 +180,8 @@ body.template{
         }
     }
     .details-panel{
+        float: right;
+        
         .colours, .images{
             input{
                 width: 100%;
@@ -212,7 +232,7 @@ body.template{
                     }
                 }
             }
-            .remove{
+            .remove, .overwrite{ 
                 display: block;
                 margin: 20px auto;
             }
@@ -276,6 +296,50 @@ body.template{
                 cursor: pointer;
                 .dropdown-menu{
                     min-width: 100%;
+                }
+            }
+            .paddings{
+                .btn-group{
+                    width: 48%;
+                    margin-right: 4%;
+                    &:nth-last-of-type(2n+1){
+                        margin-right: 0;
+                    }
+                }
+            }
+            .generate_thumbnail, .is_ready{
+                div{
+                    position: relative;
+                    
+                    &:before{
+                        font: normal normal normal 14px/1 FontAwesome;
+                        text-shadow: 0 0 10px #000;
+                        position: absolute;
+                        bottom: 0;
+                        right: 0;
+                        font-size: 3em;
+                        display: inline-block;
+                        -webkit-font-smoothing: antialiased;
+                        -moz-osx-font-smoothing: grayscale;
+                        transform: translate(0, 0);
+                        color: @brand-success;
+                        content: "\f00c";
+                        opacity: 0;
+                        -webkit-transition: opacity .5s, background .5s;
+                        transition: opacity .5s, background .5s; 
+                    }
+                    &.feedback{
+                        &:before{
+                            opacity: 1;
+                        }
+                    }
+                    .template_thumbnail{
+                        width: 100%;
+                    }
+                }
+                .ready, .generate{
+                    margin-bottom: 10px;
+                    float: none;
                 }
             }
         }

@@ -89,8 +89,10 @@ angular.module('mean.settings', ['colorpicker.module'])
                 });
             };
             
-            $scope.$watch('global.teamActive._id', function(){
-                $scope.changeSubtabActive('colours', $scope.coloursUsage[0]);
+            $scope.$watch('global.teamActive.settings', function(){
+                if($scope.global.teamActive && $scope.global.teamActive._id){
+                    $scope.changeSubtabActive('colours', $scope.coloursUsage[0]);
+                }
             });
         }
     ])
@@ -255,8 +257,8 @@ angular.module('mean.settings', ['colorpicker.module'])
     ])
     .controller('BordersController', ['$scope', '$rootScope', '$stateParams', '$timeout', '$location', 'Global', 'Border',
         function ($scope, $rootScope, $stateParams, $timeout, $location, Global, Border) {
-            var widths = Array.apply(null, new Array(6)).map(function(i, j) { return j + 'px'; }),
-                radius = Array.apply(null, new Array(11)).map(function(i, j) { return (10*j) + 'px'; });
+            var widths = Array.apply(null, new Array(6)).map(function(i, j) { return j; }),
+                radius = Array.apply(null, new Array(11)).map(function(i, j) { return (10*j); });
             $scope.global = Global;
             $scope.border = {};
             $scope.buttonGroup = [{

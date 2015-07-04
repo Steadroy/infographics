@@ -10,6 +10,6 @@
     "node": "0.10.x",
     "npm": "1.4.x"
   },
-  "dependencies": ["jqueryui", "handsontable"],
+  "dependencies": ["jqueryui", "html2canvas"],
   "license": "MIT"
 }

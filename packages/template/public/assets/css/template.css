@@ -75,8 +75,12 @@ body.template .template-container .template_header_name {
   margin-top: 0;
 }
 body.template .template-container .template_header_name label {
-  margin-top: 0;
+  margin: 4px 1px !important;
   vertical-align: 5px;
+  float: right;
+}
+body.template .template-container .template_header_name label.col-md-3 {
+  width: 24%;
 }
 body.template .template-container .template-edit {
   height: 450px;
@@ -84,7 +88,7 @@ body.template .template-container .template-edit {
 body.template .template-container.infographic.edit .editing {
   box-shadow: 0 0 10px blue;
   opacity: 1;
-  z-index: 100;
+  z-index: 100 !important;
   outline: 1px solid #222222 !important;
   opacity: 1 !important;
 }
@@ -98,11 +102,20 @@ body.template .template-container.infographic.edit:hover .infographic-element {
   opacity: .35;
   outline: 1px solid #555555 !important;
 }
+body.template .template-container.infographic.edit:hover .active * {
+  opacity: 1 !important;
+  outline: none !important;
+}
+body.template .template-container.infographic.edit .active * {
+  opacity: 1 !important;
+  outline: none !important;
+}
 body.template .template-container.infographic.edit .infographic-container,
 body.template .template-container.infographic.edit .infographic-element {
   position: absolute;
   border-collapse: collapse;
   opacity: 1;
+  outline: 1px solid #eeeeee;
 }
 body.template .template-container.infographic.edit .infographic-container:hover,
 body.template .template-container.infographic.edit .infographic-element:hover {
@@ -235,6 +248,9 @@ body.template .template-container .pagination-container {
 body.template .template-container .pagination-container .pagination > li a {
   margin: 10px;
 }
+body.template .details-panel {
+  float: right;
+}
 body.template .details-panel .colours input,
 body.template .details-panel .images input {
   width: 100%;
@@ -287,7 +303,8 @@ body.template .details-panel .tabpanel .btn-group[dropdown] button li a,
 body.template .details-panel .tabpanel .btn-group[dropdown] ul li a {
   padding: 10px;
 }
-body.template .details-panel .tabpanel .remove {
+body.template .details-panel .tabpanel .remove,
+body.template .details-panel .tabpanel .overwrite {
   display: block;
   margin: 20px auto;
 }
@@ -344,4 +361,48 @@ body.template .details-panel .tabpanel .add {
 }
 body.template .details-panel .tabpanel .add .dropdown-menu {
   min-width: 100%;
+}
+body.template .details-panel .tabpanel .paddings .btn-group {
+  width: 48%;
+  margin-right: 4%;
+}
+body.template .details-panel .tabpanel .paddings .btn-group:nth-last-of-type(2n+1) {
+  margin-right: 0;
+}
+body.template .details-panel .tabpanel .generate_thumbnail div,
+body.template .details-panel .tabpanel .is_ready div {
+  position: relative;
+}
+body.template .details-panel .tabpanel .generate_thumbnail div:before,
+body.template .details-panel .tabpanel .is_ready div:before {
+  font: normal normal normal 14px/1 FontAwesome;
+  text-shadow: 0 0 10px #000;
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  font-size: 3em;
+  display: inline-block;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  transform: translate(0, 0);
+  color: #5cb85c;
+  content: "\f00c";
+  opacity: 0;
+  -webkit-transition: opacity .5s, background .5s;
+  transition: opacity .5s, background .5s;
+}
+body.template .details-panel .tabpanel .generate_thumbnail div.feedback:before,
+body.template .details-panel .tabpanel .is_ready div.feedback:before {
+  opacity: 1;
+}
+body.template .details-panel .tabpanel .generate_thumbnail div .template_thumbnail,
+body.template .details-panel .tabpanel .is_ready div .template_thumbnail {
+  width: 100%;
+}
+body.template .details-panel .tabpanel .generate_thumbnail .ready,
+body.template .details-panel .tabpanel .is_ready .ready,
+body.template .details-panel .tabpanel .generate_thumbnail .generate,
+body.template .details-panel .tabpanel .is_ready .generate {
+  margin-bottom: 10px;
+  float: none;
 }

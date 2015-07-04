@@ -166,49 +166,75 @@ exports.getTags = function (req, res) {
 /* Upload */
 function rename(req, file, dest, user, callback) {
     var file_name = new Date().getTime();
-    fs.rename(file.path, config.root + dest + file_name, function(err) {
-        if (err) throw err;
-        else{
-            var poster = '';
-            
-            if(file.type.indexOf('video') >= 0){
-                var ffmpeg = require('fluent-ffmpeg'),
-                    poster_name = file_name + '.png';
+    
+    if(!file){
+        var base64Data = req.body.file.replace(/^data:image\/png;base64,/, '');
 
-                ffmpeg(config.root + dest + file_name)
-                    .thumbnail({count: 1, timemarks: ['1'], filename: poster_name}, config.root + dest);
-            
-                poster = dest + poster_name;
-            }
-            
-            if(req.body.delete){
-                var previous_path = config.root + dest + req.body.delete;
-                
-                fs.exists(previous_path, function (exists) {
-                    if (exists) {
-                        fs.unlink(previous_path);
+        fs.writeFile(config.root + dest + file_name, base64Data, 'base64', function(err) {
+            if (err) throw err;
+            else{
+                if(req.body.delete){
+                    var previous_path = config.root + dest + req.body.delete;
+                    fs.exists(previous_path, function (exists) {
+                        if (exists) {
+                            fs.unlink(previous_path);
+                        }
+                    });
+                }
+                callback({
+                    success: true,
+                    file: {
+                        filename: file_name
                     }
                 });
             }
-            
-            callback({
-                success: true,
-                file: {
-                    filename: file_name,
-                    src: dest + file_name,
-                    name: file.name,
-                    size: file.size,
-                    type: file.type,
-                    poster: poster,
-                    created: Date.now(),
-                    createor: (user) ? {
-                        id: user.id,
-                        name: user.name
-                    } : {}
+        });
+    }
+    else{
+        fs.rename(file.path, config.root + dest + file_name, function(err) {
+            if (err) throw err;
+            else{
+                var poster = '';
+
+                if(file.type.indexOf('video') >= 0){
+                    var ffmpeg = require('fluent-ffmpeg'),
+                        poster_name = file_name + '.png';
+
+                    ffmpeg(config.root + dest + file_name)
+                        .thumbnail({count: 1, timemarks: ['1'], filename: poster_name}, config.root + dest);
+
+                    poster = dest + poster_name;
                 }
-            });
-        }
-    });
+
+                if(req.body.delete){
+                    var previous_path = config.root + dest + req.body.delete;
+
+                    fs.exists(previous_path, function (exists) {
+                        if (exists) {
+                            fs.unlink(previous_path);
+                        }
+                    });
+                }
+
+                callback({
+                    success: true,
+                    file: {
+                        filename: file_name,
+                        src: dest + file_name,
+                        name: file.name,
+                        size: file.size,
+                        type: file.type,
+                        poster: poster,
+                        created: Date.now(),
+                        createor: (user) ? {
+                            id: user.id,
+                            name: user.name
+                        } : {}
+                    }
+                });
+            }
+        });
+    }
 }
 
 function mkdir_p(path, callback, position) {

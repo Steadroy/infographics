@@ -1,5 +1,37 @@
 <section class="details-panel">
-    <tabset> 
+    <tabset data-ng-if="active_template"> 
+        <tab> 
+            <tab-heading>
+                <i class="fa fa-cog"></i>
+            </tab-heading> 
+            <div role="tabpanel" class="settings tabpanel">
+                <div class="is_ready">
+                    <button type="button" class="btn btn-primary col-md-12 ready"
+                        data-ng-class="{'btn-success': !active_template.ready, 'btn-danger': active_template.ready}"
+                        data-ng-click="un_publish(active_template)" 
+                    >
+                        <span data-ng-if="!active_template.ready">
+                            publish
+                        </span>
+                        <span data-ng-if="active_template.ready">
+                            unpublish
+                        </span>
+                    </button>
+                </div>
+                <div class="generate_thumbnail">
+                    <button type="button" class="btn btn-primary col-md-12 generate" 
+                        data-ng-click="generateThumbnail()"
+                    >
+                        generate thumbnail
+                    </button>
+                    <div data-ng-class="{'feedback': feedback}">
+                        <img class='template_thumbnail' data-ng-src="{{'/poster/' + global.teamActive._id + '/' + active_template._id + '?t=' + _t}}" />
+                    </div>
+                </div>
+            </div>
+        </tab>
+    </tabset>
+    <tabset data-ng-if="active_dom"> 
         <tab> 
             <tab-heading>
                 <i class="fa fa-cog"></i>
@@ -33,6 +65,24 @@
                                 data-ng-class="{active: active_dom.configuration.font._id === font._id}" 
                             >
                                 <a href data-ng-click="changeSetting('font', null, font)">{{font.name}}</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="paddings" data-ng-if="active_dom.type === 'text'">
+                    <h5>paddings</h5>
+                    <div class="btn-group" dropdown data-ng-repeat="key in config.overwrites">
+                        <button type="button" class="btn btn-primary dropdown-toggle" > 
+                            <span>
+                                {{active_dom.configuration.overwrite[key]}}px
+                            </span> 
+                            <span class="caret"></span> 
+                        </button>
+                        <ul class="dropdown-menu" role="menu">
+                            <li data-ng-repeat="value in paddings"
+                                data-ng-class="{active: active_dom.configuration.overwrite[key] === value}" 
+                            >
+                                <a href data-ng-click="changeSetting('overwrite', key, value)">{{value}}px</a>
                             </li>
                         </ul>
                     </div>
@@ -102,9 +152,14 @@
                         <i class="fa fa-ellipsis-h"></i>
                     </span>
                 </div>
-                <div class="overwritable">
-                    <h5>it can be overwritten?</h5>
-                    <input type="checkbox" />
+                <div class="overwritable" data-ng-if="active_dom.configuration.background.background_image !== 'none'">
+                    <button type="button" class="btn overwrite" 
+                        data-ng-class="{'btn-success': active_dom.configuration.background.overwritable}"
+                        data-ng-model="active_dom.configuration.background.overwritable" btn-checkbox btn-checkbox-true="true" btn-checkbox-false="false"
+                        data-ng-click="changeSetting('background', 'overwritable')"
+                        >
+                        allow overwrite
+                    </button>
                 </div>
                 <div class="background-settings">
                     <div data-ng-repeat="(key, setting) in config.background_settings" 
@@ -173,7 +228,7 @@
                         </div>
                         <ul class="dropdown-menu" role="menu">
                             <li data-ng-repeat="font in global.teamActive.settings.fonts">
-                                <a href="#" data-ng-click="addDom('text', font._id)">
+                                <a href data-ng-click="addDom('text', font._id)">
                                     {{font.name}}
                                 </a>
                             </li>

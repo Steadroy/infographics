@@ -3,7 +3,7 @@
         <form name="teamName" role="form" data-ng-submit="update(teamName.$valid, global.teamActive.name)" novalidate> 
             General settings for 
             <input id="team_name" name="team_name" data-ng-model="global.teamActive.name" class="col-md-7" data-ng-blur="update(teamName.$valid, global.teamActive.name)"/>
-            <label class="btn btn-success pull-right" role="button" data-ng-click="clone()" data-ng-show="teams.length < constants.max.teams"> 
+            <label class="btn btn-success pull-right" role="button" data-ng-click="clone()" data-ng-if="teams.length < constants.max.teams"> 
                 <i class="fa fa-copy"></i>
                 Clone Team
             </label> 
@@ -33,7 +33,7 @@
                                     <button tooltip="Remove {{colour.hex | uppercase}}" tooltip-trigger="mouseenter" tooltip-placement="right" class="colour_remove" data-ng-click="remove(colour)" role="button"><i class="fa fa-close"></i></button>
                                     <input tooltip="Alpha: {{colour.alpha | number:3}}" tooltip-trigger="mouseenter" tooltip-placement="bottom" type="range" min="0" max="1" step=".025" data-ng-model="colour.alpha" data-ng-blur="update(colour)" />
                                 </div> 
-                                <div class="col-md-2 col-sm-2 colour_container colour_new new_plus" data-ng-show="global.teamActive.settings.colours[usage].length < constants.max[usage + '_colours']">
+                                <div class="col-md-2 col-sm-2 colour_container colour_new new_plus" data-ng-if="global.teamActive.settings.colours[usage].length < constants.max[usage + '_colours']">
                                     <input class="colour_input colour_new new_plus" colorpicker type="text" data-ng-model="newColour" style="background: {{newColour}}" data-ng-blur="create(usage, newColour); newColour = ''"/>
                                 </div>
                             </div>
@@ -49,7 +49,7 @@
                     <h3>No colours have been set for fonts.</h3>
                     <h4>Please, go to <a data-ng-click="open('colours', 'fonts')" role="button"><strong>Colours &raquo; Fonts</strong></a> and configure them.</h4>
                 </div>
-                <div role="tabpanel" class="fonts_panel tabpanel" data-ng-show="global.teamActive.settings.colours.fonts.length > 0"> 
+                <div role="tabpanel" class="fonts_panel tabpanel" data-ng-if="global.teamActive.settings.colours.fonts.length > 0"> 
                     <ul class="nav nav-pills nav-stacked col-md-3 col-sm-3" role="tablist">
                         <li role="presentation" data-ng-class="{active: font._id === actives['fonts']}" data-ng-repeat="font in global.teamActive.settings.fonts" >
                             <a href aria-controls="{{font.name}}" role="tab" data-toggle="tab" data-ng-click="changeSubtabActive('fonts', font._id)">
@@ -57,7 +57,7 @@
                             </a>
                             <a role="button" data-ng-click="remove(font)" class="remove"><i class="fa fa-remove"></i></a>
                         </li>
-                        <li role="presentation" data-ng-show="global.teamActive.settings.colours.fonts.length > 0 && global.teamActive.settings.fonts.length < constants.max.fonts"> 
+                        <li role="presentation" data-ng-if="global.teamActive.settings.colours.fonts.length > 0 && global.teamActive.settings.fonts.length < constants.max.fonts"> 
                             <a role="menuitem" class="new_element_hover_plus"> 
                                 <form name="newFont" role="form" data-ng-submit="create(newFont.$valid)" novalidate>
                                     <input class="new_font" name="new_font" type="text" placeholder="Add new font..." data-ng-model="font.name" required="" data-ng-blur="font.name = ''">
@@ -71,7 +71,7 @@
                                 <h2>
                                     <form name="fontName" role="form" data-ng-submit="update(font)" novalidate> 
                                         <input id="fonts_name_{{font._id}}" data-ng-model="font.name" class="col-md-10"/>
-                                        <label class="btn btn-success" role="button" data-ng-click="clone(font)" data-ng-show="global.teamActive.settings.fonts.length < constants.max.fonts">
+                                        <label class="btn btn-success" role="button" data-ng-click="clone(font)" data-ng-if="global.teamActive.settings.fonts.length < constants.max.fonts">
                                             <i class="fa fa-copy"></i>
                                             Clone Font
                                         </label>
@@ -94,8 +94,8 @@
                                 </div>
                                 <div class="btn-group dd-{{dd.style}}" dropdown data-ng-repeat='dd in buttonGroup2'>
                                     <button type="button" class="btn btn-primary dropdown-toggle" data-ng-click="scroll(('fonts-id-' + font._id + '-' + dd.style | clean), ('fonts-id-' + font._id + '-' + (font[dd.style]._id ? font[dd.style]._id : font[dd.style]) | clean))"> 
-                                        <span data-ng-show="dd.style !== 'color'">{{font[dd.style]}} </span>
-                                        <span data-ng-show="dd.style === 'color'">
+                                        <span data-ng-if="dd.style !== 'color'">{{font[dd.style]}} </span>
+                                        <span data-ng-if="dd.style === 'color'">
                                             <span class='dd-color' style='background: {{font[dd.style] | toRGBA}}'> </span> {{font[dd.style].hex | uppercase}}
                                         </span> 
                                         <span class="caret"></span> 
@@ -106,13 +106,13 @@
                                             data-ng-class="{active: (option === font[dd.style] && dd.options !== 'colours.fonts') || (option._id === font[dd.style]._id && dd.options === 'colours.fonts')}"
                                             >
                                             <a href data-ng-click="change(font, dd.style, option)" > 
-                                                <span data-ng-show="dd.style === 'font_family'" style='font-family: {{option}}'>
+                                                <span data-ng-if="dd.style === 'font_family'" style='font-family: {{option}}'>
                                                     {{option}}
                                                 </span>
-                                                <span data-ng-show="dd.style === 'font_size'">
+                                                <span data-ng-if="dd.style === 'font_size'">
                                                     {{option}}
                                                 </span>
-                                                <span data-ng-show="dd.style === 'color'">
+                                                <span data-ng-if="dd.style === 'color'">
                                                     <span class='dd-color' style='background: {{option | toRGBA}}'> </span> {{option.hex | uppercase}}
                                                 </span>
                                             </a>
@@ -132,7 +132,7 @@
                     <h3>No colours have been set for borders.</h3>
                     <h4>Please, go to <a data-ng-click="open('colours', 'borders')" role="button"><strong>Colours &raquo; Borders</strong></a> and configure them.</h4>
                 </div> 
-                <div role="tabpanel" class="borders_panel tabpanel" data-ng-show="global.teamActive.settings.colours.borders.length > 0"> 
+                <div role="tabpanel" class="borders_panel tabpanel" data-ng-if="global.teamActive.settings.colours.borders.length > 0"> 
                     <ul class="nav nav-pills nav-stacked col-md-3 col-sm-3" role="tablist">
                         <li role="presentation" data-ng-class="{active: border._id === actives['borders']}" data-ng-repeat="border in global.teamActive.settings.borders" >
                             <a href aria-controls="{{border.name}}" role="tab" data-toggle="tab" data-ng-click="changeSubtabActive('borders', border._id)">
@@ -140,7 +140,7 @@
                             </a>
                             <a role="button" data-ng-click="remove(border)" class="remove"><i class="fa fa-remove"></i></a>
                         </li>
-                        <li role="presentation" data-ng-show="global.teamActive.settings.colours.borders.length > 0 && global.teamActive.settings.borders.length < constants.max.borders"> 
+                        <li role="presentation" data-ng-if="global.teamActive.settings.colours.borders.length > 0 && global.teamActive.settings.borders.length < constants.max.borders"> 
                             <a role="menuitem" class="new_element_hover_plus"> 
                                 <form name="newBorder" role="form" data-ng-submit="create(newBorder.$valid)" novalidate>
                                     <input class="new_border" name="new_border" type="text" placeholder="Add new border..." data-ng-model="border.name" required="" data-ng-blur="border.name = ''">
@@ -154,7 +154,7 @@
                                 <h2>
                                     <form name="borderName" role="form" data-ng-submit="update(border)" novalidate> 
                                         <input id="borders_name_{{border._id}}" data-ng-model="border.name" class="col-md-10"/>
-                                        <label class="btn btn-success" role="button" data-ng-click="clone(border)" data-ng-show="global.teamActive.settings.borders.length < constants.max.borders">
+                                        <label class="btn btn-success" role="button" data-ng-click="clone(border)" data-ng-if="global.teamActive.settings.borders.length < constants.max.borders">
                                             <i class="fa fa-copy"></i>
                                             Clone Border
                                         </label>
@@ -168,8 +168,13 @@
                             <div class="controls">
                                 <div class="btn-group dd-{{dd.style}}" dropdown data-ng-repeat='dd in buttonGroup'>
                                     <button type="button" class="btn btn-primary dropdown-toggle" data-ng-click="scroll(('borders-id-' + border._id + '-' + dd.style | clean), ('borders-id-' + border._id + '-' + (border[dd.style]._id ? border[dd.style]._id : border[dd.style]) | clean))"> 
-                                        <span data-ng-show="dd.style !== 'border_color'">{{border[dd.style]}} </span>
-                                        <span data-ng-show="dd.style === 'border_color'">
+                                        <span data-ng-if="dd.style === 'border_style'">
+                                            {{border[dd.style]}}
+                                        </span>
+                                        <span data-ng-if="['border_top_width', 'border_right_width', 'border_bottom_width', 'border_left_width', 'border_radius'].indexOf(dd.style) >= 0">
+                                            {{border[dd.style]}}px
+                                        </span>
+                                        <span data-ng-if="dd.style === 'border_color'">
                                             <span class='dd-color' style='background: {{border[dd.style] | toRGBA}}'> </span> {{border[dd.style].hex | uppercase}} 
                                         </span>
                                         <span class="caret"></span>
@@ -180,13 +185,13 @@
                                             data-ng-class="{active: (option === border[dd.style]) || (option._id === border[dd.style]._id && dd.options === 'colours.borders')}"
                                             >
                                             <a href data-ng-click="change(border, dd.style, option)">
-                                                <span data-ng-show="dd.style === 'border_style'">
+                                                <span data-ng-if="dd.style === 'border_style'">
                                                     <span class="dropelement dd-border_style" style='border-style: {{option}}'> </span>
                                                 </span>
-                                                <span data-ng-show="['border_top_width', 'border_right_width', 'border_bottom_width', 'border_left_width', 'border_radius'].indexOf(dd.style) >= 0">
-                                                    {{option}} 
+                                                <span data-ng-if="['border_top_width', 'border_right_width', 'border_bottom_width', 'border_left_width', 'border_radius'].indexOf(dd.style) >= 0">
+                                                    {{option}}px
                                                 </span>
-                                                <span data-ng-show="dd.style === 'border_color'">
+                                                <span data-ng-if="dd.style === 'border_color'">
                                                     <span class='dd-color' style='background: {{option| toRGBA}}'> </span> {{option.hex | uppercase}}
                                                 </span>
                                             </a>
@@ -206,7 +211,7 @@
                     <h3>No colours have been set for overlays.</h3>
                     <h4>Please, go to <a data-ng-click="open('colours', 'overlays')" role="button"><strong>Colours &raquo; Overlays</strong></a> and configure them.</h4>
                 </div> 
-                <div role="tabpanel" class="overlays_panel tabpanel" data-ng-show="global.teamActive.settings.colours.overlays.length > 0"> 
+                <div role="tabpanel" class="overlays_panel tabpanel" data-ng-if="global.teamActive.settings.colours.overlays.length > 0"> 
                     <ul class="nav nav-pills nav-stacked col-md-3 col-sm-3" role="tablist">
                         <li role="presentation" data-ng-class="{active: overlay._id === actives['overlays']}" data-ng-repeat="overlay in global.teamActive.settings.overlays" >
                             <a href aria-controls="{{overlay.name}}" role="tab" data-toggle="tab" data-ng-click="changeSubtabActive('overlays', overlay._id)">
@@ -214,7 +219,7 @@
                             </a>
                             <a role="button" data-ng-click="remove(overlay, 'overlays')" class="remove"><i class="fa fa-remove"></i></a>
                         </li>
-                        <li role="presentation" data-ng-show="global.teamActive.settings.colours.overlays.length > 0 && global.teamActive.settings.overlays.length < constants.max.overlays"> 
+                        <li role="presentation" data-ng-if="global.teamActive.settings.colours.overlays.length > 0 && global.teamActive.settings.overlays.length < constants.max.overlays"> 
                             <a role="menuitem" class="new_element_hover_plus"> 
                                 <form name="newOverlay" role="form" data-ng-submit="create(newOverlay.$valid)" novalidate>
                                     <input class="new_overlay" name="new_overlay" type="text" placeholder="Add new overlay..." data-ng-model="overlay.name" required="" data-ng-blur="overlay.name = ''">
@@ -228,7 +233,7 @@
                                 <h2>
                                     <form name="overlayName" role="form" data-ng-submit="update(overlay)" novalidate> 
                                         <input id="overlays_name_{{overlay._id}}" data-ng-model="overlay.name" class="col-md-10"/> 
-                                        <label class="btn btn-success" role="button" data-ng-click="clone(overlay)" data-ng-show="global.teamActive.settings.overlays.length < constants.max.overlays">
+                                        <label class="btn btn-success" role="button" data-ng-click="clone(overlay)" data-ng-if="global.teamActive.settings.overlays.length < constants.max.overlays">
                                             <i class="fa fa-copy"></i>
                                             Clone Overlay
                                         </label>
@@ -242,8 +247,8 @@
                             <div class="controls"> 
                                 <div class="btn-group dd-{{dd.style}}" dropdown data-ng-repeat='dd in buttonGroup'>
                                     <button type="button" class="btn btn-primary dropdown-toggle" data-ng-class="{disabled: dd.style === 'color_1' && [2, 5].indexOf(overlay['type']) < 0}" data-ng-click="scroll(('overlays-id-' + overlay._id + '-' + dd.style | clean), ('overlays-id-' + overlay._id + '-' + (overlay[dd.style]._id ? overlay[dd.style]._id : overlay[dd.style]) | clean))">
-                                        <span data-ng-show="['color_0', 'color_1'].indexOf(dd.style) < 0">{{overlay[dd.style] | mapOverlayTypes}} </span> 
-                                        <span data-ng-show="['color_0', 'color_1'].indexOf(dd.style) >= 0">
+                                        <span data-ng-if="['color_0', 'color_1'].indexOf(dd.style) < 0">{{overlay[dd.style] | mapOverlayTypes}} </span> 
+                                        <span data-ng-if="['color_0', 'color_1'].indexOf(dd.style) >= 0">
                                             <span class='dd-color' style='background: {{overlay[dd.style]| toRGBA}}'> </span> {{overlay[dd.style].hex | uppercase}} 
                                         </span>
                                         <span class="caret"></span>
@@ -254,10 +259,10 @@
                                             data-ng-class="{active: (option === overlay[dd.style]) || (option._id === overlay[dd.style]._id && dd.options === 'colours.overlays')}"
                                             >
                                             <a href data-ng-click="change(overlay, dd.style, option)" >
-                                                <span data-ng-show="dd.style === 'type'">
+                                                <span data-ng-if="dd.style === 'type'">
                                                     {{option | mapOverlayTypes}} 
                                                 </span>
-                                                <span data-ng-show="['color_0', 'color_1'].indexOf(dd.style) >= 0">
+                                                <span data-ng-if="['color_0', 'color_1'].indexOf(dd.style) >= 0">
                                                     <span class='dd-color' style='background: {{option | toRGBA}}'> </span> {{option.hex | uppercase}}
                                                 </span>
                                             </a>

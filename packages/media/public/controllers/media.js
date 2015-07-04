@@ -22,17 +22,19 @@ angular.module('mean.media', [
                     }, 0, false);
                 };
 
-                $scope.$watch('global.teamActive._id', function(){
-                    $scope.search_query = '';
-                    $scope.mediaFiles = [];
-                    $scope.progress = 0;
-                    
-                    Media.query({teamId: $scope.global.teamActive._id, filetype: 'all'}, function (media_files) {
-                        $scope.mediaFiles = media_files;
-                        if($scope.mediaFiles.length > 0){
-                            $scope.selected = $scope.mediaFiles[0];
-                        }
-                    });
+                $scope.$watch('global.teamActive.settings', function(){
+                    if($scope.global.teamActive && $scope.global.teamActive._id){
+                        $scope.search_query = '';
+                        $scope.mediaFiles = [];
+                        $scope.progress = 0;
+
+                        Media.query({teamId: $scope.global.teamActive._id, filetype: 'all'}, function (media_files) {
+                            $scope.mediaFiles = media_files;
+                            if($scope.mediaFiles.length > 0){
+                                $scope.selected = $scope.mediaFiles[0];
+                            }
+                        });
+                    }
                 });
 
                 $scope.select = function(media) {

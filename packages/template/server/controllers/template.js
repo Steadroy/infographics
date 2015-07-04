@@ -4,6 +4,8 @@
  * Module dependencies.
  */
 var mongoose = require('mongoose'),
+    fs = require('fs'),
+    config = require('meanio').loadConfig(),
     Template = mongoose.model('Template'),
     Dom = mongoose.model('Dom'),
     Background = mongoose.model('Background'),
@@ -48,10 +50,10 @@ exports.template = function (req, res, next, id) {
  * Create a template
  */
 exports.create = function (req, res) {
-    var template = new Template(req.body),
+    var template = new Template(req.body), temporal_doms,
         background = new Background(),
         configuration = new Configuration(),
-        dom = new Dom(), send = false, 
+        dom = new Dom(), 
         _err = function(message, res){
             return res.status(500).json({ error: message });
         },
@@ -71,88 +73,82 @@ exports.create = function (req, res) {
                             return _err('Cannot create a new node', res);
                         
                         template.doms.push(dom);
-                            
-                        template.save(function (err) {
-                            if (err)
-                                return _err('Cannot create a new template', res);
-                            
-                            Template
-                                .deepPopulate(template, populate, function(err, template){
-                                    if(send)
+                        
+                        if(!req.query.clone || (req.query.clone && template.doms.length === temporal_doms.length)){
+                            template.save(function (err) {
+                                if (err)
+                                    return _err('Cannot create a new template', res);
+
+                                Template
+                                    .deepPopulate(template, populate, function(err, template){
                                         res.json(template);
-                                });
-                        });
+                                    });
+                            });
+                        }
                     });
                 });
             });
         };
     
     if(req.query.clone){
-        var exec_background = function(err, _background){
-                if (err || !_background)
-                    return _err('Failed to load dom background', res);
+        var clone_dom = function(id, i){
+                Dom
+                    .findById(id)
+                    .exec(function(err, _dom){
+                        if (err || !_dom)
+                            return _err('Failed to load dom element', res);
 
-                _background._id = mongoose.Types.ObjectId();
-                _background.isNew = true;
-                
-                save_tree(_background, configuration, dom, template, res); 
-            },
-            exec_configuration = function(err, _configuration){
-                if (err || !_configuration)
-                    return _err('Failed to load dom configuration', res);
+                        _dom.dom_id = _dom.dom_id === '#infographic-container' ? _dom.dom_id : _dom.dom_id + i;
+                        _dom.parent_dom_id = _dom.parent_dom_id === '' ? _dom.parent_dom_id : _dom.parent_dom_id + (i-1);
+                        _dom._id = new mongoose.Types.ObjectId();
+                        _dom.isNew = true;
 
-                _configuration._id = mongoose.Types.ObjectId();
-                _configuration.isNew = true;
-                
-                configuration = _configuration;
-                
-                Background
-                    .findById(_configuration.background)
-                    .exec(exec_background);
-            },
-            exec_dom = function(err, _dom){
-                if (err || !_dom)
-                    return _err('Failed to load dom element', res);
+                        Configuration
+                            .findById(_dom.configuration)
+                            .exec(function(err, _configuration){
+                                if (err || !_configuration)
+                                    return _err('Failed to load dom configuration', res);
 
-                _dom.dom_id = '#dom_' + Date.now();
-                _dom._id = mongoose.Types.ObjectId();
-                _dom.isNew = true;
-                
-                dom = _dom;
-                
-                Configuration
-                    .findById(_dom.configuration)
-                    .exec(exec_configuration);
-            },
-            exec_template = function(err, _template){
-                var temporal_doms = _template.doms;
+                                _configuration._id = new mongoose.Types.ObjectId();
+                                _configuration.isNew = true;
+
+                                Background
+                                    .findById(_configuration.background)
+                                    .exec(function(err, _background){
+                                        if (err || !_background)
+                                            return _err('Failed to load dom background', res);
+
+                                        _background._id = new mongoose.Types.ObjectId();
+                                        _background.isNew = true;
+
+                                        save_tree(_background, _configuration, _dom, template, res); 
+                                    });
+                            });
+                    });
+            };
+            
+        Template
+            .findById(template._id)
+            .exec(function(err, _template){
+                temporal_doms = _template.doms;
                 if (err || !_template)
                     return _err('Failed to load dom template', res);
                 
                 _template.name = _template.name + ' [Clone]';
-                _template._id = mongoose.Types.ObjectId();
+                _template._id = new mongoose.Types.ObjectId();
+                _template.poster = '';
+                _template.ready = false;
                 _template.isNew = true;
                 
                 template = _template;
                 template.doms = [];
                 
-                console.log(temporal_doms.length);
-                
                 for(var i = 0; i < temporal_doms.length; i = i + 1){
-                    if(i === temporal_doms.length - 1)
-                        send = true;
-                    Dom
-                        .findById(temporal_doms[i])
-                        .exec(exec_dom);
+                    clone_dom(temporal_doms[i], i);
                 }
-            };
-            
-        Template
-            .findById(template._id)
-            .exec(exec_template);
+            });
     }
     else{
-        send = true;
         save_tree(background, configuration, dom, template, res);
     }
 };
@@ -214,4 +210,24 @@ exports.get = function (req, res) {
         }
         res.json(template);
     });
+};
+
+exports.poster = function (req, res) {
+    if (req.template) {
+        console.log(req.team);
+        var intervalID = setInterval(function () {
+            try {
+                var img = fs.readFileSync(config.root + '/upload/' + req.team._id + '/' + req.template.poster);
+                res.writeHead(200, {'Content-Type': 'image/png'});
+                res.end(img, 'binary');
+                clearInterval(intervalID);
+            } catch (err) {
+            }
+        }, 750);
+    }
+    else {
+        var img = fs.readFileSync(config.root + '/upload/transparent.png');
+        res.writeHead(200, {'Content-Type': 'image/png'});
+        res.end(img, 'binary');
+    }
 };

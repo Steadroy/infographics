@@ -4,8 +4,8 @@
  * Module dependencies.
  */
 var mongoose = require('mongoose'),
-    Team = mongoose.model('Team'),
-    _ = require('lodash');
+        Team = mongoose.model('Team'),
+        _ = require('lodash');
 
 
 /**
@@ -28,7 +28,7 @@ exports.team = function (req, res, next, id) {
 exports.create = function (req, res) {
     var team = new Team(req.body);
     team.creator = req.user;
-    
+
     team.save(function (err) {
         if (err) {
             return res.status(500).json({
@@ -45,7 +45,7 @@ exports.create = function (req, res) {
  */
 exports.destroy = function (req, res) {
     var team = req.team;
-    
+
     team.remove(function (err) {
         if (err) {
             return res.status(500).json({
@@ -63,7 +63,7 @@ exports.update = function (req, res) {
     var team = req.team;
     req.body.settings = (typeof req.body.settings === 'object' ? req.body.settings._id : req.body.settings);
     team = _.extend(team, req.body);
-    
+
     team.save(function (err) {
         if (err) {
             return res.status(500).json({

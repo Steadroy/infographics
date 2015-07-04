@@ -9,14 +9,14 @@
         <a class="navbar-brand" ui-sref="home" mean-token="'site-title'">
             Infographics
         </a>
-        <a class="navbar-brand" title="logo" data-ng-show='global.teamActive._id'>
+        <a class="navbar-brand" title="logo" data-ng-if='global.authenticated && teams.length'>
             <span id="logo" ngf-drop data-ng-model="files" class="drop-box" 
                  ngf-drag-over-class="dragover" ngf-multiple="false" 
                  ngf-select ngf-allow-dir="true" ngf-accept="'image/png'" ngf-change="upload(files)">
-                <span data-ng-show='global.teamActive.logo'>
+                <span data-ng-if='global.teamActive.logo'>
                     <img data-ng-src="/logo/{{global.teamActive._id}}/{{global.teamActive.logo}}" alt='LOGO' />
                 </span>
-                <span data-ng-show='!global.teamActive.logo'>
+                <span data-ng-if='!global.teamActive.logo'>
                     [ {{global.teamActive.name}} ]
                 </span>
             </span>
@@ -37,13 +37,13 @@
                 <a ui-sref='auth.login'>Log In</a>
             </li>
         </ul>
-        <ul class="navbar-nav nav pull-right"  data-ng-show="global.authenticated">
+        <ul class="navbar-nav nav pull-right"  data-ng-if="global.authenticated">
             <li ng-if="global.user.profile" class="dropdown" mean-profile-menu>x</li>
             <li ng-if="!global.user.profile" class="dropdown">
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                     {{global.user.name}} <b class="caret"></b>
                 </a>
-                <ul class="dropdown-menu" data-ng-controller="TeamsController" data-ng-init="find()">
+                <ul class="dropdown-menu" data-ng-controller="TeamsController" data-ng-init="init()">
                     <li role="presentation" data-ng-class="{active: global.teamActive === team}" data-ng-repeat="team in teams">
                         <a role="menuitem" data-ng-click="changeTeamActive(team)">{{team.name}}</a>
                         <a data-ng-click="remove(team)" class="remove"><i class="fa fa-remove"></i></a>

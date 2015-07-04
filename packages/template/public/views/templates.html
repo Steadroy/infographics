@@ -27,17 +27,20 @@
         <div class="template-container infographic edit col-md-9" data-ng-show="active._id" >
             <h2 class="template_header_name">
                 <form name="templateName" role="form" data-ng-submit="update(active)" novalidate> 
-                    <input id="templates_name_{{active._id}}" data-ng-model="active.name" class="col-md-9"/>
-                    <label class="btn btn-success" role="button" data-ng-click="clone(active)"> 
+                    <input id="templates_name_{{active._id}}" data-ng-model="active.name" class="col-md-8"/>
+                    <label class="btn btn-warning col-md-1" role="button" data-ng-click="toggleTemplateSetting(active)"> 
+                        <i class="fa fa-cog"></i>
+                    </label>
+                    <label class="btn btn-success col-md-3" role="button" data-ng-click="clone(active)"> 
                         <i class="fa fa-copy"></i>
                         Clone Template
                     </label>
                 </form> 
             </h2> 
-            <section class="template-edit template" data-ng-class="{'col-md-9': active_dom, 'col-md-12': !active_dom}">
-                <dom-element data-ng-repeat="dom in active.doms" dom="dom"></dom-element>
+            <section id="template" class="template-edit template" data-ng-class="{'col-md-9': active_dom || active_template, 'col-md-12': !active_dom && !active_template, 'active': active_template}">
+                <dom-element data-ng-repeat="dom in active.doms | orderBy:'order'" dom="dom"></dom-element>
             </section>
-            <dom-settings data-ng-class="{'col-md-3': active_dom, 'hidden': !active_dom}"></dom-settings>
+            <dom-settings data-ng-class="{'col-md-3': active_dom || active_template, 'hidden': !active_dom && !active_template}"></dom-settings>
         </div>
     </div>
 </section>

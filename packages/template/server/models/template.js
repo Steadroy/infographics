@@ -31,6 +31,11 @@ var TemplateSchema = new Schema({
         trim: true,
         default: ''
     },
+    ready: {
+        type: Boolean,
+        required: true,
+        default: false
+    },
     doms: [{
         type: Schema.Types.ObjectId,
         require: true,

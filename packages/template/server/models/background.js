@@ -16,6 +16,11 @@ var BackgroundSchema = new Schema({
         require: true,
         ref: 'Colour'
     },
+    overwritable: {
+        type: Boolean,
+        required: true,
+        default: false
+    },
     background_image: {
         type: String,
         required: true,

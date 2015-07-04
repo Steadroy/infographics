@@ -27,18 +27,18 @@ angular.module('mean.system')
             var _parse = function(style){
                 var output = '';
                 for (var i in style) {
-                    if (['font', 'border'].indexOf(i) >= 0){
+                    if (['font', 'border', 'overwrite'].indexOf(i) >= 0){
                         output = output + _parse(style[i]);
                     }
                     if (
-                        ['__v', '_id', 'name', 'created', 'background', 'logo_position', 'font', 'border', 'overlay'].indexOf(i) >= 0 ||
+                        ['__v', '_id', 'name', 'created', 'background', 'logo_position', 'font', 'border', 'overlay', 'overwrite', 'overwritable'].indexOf(i) >= 0 ||
                         style[i] === null || 
                         typeof style[i] === 'function'
                     ){
                         continue;
                     }
 
-                    output = output + i.replace(/\_/g, '-') + ':' + (typeof style[i] === 'string' ? (i === 'background_image' ? 'url(/static/' + style[i] + ')': style[i]) : toRGBAFilter(style[i])) + (['top', 'left', 'width', 'height', 'padding_top', 'padding_right', 'padding_bottom', 'padding_left'].indexOf(i) >= 0 ? 'px' : '') +';';
+                    output = output + i.replace(/\_/g, '-') + ':' + (typeof style[i] === 'string' ? (i === 'background_image' ? 'url(/static/' + style[i] + ')': style[i]) : toRGBAFilter(style[i])) + (['top', 'left', 'width', 'height', 'padding_top', 'padding_right', 'padding_bottom', 'padding_left', 'border_top_width', 'border_right_width', 'border_bottom_width', 'border_left_width', 'border_radius'].indexOf(i) >= 0 ? 'px' : '') +';';
                 }
                 return output;
             };

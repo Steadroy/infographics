@@ -8,7 +8,7 @@
     
     data-ng-class="{
         'infographic-container': !dom.parent_dom_id, 
-        'infographic-element': dom.parent_dom_id, 
+        'infographic-element': dom.parent_dom_id,
         'overlay': dom.configuration.overlay,
         'editing': dom._id === $parent.active_dom._id || dom._id === $parent.add_dom._id,
         'highlight': global.highlighted === dom.dom_id
@@ -17,10 +17,10 @@
     data-ng-click="localToggle()"
     class="dom-element {{!dom.parent_dom_id ? 'logo-position-' + dom.configuration.logo_position : ''}}"
     data-type='type_{{dom.configuration.overlay.type}}' data-overlay='{{dom.configuration.overlay._id| clean}}'
-    style="{{dom | parseDom}}"
+    style="{{dom | parseDom}}z-index:{{dom.order}}"
 >
     <div data-ng-if="dom.configuration.overlay" class="inner-overlay" data-type='type_{{dom.configuration.overlay.type}}'></div>
-    <div data-ng-if="dom.type === 'text'" class="dom-content" placeholder="{{placeholder | limitTo: dom.configuration.width * dom.configuration.height / (10 * parseInt(dom.configuration.font.font_size))}}"></div> 
+    <div data-ng-if="dom.type === 'text'" class="dom-content" placeholder="{{placeholder | limitTo: dom.configuration.width * dom.configuration.height / (20 * parseInt(dom.configuration.font.font_size))}}"></div> 
     
     <form role="form" data-ng-submit="localResizeStop()" novalidate>
         <div class="size width">

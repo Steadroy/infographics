@@ -22,6 +22,11 @@ var DomSchema = new Schema({
         trim: true,
         default: ''
     },
+    order: {
+        type: Number,
+        required: true,
+        default: 0
+    },
     content: {
         type: String,
         required: false,

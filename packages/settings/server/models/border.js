@@ -24,34 +24,34 @@ var BorderSchema = new Schema({
         default: 'solid'
     },
     border_top_width: {
-        type: String,
+        type: Number,
         required: true,
         trim: true,
-        default: '1px'
+        default: '1'
     },
     border_right_width: {
-        type: String,
+        type: Number,
         required: true,
         trim: true,
-        default: '1px'
+        default: '1'
     },
     border_bottom_width: {
-        type: String,
+        type: Number,
         required: true,
         trim: true,
-        default: '1px'
+        default: '1'
     },
     border_left_width: {
-        type: String,
+        type: Number,
         required: true,
         trim: true,
-        default: '1px'
+        default: '1'
     },
     border_radius: {
-        type: String,
+        type: Number,
         required: true,
         trim: true,
-        default: '0px'
+        default: '0'
     },
     border_color: {
         type: Schema.Types.ObjectId,

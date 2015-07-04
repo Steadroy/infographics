@@ -3,7 +3,6 @@ html {
 }
 
 body.login, body.register,  body.forgot-password {
-background: url("/theme/assets/img/bg.png");
     height: 100%;
     position: relative;
 }
@@ -56,12 +55,13 @@ background: url("/theme/assets/img/bg.png");
 
 .main-form {
     width: 748px;
-    height: 435px;
+    height: 355px;
     margin-left: -374px;
 }
 
 .main-form.register-form {
-    height: 622px;
+    height: 590px;
+    margin-bottom: 130px;
 }
 
 .login-form__left {
@@ -73,7 +73,7 @@ background: url("/theme/assets/img/bg.png");
 
 .login-form__left h2, .forgot_password_form h2 {
     font-size: 30px;
-    padding-bottom: 4px;
+    padding-bottom: 24px;
     font-family: "futura_bkbook";
     margin: 0;
     text-transform: uppercase;
@@ -113,7 +113,6 @@ background: url("/theme/assets/img/bg.png");
 
 .pic.email {
     position: absolute;
-    background: url("/theme/assets/img/mail_login.png") no-repeat;
     width: 30px;
     height: 21px;
     top: 18px;
@@ -268,19 +267,20 @@ background: url("/theme/assets/img/bg.png");
 }
 
 .login-form__center {
-    height: 100%;
+    height: 80%;
     float: left;
     background: url("/theme/assets/img/devide_line.png") no-repeat 50% 30%;
     padding: 0 10px;
+    margin-top: 5%;
 }
 
 .register-form .login-form__center {
-    margin-top: 38px;
     background: url("/theme/assets/img/devide_line_long.png") no-repeat 50% 0;
+    height: 85%;
 }
 
 .login-form__center p {
-    margin-top: 155px;
+    margin-top: 110px;
     font-family: 'proxima_novalight';
     font-size: 16px;
 }
@@ -419,19 +419,6 @@ background: url("/theme/assets/img/bg.png");
     height: 41px;
     top: 10px;
     left: 8px;
-}
-
-.woman_ninja_bottom {
-    position: absolute;
-    left: 21%;
-    pointer-events: none;
-}
-
-.woman_ninja_left {
-    position: absolute;
-    top: 75px;
-    left: -410px;
-    pointer-events: none;
 }
 
 .registration_form {

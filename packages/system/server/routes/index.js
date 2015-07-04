@@ -13,7 +13,7 @@ module.exports = function (System, app, auth, database) {
             .get(index.logo);
     app.route('/logo/:teamId')
             .get(index.logo);
-
+    
     app.get('/*', function (req, res, next) {
         res.header('workerID', JSON.stringify(mean.options.workerid));
         next(); // http://expressjs.com/guide.html#passing-route control

@@ -23,9 +23,9 @@ Template.register(function (app, auth, database) {
         'link': 'see template'
     });
     
-    //Template.aggregateAsset('js', '../../../../../bower_components/ng-resize/ngresize.min.js', {group: 'footer'});
+    Template.aggregateAsset('js', '../../../../../bower_components/html2canvas/build/html2canvas.min.js', {group: 'footer'});
     //Template.aggregateAsset('js', 'colResizable-1.5.min.js', {group: 'footer'});
     Template.aggregateAsset('css', 'template.css', {group: 'footer'});
-
+    
     return Template;
 });
