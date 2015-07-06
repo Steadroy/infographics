@@ -117,11 +117,12 @@ angular.module('mean.template', [])
             $scope.toggle = function(dom){
                 if($scope.active_dom && dom._id === $scope.active_dom._id){
                     $scope.active_dom = null;
+                    $scope.active_template = $scope.active;
                 }
                 else{
                     $scope.active_dom = dom;
+                    $scope.active_template = null;
                 }
-                $scope.active_template = null;
             };
             $scope.removeDom = function(dom){
                 var find_children = function(dom){

@@ -28,7 +28,9 @@
             <h2 class="template_header_name">
                 <form name="templateName" role="form" data-ng-submit="update(active)" novalidate> 
                     <input id="templates_name_{{active._id}}" data-ng-model="active.name" class="col-md-8"/>
-                    <label class="btn btn-warning col-md-1" role="button" data-ng-click="toggleTemplateSetting(active)"> 
+                    <label class="btn btn-warning col-md-1" role="button" data-ng-click="toggleTemplateSetting(active)"
+                           tooltip="Template options" tooltip-trigger="mouseenter" tooltip-placement="top" 
+                    > 
                         <i class="fa fa-cog"></i>
                     </label>
                     <label class="btn btn-success col-md-3" role="button" data-ng-click="clone(active)"> 

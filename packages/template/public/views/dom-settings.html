@@ -2,7 +2,9 @@
     <tabset data-ng-if="active_template"> 
         <tab> 
             <tab-heading>
-                <i class="fa fa-cog"></i>
+                <i class="fa fa-cog"
+                   tooltip="Template options" tooltip-trigger="mouseenter" tooltip-placement="top" 
+                ></i>
             </tab-heading> 
             <div role="tabpanel" class="settings tabpanel">
                 <div class="is_ready">
@@ -34,7 +36,9 @@
     <tabset data-ng-if="active_dom"> 
         <tab> 
             <tab-heading>
-                <i class="fa fa-cog"></i>
+                <i class="fa fa-cog"
+                   tooltip="{{active_dom.type | capitalize}} element options" tooltip-trigger="mouseenter" tooltip-placement="top" 
+                ></i>
             </tab-heading> 
             <div role="tabpanel" class="settings tabpanel">
                 <div class="logo_position" data-ng-if="!active_dom.parent_dom_id">
@@ -43,6 +47,7 @@
                         <label data-ng-repeat="i in config.logo_position" 
                                tooltip="{{i}}" tooltip-trigger="mouseenter" tooltip-placement="top" 
                                class="btn btn-primary {{i}}" 
+                               data-ng-class="{active: active_dom.configuration.logo_position === i}"
                                data-ng-model="active_dom.configuration.logo_position" btn-radio="'{{i}}'"
                                data-ng-click="changeSetting('logo_position', null, i)">
                         </label>
@@ -135,7 +140,9 @@
         </tab>
         <tab> 
             <tab-heading>
-                <i class="fa fa-picture-o"></i>
+                <i class="fa fa-picture-o"
+                   tooltip="{{active_dom.type | capitalize}} element background" tooltip-trigger="mouseenter" tooltip-placement="top" 
+                ></i>
             </tab-heading> 
             <div role="tabpanel" class="images tabpanel">
                 <div class="pictures-container">
@@ -209,9 +216,11 @@
                 </div>
             </div>
         </tab>
-        <tab> 
+        <tab data-ng-if="active_dom.type !== 'text'"> 
             <tab-heading>
-                <i class="fa fa-plus"></i>
+                <i class="fa fa-plus"
+                   tooltip="add element to {{active_dom.type}}" tooltip-trigger="mouseenter" tooltip-placement="top" 
+                ></i>
             </tab-heading> 
             <div role="tabpanel" class="add tabpanel">
                 <div class="add-element">
