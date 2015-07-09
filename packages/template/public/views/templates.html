@@ -4,7 +4,7 @@
     </h1>
     <div class="col-md-12"> 
         <ul class="nav nav-pills nav-stacked col-md-3 col-sm-3 template-list" role="tablist">
-            <li role="presentation" data-ng-show="template.length > 0"> 
+            <li role="presentation" data-ng-if="template.length > 0"> 
                 <a role="menuitem"> 
                     <form name="searchTemplate" role="form" novalidate="">
                         <input class="search_template" name="search_template" type="text" placeholder="Search Template..." data-ng-model="search_query">
@@ -24,12 +24,12 @@
             </li>
         </ul>
         
-        <div class="template-container infographic edit col-md-9" data-ng-show="active._id" >
+        <div class="template-container infographic edit col-md-9" data-ng-if="active._id" >
             <h2 class="template_header_name">
                 <form name="templateName" role="form" data-ng-submit="update(active)" novalidate> 
                     <input id="templates_name_{{active._id}}" data-ng-model="active.name" class="col-md-8"/>
                     <label class="btn btn-warning col-md-1" role="button" data-ng-click="toggleTemplateSetting(active)"
-                           tooltip="Template options" tooltip-trigger="mouseenter" tooltip-placement="top" 
+                           tooltip="Template options" tooltip-trigger="mouseenter" tooltip-placement="top"
                     > 
                         <i class="fa fa-cog"></i>
                     </label>
@@ -42,7 +42,7 @@
             <section id="template" class="template-edit template" data-ng-class="{'col-md-9': active_dom || active_template, 'col-md-12': !active_dom && !active_template, 'active': active_template}">
                 <dom-element data-ng-repeat="dom in active.doms | orderBy:'order'" dom="dom"></dom-element>
             </section>
-            <dom-settings data-ng-class="{'col-md-3': active_dom || active_template, 'hidden': !active_dom && !active_template}"></dom-settings>
+            <dom-settings active_dom="active_dom" active_template="active_template" data-ng-class="{'col-md-3': active_dom || active_template, 'hidden': !active_dom && !active_template}"></dom-settings>
         </div>
     </div>
 </section>

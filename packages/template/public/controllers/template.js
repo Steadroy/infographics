@@ -69,7 +69,6 @@ angular.module('mean.template', [])
                 });
             };
             $scope.resize = function (evt, ui, dom) {
-                console.log(dom.configuration.overwrite);
                 dom.configuration.height = ui.size.height + (dom.configuration.overwrite ? dom.configuration.overwrite.padding_top + dom.configuration.overwrite.padding_bottom : 0) + (dom.configuration.border ? dom.configuration.border.border_top_width + dom.configuration.border.border_bottom_width : 0);
                 dom.configuration.width = ui.size.width + (dom.configuration.overwrite ? dom.configuration.overwrite.padding_left + dom.configuration.overwrite.padding_right : 0) + (dom.configuration.border ? dom.configuration.border.border_left_width + dom.configuration.border.border_right_width : 0);
             };
@@ -138,11 +137,12 @@ angular.module('mean.template', [])
                     });
                 };
                 for(var i = 0; i < $scope.active.doms.length; i = i + 1){
-                    if($scope.active.doms[i] === dom){
+                    if($scope.active.doms[i]._id === dom._id){
                         remove(i);
                     }
                 }
                 $scope.active_dom = null;
+                $scope.active_template = $scope.active;
             };
             $scope.toggleTemplateSetting = function(template){
                 if($scope.active_template && template._id === $scope.active_template._id){
@@ -215,12 +215,12 @@ angular.module('mean.template', [])
                     background.background_image = image._id;
                 }
                 background.$update(function(response){
-                    $scope.active_dom.configuration.background = response;
+                    $scope.$parent.active_dom.configuration.background = response;
                 });
             };
             $scope.changeSetting = function(setting, key, value){
                 if(setting === 'background'){
-                    var background = new Background($scope.active_dom.configuration.background);
+                    var background = new Background($scope.$parent.active_dom.configuration.background);
 
                     if(key === 'overwritable')
                         background[key] = !background[key];
@@ -228,11 +228,11 @@ angular.module('mean.template', [])
                         background[key] = typeof value === 'string' || !value ? value : value._id;
                     
                     background.$update(function(response){
-                        $scope.active_dom.configuration.background = response;
+                        $scope.$parent.active_dom.configuration.background = response;
                     });
                 }
                 else if (['logo_position', 'font', 'border', 'overlay', 'overwrite'].indexOf(setting) >= 0) {
-                    var configuration = new Configuration($scope.active_dom.configuration);
+                    var configuration = new Configuration($scope.$parent.active_dom.configuration);
                     
                     if (setting === 'overwrite'){
                         configuration.overwrite[key] = value;
@@ -241,14 +241,14 @@ angular.module('mean.template', [])
                         configuration[setting] = typeof value === 'string' || !value ? value : value._id;
                     }
                     configuration.$update(function(response){
-                        $scope.active_dom.configuration = response;
+                        $scope.$parent.active_dom.configuration = response;
                     });
                 }
             };
             
             $scope.addDom = function(type, _id){
-                var active_temp = $scope.active_dom,
-                    dom = new Dom({type: type, parent_dom_id:active_temp.dom_id, order:$scope.active.doms.length}),
+                var active_temp = $scope.$parent.active_dom,
+                    dom = new Dom({type: type, parent_dom_id:active_temp.dom_id, order:$scope.$parent.active.doms.length}),
                     getDimension = function (number) {
                         var grid = 5.0, value;
                         if (number > 0)
@@ -261,9 +261,9 @@ angular.module('mean.template', [])
                     };
                 
                 dom.$save(function(dom){
-                    $scope.active.doms.push(dom);
-                    new Template($scope.active).$update(function(template){ 
-                        $scope.active = template;
+                    $scope.$parent.active.doms.push(dom);
+                    new Template($scope.$parent.active).$update(function(template){ 
+                        $scope.$parent.active = template;
                         var configuration = new Configuration(dom.configuration);
                         configuration.height = getDimension(active_temp.configuration.height / 2);
                         configuration.width = getDimension(active_temp.configuration.width / 2);
@@ -274,9 +274,8 @@ angular.module('mean.template', [])
                             configuration.font = _id;
                         
                         configuration.$update(function(configuration){
-                            console.log(configuration);
-                            $scope.active.doms[$scope.active.doms.length - 1].configuration = configuration;
-                            $scope.active_dom = $scope.active.doms[$scope.active.doms.length - 1];
+                            $scope.$parent.active.doms[$scope.$parent.active.doms.length - 1].configuration = configuration;
+                            $scope.$parent.active_dom = $scope.$parent.active.doms[$scope.$parent.active.doms.length - 1];
                         });
                     });
                 });
@@ -286,10 +285,10 @@ angular.module('mean.template', [])
                 var dimensions = {width: 0, height: 0},
                     $template = angular.element('#template');
                 $scope.generating = true;
-                for (var i = 0; i < $scope.active.doms.length; i = i + 1) {
-                    if (!$scope.active.doms[i].parent_dom_id) {
-                        dimensions.width = $scope.active.doms[i].configuration.width;
-                        dimensions.height = $scope.active.doms[i].configuration.height;
+                for (var i = 0; i < $scope.$parent.active.doms.length; i = i + 1) {
+                    if (!$scope.$parent.active.doms[i].parent_dom_id) {
+                        dimensions.width = $scope.$parent.active.doms[i].configuration.width;
+                        dimensions.height = $scope.$parent.active.doms[i].configuration.height;
                         break;
                     }
                 }
@@ -305,13 +304,13 @@ angular.module('mean.template', [])
                                 url: '/upload',
                                 fields: {
                                     'dest': '/upload/' + $scope.global.teamActive._id + '/', 
-                                    'delete': $scope.active.poster,
+                                    'delete': $scope.$parent.active.poster,
                                     'file': poster
                                 }
                             })
                             .success(function(data, status, headers, config){
-                                $scope.active.poster = data.file.filename;
-                                $scope.update($scope.active);
+                                $scope.$parent.active.poster = data.file.filename;
+                                $scope.update($scope.$parent.active);
                                 $scope._t = new Date().getTime();
                                 $scope.feedback = true;
                                 

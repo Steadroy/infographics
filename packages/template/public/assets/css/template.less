@@ -130,12 +130,40 @@ body.template{
                             text-align: right;
                         }
                     }
-                    .dom-content{
+                    .dom-text{
                         white-space: pre-wrap;
                         word-wrap: break-word;
                         
                         &:empty:before{
                             content: attr(placeholder);
+                        }
+                    }
+                    .dom-media, .dom-chart{
+                        background-color: transparent;
+                        background-color: rgba(255, 255, 255, 0.65); 
+                        width: 100%;
+                        display: flex;
+                        
+                        &:empty:before{
+                            font: normal normal normal 14px/1 FontAwesome;
+                            text-shadow: 0 0 10px #000;
+                            font-size: 3em;
+                            display: inline-block;
+                            -webkit-font-smoothing: antialiased;
+                            -moz-osx-font-smoothing: grayscale;
+                            transform: translate(0, 0);
+                            color: @gray-darker;
+                            margin: auto;
+                        }
+                    }
+                    .dom-media{
+                        &:empty:before{
+                            content: "\f03e";
+                        }
+                    }
+                    .dom-chart{
+                        &:empty:before{
+                            content: "\f080";
                         }
                     }
                     .logo{

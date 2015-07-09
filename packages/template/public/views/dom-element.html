@@ -20,7 +20,9 @@
     style="{{dom | parseDom}}z-index:{{dom.order}}"
 >
     <div data-ng-if="dom.configuration.overlay" class="inner-overlay" data-type='type_{{dom.configuration.overlay.type}}'></div>
-    <div data-ng-if="dom.type === 'text'" class="dom-content" placeholder="{{placeholder | limitTo: dom.configuration.width * dom.configuration.height / (20 * parseInt(dom.configuration.font.font_size))}}"></div> 
+    <div data-ng-if="dom.type === 'text'" class="dom-text" placeholder="{{placeholder | limitTo: dom.configuration.width * dom.configuration.height / (20 * parseInt(dom.configuration.font.font_size))}}"></div> 
+    <div data-ng-if="dom.type === 'media'" class="dom-media"></div> 
+    <div data-ng-if="dom.type === 'chart'" class="dom-chart"></div> 
     
     <form role="form" data-ng-submit="localResizeStop()" novalidate>
         <div class="size width">
@@ -31,7 +33,7 @@
         </div>
         <input type="submit" style="position: absolute; left: -9999px; width: 1px; height: 1px;"/> 
     </form>
-    <div data-ng-show="!dom.parent_dom_id" class="logo {{dom.configuration.logo_position}}" 
+    <div data-ng-if="!dom.parent_dom_id" class="logo {{dom.configuration.logo_position}}" 
          data-ng-style="{'background-image': 'url(/logo/' + global.teamActive._id + '/' + global.teamActive.logo + ')'}">
     </div>
     <overlay-style data-ng-if="dom.configuration.overlay" overlay="dom.configuration.overlay"></overlay-style>

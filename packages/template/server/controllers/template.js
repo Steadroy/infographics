@@ -98,8 +98,12 @@ exports.create = function (req, res) {
                         if (err || !_dom)
                             return _err('Failed to load dom element', res);
 
-                        _dom.dom_id = _dom.dom_id === '#infographic-container' ? _dom.dom_id : _dom.dom_id + i;
-                        _dom.parent_dom_id = _dom.parent_dom_id === '' ? _dom.parent_dom_id : _dom.parent_dom_id + (i-1);
+                        if(_dom.dom_id !== '#infographic-container'){
+                            _dom.dom_id = _dom.dom_id + i;
+                        }
+                        if(_dom.parent_dom_id && _dom.parent_dom_id !== '#infographic-container'){
+                            _dom.parent_dom_id = _dom.parent_dom_id + (i-1);
+                        }
                         _dom._id = new mongoose.Types.ObjectId();
                         _dom.isNew = true;
 
@@ -214,7 +218,6 @@ exports.get = function (req, res) {
 
 exports.poster = function (req, res) {
     if (req.template) {
-        console.log(req.team);
         var intervalID = setInterval(function () {
             try {
                 var img = fs.readFileSync(config.root + '/upload/' + req.team._id + '/' + req.template.poster);

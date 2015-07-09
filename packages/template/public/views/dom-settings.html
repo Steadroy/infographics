@@ -216,10 +216,10 @@
                 </div>
             </div>
         </tab>
-        <tab data-ng-if="active_dom.type !== 'text'"> 
+        <tab data-ng-if="active_dom.type === 'container'"> 
             <tab-heading>
                 <i class="fa fa-plus"
-                   tooltip="add element to {{active_dom.type}}" tooltip-trigger="mouseenter" tooltip-placement="top" 
+                   tooltip="add element to {{active_dom.type}}" tooltip-trigger="mouseenter" tooltip-placement="top"
                 ></i>
             </tab-heading> 
             <div role="tabpanel" class="add tabpanel">
