@@ -48,7 +48,9 @@
     "passport-twitter": "1.0.2",
     "serve-favicon": "2.2.0",
     "swig": "1.4.2",
-    "view-helpers": "0.1.5"
+    "view-helpers": "0.1.5",
+    "passport": "latest",
+    "express-session": "latest"
   },
   "devDependencies": {
     "expect.js": "0.3.1",
@@ -84,7 +86,6 @@
     "require-dir":"latest",
     "through": "^2.3.6",
     "express-validator": "latest",
-    "method-override": "latest",
-    "passport": "latest"
+    "method-override": "latest"
   }
 }
