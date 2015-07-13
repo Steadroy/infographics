@@ -11,6 +11,20 @@
     "angular-bootstrap": "0.11.0",
     "angular-ui-router": "#master",
     "web-bootstrap": "./node_modules/meanio/resources/web-bootstrap.js",
-    "fontawesome": "~4.3.0"
+    "jquery-ui": "1.11.4",
+    "fontawesome": "~4.3.0",
+    "ng-file-upload": "",
+    "html2canvas": "",
+    "angular-bootstrap-colorpicker": "",
+    "ng-tags-input": "",
+    "angular-sanitize": "",
+    "videogular": "1.2.2",
+    "videogular-angulartics": "1.2.2",
+    "videogular-buffering": "1.2.2",
+    "videogular-controls": "1.2.2",
+    "videogular-ima-ads": "1.2.2",
+    "videogular-overlay-play": "1.2.2",
+    "videogular-poster": "1.2.2",
+    "videogular-themes-default": "1.2.2",
   }
 }
