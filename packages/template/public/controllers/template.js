@@ -103,6 +103,7 @@ angular.module('mean.template', [])
                 var update_children = function(dom){
                     for(var j = 0; j < $scope.active.doms.length; j = j + 1){
                         if(dom.dom_id === $scope.active.doms[j].parent_dom_id){
+                            console.log(ui);
                             $scope.active.doms[j].configuration.top = $scope.active.doms[j].configuration.top + (ui.position.top - ui.originalPosition.top); 
                             $scope.active.doms[j].configuration.left = $scope.active.doms[j].configuration.left + (ui.position.left - ui.originalPosition.left);
                             $scope.dragStop(evt, ui, $scope.active.doms[j]);

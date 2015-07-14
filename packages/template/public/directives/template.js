@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('mean.template') 
-    .directive('domElement', function (Global, $timeout, $compile) {
+    .directive('domElement', function (Global, $window) {
         return {
             restrict: 'E',
             scope: {
@@ -13,6 +13,7 @@ angular.module('mean.template')
             },
             replace: true,
             compile: function(elem, attributes){
+                var grid = 5;
                 return {
                     post: function(scope, elem, attributes, controller){
                         scope.global = Global;
@@ -20,7 +21,7 @@ angular.module('mean.template')
 
                         elem
                             .resizable({ 
-                                grid: 5,
+                                grid: grid,
                                 handles: scope.dom.parent_dom_id ? 'all' : 'e, s, se',
                                 containment: scope.dom.parent_dom_id ? scope.dom.parent_dom_id : '.template'
                             })
@@ -42,9 +43,9 @@ angular.module('mean.template')
                         if(scope.dom.parent_dom_id){
                             elem
                                 .draggable({ 
-                                    grid: [5, 5],
+                                    grid: [grid, grid],
                                     snap: '.dom-element',
-                                    snapTolerance: 5,
+                                    snapTolerance: grid,
                                     containment: scope.dom.parent_dom_id
                                 })
                                 .on('drag', function(evt, ui){
@@ -71,6 +72,68 @@ angular.module('mean.template')
                         };
                         scope.parseInt = function(str){
                             return parseInt(str);
+                        };
+                        $window.onkeydown = function($event){
+                            if(scope.$parent.active_dom && scope.$parent.active_dom.parent_dom_id){
+                                var original = {top: scope.$parent.active_dom.configuration.top, left: scope.$parent.active_dom.configuration.left, width: scope.$parent.active_dom.configuration.width, height: scope.$parent.active_dom.configuration.height}, 
+                                    position = {top: scope.$parent.active_dom.configuration.top, left: scope.$parent.active_dom.configuration.left}, 
+                                    update = false,
+                                    code = $event.keyCode || $event.which,
+                                    $parent = angular.element(scope.$parent.active_dom.parent_dom_id),
+                                    parent = $parent.position();
+                                parent.width = $parent.width();
+                                parent.height = $parent.height();
+
+                                switch(code){
+                                    case 37: //left arrow
+                                        if(original.left - grid >= parent.left){
+                                            update = true;
+                                            position.left =  position.left - grid;
+                                        }
+                                        break;
+                                    case 38: //up arrow
+                                        if(original.top - grid >= parent.top){
+                                            update = true;
+                                            position.top =  position.top - grid;
+                                        }
+                                        break;
+                                    case 39: //right arrow
+                                        if(original.left + original.width + grid <= parent.left + parent.width){
+                                            update = true;
+                                            position.left =  position.left + grid;
+                                        }
+                                        break;
+                                    case 40: //down arrow
+                                        if(original.top + original.height + grid <= parent.top + parent.height){
+                                            update = true;
+                                            position.top =  position.top + grid;
+                                        }
+                                        break;
+                                    case 8: //delete
+                                        scope.$apply(function () {
+                                            if (scope.$parent.removeDom) {
+                                                scope.$parent.removeDom(scope.$parent.active_dom);
+                                            }
+                                            $event.stopPropagation();
+                                            $event.preventDefault();
+                                        });
+                                        break;
+                                }
+                                if(update){
+                                    scope.$apply(function () {
+                                        if (scope.onDrag) {
+                                            scope.onDrag({$evt: $event, $ui: {position: position}, dom: scope.$parent.active_dom});
+                                        }
+                                        if (scope.onDragStop) {
+                                            console.log(position);
+                                            console.log(original);
+                                            scope.onDragStop({$evt: $event, $ui: {position: position, originalPosition: original}, dom: scope.$parent.active_dom});
+                                        }
+                                        $event.stopPropagation();
+                                        $event.preventDefault();
+                                    });
+                                }
+                            }
                         };
                     }
                 };
