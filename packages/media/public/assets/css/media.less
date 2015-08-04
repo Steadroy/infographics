@@ -77,9 +77,6 @@ body.media{
                     cursor: pointer;
                     .transition(border .2s);
                     .plus(); 
-                    &.dragover{
-                        border: 2px @btn-success-border dashed;
-                    }
                 }
             }
         }
@@ -104,23 +101,6 @@ body.media{
             input{
                 padding: 10px 15px;
                 margin-bottom: 10px;
-            }
-        }
-        .tags{
-            border: 1px @input-border solid;
-            .box-shadow(none);
-            
-            .tag-item{
-                padding: 4px 10px;
-                background: @btn-info-bg;
-                border-color: @btn-info-border;
-                &.selected{
-                    background: @btn-danger-bg;
-                    border-color: @btn-danger-border;
-                }
-            }
-            .input, .tag-item{
-                height: 36px;
             }
         }
     }

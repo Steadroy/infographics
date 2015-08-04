@@ -39,8 +39,8 @@ module.exports = function (Media, app, auth) {
         .post(multipartMiddleware, media.upload);
 
     // Tags
-    app.route('/tags/:team/:query')
-        .get(multipartMiddleware, media.getTags);
+    app.route('/media-tags/:team/:query')
+        .get(auth.requiresLogin, hasAuthorization, media.getTags); 
 
     // Finish with media up the mediaId param
     app.param('mediaId', media.media);

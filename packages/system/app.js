@@ -17,7 +17,7 @@ SystemPackage.register(function (app, auth, database) {
     //We enable routing. By default the Package Object is passed to the routes
     SystemPackage.routes(app, auth, database);
 
-    SystemPackage.aggregateAsset('css', 'common.css', {group: 'footer'});
+    SystemPackage.aggregateAsset('css', 'common.css', {group: 'footer'}); 
     SystemPackage.aggregateAsset('css', 'styles.css', {group: 'footer'});
     
     SystemPackage.aggregateAsset('js', '../../../../../bower_components/ng-file-upload/ng-file-upload-shim.min.js', {group: 'footer'});
@@ -43,7 +43,5 @@ SystemPackage.register(function (app, auth, database) {
         menu: 'account'
     });
 
-
     return SystemPackage;
-
 });

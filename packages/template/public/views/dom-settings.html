@@ -1,4 +1,94 @@
 <section class="details-panel">
+    <tabset data-ng-if="templates && active_infographic"> 
+        <tab> 
+            <tab-heading>
+                <i class="fa fa-cog"
+                   tooltip="Infographic options" tooltip-trigger="mouseenter" tooltip-placement="top" 
+                ></i>
+            </tab-heading> 
+            <div role="tabpanel" class="settings tabpanel">
+                <div class="templates" data-ng-if="!active_infographic.template">
+                    <div>
+                        <img data-ng-if="inf_active_template._id" class='template_thumbnail' data-ng-src="{{'/template/poster/' + global.teamActive._id + '/' + inf_active_template._id + '?t=' + _t}}" />
+                    </div>
+                    <div class="form-group btn-group add add_text" dropdown>
+                        <div class="input-group dropdown-toggle">
+                            <span class="form-control">Select Template</span>
+                            <div class="input-group-addon"><i class="fa fa-caret-down"></i></div>
+                        </div>
+                        <ul class="dropdown-menu" role="menu">
+                            <li data-ng-repeat="template in templates"
+                                data-ng-class="{active: template._id === inf_active_template._id}"
+                            >
+                                <a href data-ng-click="select(template)">
+                                    {{template.name}}
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                    <button type="button" class="btn btn-primary col-md-12 ready"
+                        data-ng-class="{'btn-success': !active_infographic.ready, 'btn-danger': active_infographic.ready}"
+                        data-ng-click="save(inf_active_template)" 
+                        data-ng-if="inf_active_template" 
+                    >
+                        save
+                    </button>
+                </div>
+                <div class="save" data-ng-if="false && active_infographic.template">
+                    <button type="button" class="btn btn-primary col-md-12 save"
+                        data-ng-click="saveContent(active_infographic)" 
+                    >
+                        save
+                    </button>
+                </div>
+                <div class="is_ready" data-ng-if="active_infographic.template">
+                    <div class="status">
+                        <strong>current status: </strong>
+                        <span data-ng-if="active_infographic.ready">Published</span>
+                        <span data-ng-if="!active_infographic.ready">Unpublished</span>
+                    </div>
+                    <button type="button" class="btn btn-primary col-md-12 ready"
+                        data-ng-class="{'btn-success': !active_infographic.ready, 'btn-danger': active_infographic.ready}"
+                        data-ng-click="un_publish('infographic')" 
+                    >
+                        <span data-ng-if="!active_infographic.ready">
+                            publish
+                        </span>
+                        <span data-ng-if="active_infographic.ready">
+                            unpublish
+                        </span>
+                    </button>
+                </div>
+                <div class="generate_thumbnail" data-ng-if="active_infographic.template">
+                    <button type="button" class="btn btn-primary col-md-12 generate" 
+                        data-ng-click="generateThumbnail('infographic')"
+                    >
+                        generate thumbnail
+                    </button>
+                    <div data-ng-class="{'feedback': feedback}">
+                        <img class='template_thumbnail' data-ng-src="{{'/infographic/poster/' + global.teamActive._id + '/' + active_infographic._id + '?t=' + _t}}" />
+                    </div>
+                </div>
+            </div>
+        </tab>
+        <tab> 
+            <tab-heading>
+                <i class="fa fa-info-circle" 
+                   tooltip="Infographic description" tooltip-trigger="mouseenter" tooltip-placement="top" 
+                ></i>
+            </tab-heading> 
+            <div role="tabpanel" class="information tabpanel">
+                <div class="information">
+                    <textarea placeholder="Infographic description" data-ng-blur="updateInfographic()" data-ng-model="active.description"></textarea>
+                </div>
+                <div class="tags">
+                    <tags-input placeholder="Tags..." data-ng-model="active.tags" on-tag-added="updateInfographic()" on-tag-removed="updateInfographic()">
+                        <auto-complete source="loadTags($query)"></auto-complete>
+                    </tags-input>
+                </div>
+            </div>
+        </tab>
+    </tabset>
     <tabset data-ng-if="active_template"> 
         <tab> 
             <tab-heading>
@@ -8,9 +98,14 @@
             </tab-heading> 
             <div role="tabpanel" class="settings tabpanel">
                 <div class="is_ready">
+                    <div class="status">
+                        <strong>current status: </strong>
+                        <span data-ng-if="active_template.ready">Published</span>
+                        <span data-ng-if="!active_template.ready">Unpublished</span>
+                    </div>
                     <button type="button" class="btn btn-primary col-md-12 ready"
                         data-ng-class="{'btn-success': !active_template.ready, 'btn-danger': active_template.ready}"
-                        data-ng-click="un_publish(active_template)" 
+                        data-ng-click="un_publish('template')" 
                     >
                         <span data-ng-if="!active_template.ready">
                             publish
@@ -22,19 +117,19 @@
                 </div>
                 <div class="generate_thumbnail">
                     <button type="button" class="btn btn-primary col-md-12 generate" 
-                        data-ng-click="generateThumbnail()"
+                        data-ng-click="generateThumbnail('template')"
                     >
                         generate thumbnail
                     </button>
                     <div data-ng-class="{'feedback': feedback}">
-                        <img class='template_thumbnail' data-ng-src="{{'/poster/' + global.teamActive._id + '/' + active_template._id + '?t=' + _t}}" />
+                        <img class='template_thumbnail' data-ng-src="{{'/template/poster/' + global.teamActive._id + '/' + active_template._id + '?t=' + _t}}" />
                     </div>
                 </div>
             </div>
         </tab>
     </tabset>
     <tabset data-ng-if="active_dom"> 
-        <tab> 
+        <tab data-ng-if="!is_infographic"> 
             <tab-heading>
                 <i class="fa fa-cog"
                    tooltip="{{active_dom.type | capitalize}} element options" tooltip-trigger="mouseenter" tooltip-placement="top" 
@@ -53,7 +148,7 @@
                         </label>
                     </div>
                 </div>
-                <div class="font" data-ng-if="active_dom.type === 'text'">
+                <div class="font" data-ng-if="active_dom.type === 'text' || active_dom.type === 'chart'"> 
                     <h5>font</h5>
                     <div class="btn-group" dropdown>
                         <button type="button" class="btn btn-primary dropdown-toggle" > 
@@ -146,26 +241,31 @@
             </tab-heading> 
             <div role="tabpanel" class="images tabpanel">
                 <div class="pictures-container">
-                    <input class="search_image" name="search_image" type="text" placeholder="Search Image..." data-ng-model="search_query_image"> 
-                    <div data-ng-repeat="image in mediaFiles | filter:search_query_image | limitTo:6" 
+                    <input class="search_image" name="search_image" type="text" placeholder="Search Image..." data-ng-model="search.query"> 
+                    <div data-ng-repeat="image in mediaFiles | filter:search.query | orderBy:'-created' | limitTo:6" 
                          style="background-image: url(/static/{{image._id}})" class="image"
                          data-ng-class="{selected: image._id === active_dom.configuration.background.background_image}"
-                         role="button" data-ng-click="selectImage(image)">
+                         role="button" data-ng-click="selectImage(image)"> 
                     </div> 
                     <span 
-                        data-ng-if="mediaFiles.length > 6"
+                        data-ng-if="mediaFiles.length > 6" 
                         tooltip="more, please use the search bar" tooltip-trigger="mouseenter" tooltip-placement="top" 
                     >
                         <i class="fa fa-ellipsis-h"></i>
                     </span>
                 </div>
-                <div class="overwritable" data-ng-if="active_dom.configuration.background.background_image !== 'none'">
+                <div class="overwritable" data-ng-if="active_dom.configuration.background.background_image !== 'none' && !is_infographic">
                     <button type="button" class="btn overwrite" 
-                        data-ng-class="{'btn-success': active_dom.configuration.background.overwritable}"
+                        data-ng-class="{'btn-success': active_dom.configuration.background.overwritable}" 
                         data-ng-model="active_dom.configuration.background.overwritable" btn-checkbox btn-checkbox-true="true" btn-checkbox-false="false"
                         data-ng-click="changeSetting('background', 'overwritable')"
                         >
-                        allow overwrite
+                        <span data-ng-if="active_dom.configuration.background.overwritable">
+                            overwrite 
+                        </span>
+                        <span data-ng-if="!active_dom.configuration.background.overwritable">
+                            not overwrite
+                        </span>
                     </button>
                 </div>
                 <div class="background-settings">

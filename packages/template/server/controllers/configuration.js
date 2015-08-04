@@ -52,7 +52,10 @@ exports.create = function (req, res) {
                 error: 'Cannot save the configuration'
             });
         }
-        res.json(configuration);
+        Configuration
+            .deepPopulate(configuration, populate, function(err, configuration){
+                res.json(configuration);
+            });
     });
 };
 

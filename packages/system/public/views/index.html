@@ -1,12 +1,56 @@
-<section class="welcome container-fluid" data-ng-controller="IndexController">
-    <div class="col-md-12 first">
-        <h1>infographics made simple and accessible.</h1>
-    </div>
-    <div class="col-md-12 row" data-ng-repeat="row in samples">
-        <div class="col-xs-6 col-md-3" data-ng-repeat="id in row track by $index">
-            <a href="#" class="thumbnail">
-                <img data-src="holder.js/100%x180" alt="100%x190" style="height: 190px; width: 100%; display: block;" src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiIHN0YW5kYWxvbmU9InllcyI/PjxzdmcgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB3aWR0aD0iMTcxIiBoZWlnaHQ9IjE4MCIgdmlld0JveD0iMCAwIDE3MSAxODAiIHByZXNlcnZlQXNwZWN0UmF0aW89Im5vbmUiPjxkZWZzLz48cmVjdCB3aWR0aD0iMTcxIiBoZWlnaHQ9IjE4MCIgZmlsbD0iI0VFRUVFRSIvPjxnPjx0ZXh0IHg9IjU5LjU0Njg3NSIgeT0iOTAiIHN0eWxlPSJmaWxsOiNBQUFBQUE7Zm9udC13ZWlnaHQ6Ym9sZDtmb250LWZhbWlseTpBcmlhbCwgSGVsdmV0aWNhLCBPcGVuIFNhbnMsIHNhbnMtc2VyaWYsIG1vbm9zcGFjZTtmb250LXNpemU6MTBwdDtkb21pbmFudC1iYXNlbGluZTpjZW50cmFsIj4xNzF4MTgwPC90ZXh0PjwvZz48L3N2Zz4=" data-holder-rendered="true">
-            </a> 
-        </div>
-    </div>
+<section data-ng-controller="IndexController" data-ng-if='global.authenticated && teams.length'> 
+    <h1 class="infographic_header col-md-12 col-sm-12">
+        Infographics for <span>{{global.teamActive.name}}</span>
+    </h1>
+    <div role="tabpanel" class="col-md-12 col-sm-12"> 
+        <tabset> 
+            <tab> 
+                <tab-heading>
+                    <i class="fa fa-list"></i> List
+                </tab-heading> 
+                <div role="tabpanel" class="list_panel tabpanel">
+                    <ul class="nav nav-pills nav-stacked col-md-3 col-sm-3 list" role="tablist">
+                        <li role="presentation" data-ng-if="infographics.length > 0"> 
+                            <a role="menuitem"> 
+                                <form name="searchInfographic" role="form" novalidate="">
+                                    <input class="search" name="search_infographic" type="text" placeholder="Search Infographic..." data-ng-model="search.query">
+                                </form>
+                            </a> 
+                        </li>
+                        <li role="presentation" data-ng-repeat="infographic in infographics | filter:search.query | orderBy:'created'" data-ng-class="{active: infographic._id === active._id}">
+                            <a href data-ng-click="select(infographic)">{{infographic.name}}</a>
+                            <a tooltip="Remove infographic" tooltip-trigger="mouseenter" tooltip-placement="right" role="button" data-ng-click="openModal(infographic)" class="remove"><i class="fa fa-remove"></i></a>
+                        </li>
+                        <li role="presentation"> 
+                            <a role="menuitem" class="new_element_hover_plus"> 
+                                <form name="newInfographic" role="form" data-ng-submit="create(newInfographic.$valid, newInfographic)" novalidate> 
+                                    <input class="new" name="new_infographic" type="text" placeholder="Add new infographic..." data-ng-model="new.infographic_name" data-ng-blur="new.infographic_name = ''" required />
+                                </form>
+                            </a>
+                        </li>
+                    </ul>
+                    <div class="infographic col-md-9" data-ng-if="active._id" >
+                        <h2 class="header_name">
+                            <form name="infographicName" role="form" data-ng-submit="update(active)" novalidate> 
+                                <input id="infographics_name_{{active._id}}" data-ng-model="active.name" class="col-md-12"/>
+                            </form> 
+                        </h2> 
+                        <section id="infographic-section" data-ng-class="{'col-md-9': active_dom || active_infographic, 'col-md-12': !active_dom && !active_infographic, 'active': active_infographic}">
+                            <dom-element edit="false" data-ng-repeat="dom in active.template.doms | orderBy:'order'" dom="dom" active="active"></dom-element>
+                        </section>
+                        <dom-settings templates="templates" active_infographic="active_infographic" data-ng-class="{'col-md-3': active_dom || active_infographic, 'hidden': !active_dom && !active_infographic}"></dom-settings>
+                    </div>
+                </div>
+            </tab>
+            <tab> 
+                <tab-heading>
+                    <i class="fa fa-picture-o"></i> Gallery
+                </tab-heading> 
+                <div role="tabpanel" class="gallery_panel tabpanel">
+                    <a ng-repeat="infographic in infographics | filter:{ready:true} | orderBy:'created'" href="/iframe/{{infographic._id}}" class="col-md-3 thumbnail" target="_blank" > 
+                        <img data-ng-src="/infographic/poster/{{global.teamActive._id}}/{{infographic._id}}?t={{_t}}" alt="{{infographic.name}}">
+                    </a>
+                </div>
+            </tab>
+        </tabset>
 </section>

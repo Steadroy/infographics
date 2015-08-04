@@ -20,122 +20,36 @@
 .template_header:hover input ~ .btn {
   display: inline;
 }
-body.template ul.nav.template-list li.active input.new_font::-moz-placeholder {
-  color: #ffffff;
-  opacity: 1;
-}
-body.template ul.nav.template-list li.active input.new_font:-ms-input-placeholder {
-  color: #ffffff;
-}
-body.template ul.nav.template-list li.active input.new_font::-webkit-input-placeholder {
-  color: #ffffff;
-}
-body.template ul.nav.template-list li.active .remove {
-  color: #ffffff;
-}
-body.template ul.nav.template-list li .remove {
-  display: none;
-  position: absolute;
-  right: 0;
-  top: 0;
-}
-body.template ul.nav.template-list li:hover .remove {
-  display: block;
-}
-body.template ul.nav.template-list li:hover:not(.active) a {
-  background: #f5f5f5;
-}
-body.template ul.nav.template-list .search_template {
-  width: 100%;
-}
-body.template .template-container .template_header_name {
-  text-align: left;
-  margin-bottom: 30px;
-  height: 48px;
-  padding-top: 4px;
-}
-body.template .template-container .template_header_name input {
-  border: 1px solid transparent;
-  background: transparent;
-  float: none;
-  padding-left: 0;
-}
-body.template .template-container .template_header_name input:hover {
-  border: 1px solid #dddddd;
-}
-body.template .template-container .template_header_name input ~ .btn {
-  margin-top: 6px;
-  display: none;
-}
-body.template .template-container .template_header_name:hover input ~ .btn {
-  display: inline;
-}
-body.template .template-container .template_header_name {
-  padding-top: 0;
-  margin-top: 0;
-}
-body.template .template-container .template_header_name label {
-  margin: 4px 1px !important;
-  vertical-align: 5px;
-  float: right;
-}
-body.template .template-container .template_header_name label.col-md-3 {
-  width: 24%;
-}
-body.template .template-container .template-edit {
-  height: 450px;
-}
-body.template .template-container.infographic.edit .editing {
-  box-shadow: 0 0 10px blue;
-  opacity: 1;
-  z-index: 100 !important;
-  outline: 1px solid #222222 !important;
-  opacity: 1 !important;
-}
-body.template .template-container.infographic.edit .editing .toggle-settings,
-body.template .template-container.infographic.edit .editing .size,
-body.template .template-container.infographic.edit .editing .ui-icon {
-  display: block !important;
-}
-body.template .template-container.infographic.edit:hover .infographic-container,
-body.template .template-container.infographic.edit:hover .infographic-element {
+body.template .infographic.edit:hover .infographic-container,
+body.template .infographic.edit:hover .infographic-element {
   opacity: .35;
   outline: 1px solid #555555 !important;
 }
-body.template .template-container.infographic.edit:hover .active * {
+body.template .infographic.edit:hover .active * {
   opacity: 1 !important;
   outline: none !important;
 }
-body.template .template-container.infographic.edit .active * {
+body.template .infographic.edit .active * {
   opacity: 1 !important;
   outline: none !important;
 }
-body.template .template-container.infographic.edit .infographic-container,
-body.template .template-container.infographic.edit .infographic-element {
-  position: absolute;
-  border-collapse: collapse;
-  opacity: 1;
-  outline: 1px solid #eeeeee;
+body.template .infographic.edit .infographic-container .dom-text:empty:before,
+body.template .infographic.edit .infographic-element .dom-text:empty:before {
+  content: attr(placeholder);
 }
-body.template .template-container.infographic.edit .infographic-container:hover,
-body.template .template-container.infographic.edit .infographic-element:hover {
+body.template .infographic.edit .infographic-container:hover,
+body.template .infographic.edit .infographic-element:hover {
   outline: 1px solid #222222 !important;
   opacity: 1 !important;
 }
-body.template .template-container.infographic.edit .infographic-container:hover .toggle-settings,
-body.template .template-container.infographic.edit .infographic-element:hover .toggle-settings,
-body.template .template-container.infographic.edit .infographic-container:hover .size,
-body.template .template-container.infographic.edit .infographic-element:hover .size,
-body.template .template-container.infographic.edit .infographic-container:hover .ui-icon,
-body.template .template-container.infographic.edit .infographic-element:hover .ui-icon {
+body.template .infographic.edit .infographic-container:hover .toggle-settings,
+body.template .infographic.edit .infographic-element:hover .toggle-settings,
+body.template .infographic.edit .infographic-container:hover .size,
+body.template .infographic.edit .infographic-element:hover .size {
   display: block !important;
 }
-body.template .template-container.infographic.edit .infographic-container .ui-icon,
-body.template .template-container.infographic.edit .infographic-element .ui-icon {
-  display: none;
-}
-body.template .template-container.infographic.edit .infographic-container .size,
-body.template .template-container.infographic.edit .infographic-element .size {
+body.template .infographic.edit .infographic-container .size,
+body.template .infographic.edit .infographic-element .size {
   display: none;
   position: absolute;
   opacity: 0.5;
@@ -148,20 +62,20 @@ body.template .template-container.infographic.edit .infographic-element .size {
   font-weight: lighter;
   font-family: monospace;
 }
-body.template .template-container.infographic.edit .infographic-container .size:hover,
-body.template .template-container.infographic.edit .infographic-element .size:hover,
-body.template .template-container.infographic.edit .infographic-container .size:focus,
-body.template .template-container.infographic.edit .infographic-element .size:focus {
+body.template .infographic.edit .infographic-container .size:hover,
+body.template .infographic.edit .infographic-element .size:hover,
+body.template .infographic.edit .infographic-container .size:focus,
+body.template .infographic.edit .infographic-element .size:focus {
   opacity: 1;
 }
-body.template .template-container.infographic.edit .infographic-container .size:hover input,
-body.template .template-container.infographic.edit .infographic-element .size:hover input,
-body.template .template-container.infographic.edit .infographic-container .size:focus input,
-body.template .template-container.infographic.edit .infographic-element .size:focus input {
+body.template .infographic.edit .infographic-container .size:hover input,
+body.template .infographic.edit .infographic-element .size:hover input,
+body.template .infographic.edit .infographic-container .size:focus input,
+body.template .infographic.edit .infographic-element .size:focus input {
   background-color: #ffffff;
 }
-body.template .template-container.infographic.edit .infographic-container .size:after,
-body.template .template-container.infographic.edit .infographic-element .size:after {
+body.template .infographic.edit .infographic-container .size:after,
+body.template .infographic.edit .infographic-element .size:after {
   content: "px";
   position: absolute;
   right: 0;
@@ -170,8 +84,8 @@ body.template .template-container.infographic.edit .infographic-element .size:af
   text-align: right;
   background-color: transparent;
 }
-body.template .template-container.infographic.edit .infographic-container .size input,
-body.template .template-container.infographic.edit .infographic-element .size input {
+body.template .infographic.edit .infographic-container .size input,
+body.template .infographic.edit .infographic-element .size input {
   width: 100%;
   border: none;
   text-align: right;
@@ -180,8 +94,8 @@ body.template .template-container.infographic.edit .infographic-element .size in
   background-color: transparent;
   background-color: rgba(255, 255, 255, 0);
 }
-body.template .template-container.infographic.edit .infographic-container .size.width,
-body.template .template-container.infographic.edit .infographic-element .size.width {
+body.template .infographic.edit .infographic-container .size.width,
+body.template .infographic.edit .infographic-element .size.width {
   bottom: 0;
   left: 50%;
   right: auto;
@@ -189,8 +103,8 @@ body.template .template-container.infographic.edit .infographic-element .size.wi
   width: 50px;
   margin-left: -25px;
 }
-body.template .template-container.infographic.edit .infographic-container .size.height,
-body.template .template-container.infographic.edit .infographic-element .size.height {
+body.template .infographic.edit .infographic-container .size.height,
+body.template .infographic.edit .infographic-element .size.height {
   bottom: 0;
   right: 5px;
   top: 50%;
@@ -199,159 +113,10 @@ body.template .template-container.infographic.edit .infographic-element .size.he
   margin-top: -10px;
   text-align: right;
 }
-body.template .template-container.infographic.edit .infographic-container .dom-text,
-body.template .template-container.infographic.edit .infographic-element .dom-text {
-  white-space: pre-wrap;
-  word-wrap: break-word;
-}
-body.template .template-container.infographic.edit .infographic-container .dom-text:empty:before,
-body.template .template-container.infographic.edit .infographic-element .dom-text:empty:before {
-  content: attr(placeholder);
-}
-body.template .template-container.infographic.edit .infographic-container .dom-media,
-body.template .template-container.infographic.edit .infographic-element .dom-media,
-body.template .template-container.infographic.edit .infographic-container .dom-chart,
-body.template .template-container.infographic.edit .infographic-element .dom-chart {
-  background-color: transparent;
-  background-color: rgba(255, 255, 255, 0.65);
-  width: 100%;
-  display: flex;
-}
-body.template .template-container.infographic.edit .infographic-container .dom-media:empty:before,
-body.template .template-container.infographic.edit .infographic-element .dom-media:empty:before,
-body.template .template-container.infographic.edit .infographic-container .dom-chart:empty:before,
-body.template .template-container.infographic.edit .infographic-element .dom-chart:empty:before {
-  font: normal normal normal 14px/1 FontAwesome;
-  text-shadow: 0 0 10px #000;
-  font-size: 3em;
-  display: inline-block;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  transform: translate(0, 0);
-  color: #222222;
-  margin: auto;
-}
-body.template .template-container.infographic.edit .infographic-container .dom-media:empty:before,
-body.template .template-container.infographic.edit .infographic-element .dom-media:empty:before {
-  content: "\f03e";
-}
-body.template .template-container.infographic.edit .infographic-container .dom-chart:empty:before,
-body.template .template-container.infographic.edit .infographic-element .dom-chart:empty:before {
-  content: "\f080";
-}
-body.template .template-container.infographic.edit .infographic-container .logo,
-body.template .template-container.infographic.edit .infographic-element .logo {
-  width: 30%;
-  height: 40px;
-  position: absolute;
-  z-index: 2;
-  background-size: contain;
-  background-repeat: no-repeat;
-}
-body.template .template-container.infographic.edit .infographic-container .logo.bottom-right,
-body.template .template-container.infographic.edit .infographic-element .logo.bottom-right {
-  bottom: 0;
-  right: 0;
-  background-position: right bottom;
-}
-body.template .template-container.infographic.edit .infographic-container .logo.bottom-left,
-body.template .template-container.infographic.edit .infographic-element .logo.bottom-left {
-  bottom: 0;
-  left: 0;
-  background-position: left bottom;
-}
-body.template .template-container.infographic.edit .infographic-container .logo.top-right,
-body.template .template-container.infographic.edit .infographic-element .logo.top-right {
-  top: 0;
-  right: 0;
-  background-position: right top;
-}
-body.template .template-container.infographic.edit .infographic-container .logo.top-left,
-body.template .template-container.infographic.edit .infographic-element .logo.top-left {
-  top: 0;
-  left: 0;
-  background-position: left top;
-}
-body.template .template-container .pagination-container {
-  text-align: center;
-  clear: both;
-}
-body.template .template-container .pagination-container .pagination > li a {
-  margin: 10px;
-}
-body.template .details-panel {
-  float: right;
-}
-body.template .details-panel .colours input,
-body.template .details-panel .images input {
-  width: 100%;
-}
-body.template .details-panel .colours .colour,
-body.template .details-panel .images .colour,
-body.template .details-panel .colours .image,
-body.template .details-panel .images .image {
-  width: 53.5px;
-  height: 53.5px;
-  cursor: pointer;
-  margin: 5px 5px 0 0;
-  display: inline-block;
-  background-position: 50%;
-  background-size: cover;
-  background-repeat: no-repeat;
-  border: 2px solid #999999;
-}
-body.template .details-panel .colours .colour:nth-of-type(3n),
-body.template .details-panel .images .colour:nth-of-type(3n),
-body.template .details-panel .colours .image:nth-of-type(3n),
-body.template .details-panel .images .image:nth-of-type(3n) {
-  margin: 5px 0 0 0;
-}
-body.template .details-panel .colours .colour:nth-of-type(3n + 1),
-body.template .details-panel .images .colour:nth-of-type(3n + 1),
-body.template .details-panel .colours .image:nth-of-type(3n + 1),
-body.template .details-panel .images .image:nth-of-type(3n + 1) {
-  clear: both;
-}
-body.template .details-panel .colours .colour.selected,
-body.template .details-panel .images .colour.selected,
-body.template .details-panel .colours .image.selected,
-body.template .details-panel .images .image.selected {
-  border: 2px #46b8da solid;
-}
-body.template .details-panel .tabpanel .btn-group[dropdown] {
-  margin-bottom: 10px;
-  display: inline-block;
-  width: 100%;
-}
-body.template .details-panel .tabpanel .btn-group[dropdown] button,
-body.template .details-panel .tabpanel .btn-group[dropdown] ul {
-  min-width: 100%;
-  max-width: 100%;
-  max-height: 170px;
-  overflow: auto;
-}
-body.template .details-panel .tabpanel .btn-group[dropdown] button li a,
-body.template .details-panel .tabpanel .btn-group[dropdown] ul li a {
-  padding: 10px;
-}
 body.template .details-panel .tabpanel .remove,
 body.template .details-panel .tabpanel .overwrite {
   display: block;
   margin: 20px auto;
-}
-body.template .details-panel .tabpanel > div {
-  text-align: center;
-}
-body.template .details-panel .tabpanel > div h5 {
-  margin-bottom: 5px;
-}
-body.template .details-panel .tabpanel .background-position .btn-group label {
-  width: 25px;
-  height: 25px;
-  margin: 1px;
-}
-body.template .details-panel .tabpanel .background-position .btn-group label:nth-of-type(3n+1) {
-  clear: left;
 }
 body.template .details-panel .tabpanel .logo_position .btn-group {
   width: 85px;
@@ -399,41 +164,4 @@ body.template .details-panel .tabpanel .paddings .btn-group {
 }
 body.template .details-panel .tabpanel .paddings .btn-group:nth-last-of-type(2n+1) {
   margin-right: 0;
-}
-body.template .details-panel .tabpanel .generate_thumbnail div,
-body.template .details-panel .tabpanel .is_ready div {
-  position: relative;
-}
-body.template .details-panel .tabpanel .generate_thumbnail div:before,
-body.template .details-panel .tabpanel .is_ready div:before {
-  font: normal normal normal 14px/1 FontAwesome;
-  text-shadow: 0 0 10px #000;
-  position: absolute;
-  bottom: 0;
-  right: 0;
-  font-size: 3em;
-  display: inline-block;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  transform: translate(0, 0);
-  color: #5cb85c;
-  content: "\f00c";
-  opacity: 0;
-  -webkit-transition: opacity .5s, background .5s;
-  transition: opacity .5s, background .5s;
-}
-body.template .details-panel .tabpanel .generate_thumbnail div.feedback:before,
-body.template .details-panel .tabpanel .is_ready div.feedback:before {
-  opacity: 1;
-}
-body.template .details-panel .tabpanel .generate_thumbnail div .template_thumbnail,
-body.template .details-panel .tabpanel .is_ready div .template_thumbnail {
-  width: 100%;
-}
-body.template .details-panel .tabpanel .generate_thumbnail .ready,
-body.template .details-panel .tabpanel .is_ready .ready,
-body.template .details-panel .tabpanel .generate_thumbnail .generate,
-body.template .details-panel .tabpanel .is_ready .generate {
-  margin-bottom: 10px;
-  float: none;
 }

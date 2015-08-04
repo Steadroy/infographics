@@ -13,18 +13,46 @@
         'editing': dom._id === $parent.active_dom._id || dom._id === $parent.add_dom._id,
         'highlight': global.highlighted === dom.dom_id
     }" 
-    vertical-align="{{dom.configuration.font.vertical_align}}" 
-    data-ng-click="localToggle()"
-    class="dom-element {{!dom.parent_dom_id ? 'logo-position-' + dom.configuration.logo_position : ''}}"
-    data-type='type_{{dom.configuration.overlay.type}}' data-overlay='{{dom.configuration.overlay._id| clean}}'
-    style="{{dom | parseDom}}z-index:{{dom.order}}"
->
-    <div data-ng-if="dom.configuration.overlay" class="inner-overlay" data-type='type_{{dom.configuration.overlay.type}}'></div>
-    <div data-ng-if="dom.type === 'text'" class="dom-text" placeholder="{{placeholder | limitTo: dom.configuration.width * dom.configuration.height / (20 * parseInt(dom.configuration.font.font_size))}}"></div> 
-    <div data-ng-if="dom.type === 'media'" class="dom-media"></div> 
-    <div data-ng-if="dom.type === 'chart'" class="dom-chart"></div> 
+    data-ng-click="!iframe && localToggle(dom)"
     
-    <form role="form" data-ng-submit="localResizeStop()" novalidate>
+    vertical-align="{{dom.configuration.font.vertical_align}}" 
+    class="dom-element {{!dom.parent_dom_id ? 'logo-position-' + dom.configuration.logo_position : ''}} {{dom.type}}"
+    style="{{dom | parseDom}}z-index:{{dom.order}}"
+    
+    data-type='type_{{dom.configuration.overlay.type}}' data-overlay='{{dom.configuration.overlay._id| clean}}'
+    
+    aria-label="{{iframe ? (!dom.parent_dom_id ? active.description : ''): ''}}" 
+>
+    <!--edit = true > templates-->
+    <!--edit = false > infographic-->
+    <div data-ng-if="dom.configuration.overlay" class="inner-overlay" data-type='type_{{dom.configuration.overlay.type}}'></div>
+    <div 
+        data-ng-if="dom.type === 'text'" 
+        class="dom-text" 
+        placeholder="{{placeholder | limitTo: dom.configuration.width * dom.configuration.height / (25 * parseInt(dom.configuration.font.font_size))}}"
+        contenteditable="{{!iframe && !edit}}"
+        data-ng-keydown="!iframe && keydown($event)"
+        data-ng-blur="!iframe && saveChangesNow($event)"
+        >{{dom | getContent:active:edit}}</div> 
+    <div data-ng-if="(dom.type === 'media' && edit) || iframe" class="dom-media" data-ng-class="{clean: dom.configuration.background.background_image !== 'none'}" data-media="{{dom.configuration.background.background_image}}"></div>
+    <div data-ng-if="dom.type === 'media' && !edit && !iframe" class="dom-media drop-box" 
+         ngf-drop data-ng-model="files" ngf-drag-over-class="dragover" ngf-multiple="false" 
+         ngf-allow-dir="true" ngf-accept="'image/*,video/*'" ngf-change="uploadMedia(files)"
+         data-ng-class="{clean: dom.configuration.background.background_image !== 'none'}">
+         <progressbar data-ng-if="progress" max="100" value="progress">{{progress}}% </progressbar> 
+    </div> 
+    <table data-ng-if="dom.type === 'chart' && edit" class="dom-chart"> 
+        <tbody>
+            <tr>
+                <th style="{{dom | parseDom:['border','font']}}" data-ng-repeat="j in numbers(dom.configuration.width / 100) track by $index">Header {{$index+1}}</th> 
+            </tr>
+            <tr data-ng-repeat="i in numbers(dom.configuration.height / 100) track by $index">
+                <td style="{{dom | parseDom:['border','font']}}" data-ng-repeat="j in numbers(dom.configuration.width / 100) track by $index">content</td> 
+            </tr> 
+        </tbody>
+    </table> 
+    <div data-ng-if="dom.type === 'chart' && !edit" chart-content iframe="{{iframe}}"></div>
+    <form data-ng-if="edit" role="form" data-ng-submit="localResizeStop()" novalidate>
         <div class="size width">
             <input data-ng-model="dom.configuration.width" type="text" data-ng-blur="localResizeStop()" />
         </div> 
@@ -34,7 +62,7 @@
         <input type="submit" style="position: absolute; left: -9999px; width: 1px; height: 1px;"/> 
     </form>
     <div data-ng-if="!dom.parent_dom_id" class="logo {{dom.configuration.logo_position}}" 
-         data-ng-style="{'background-image': 'url(/logo/' + global.teamActive._id + '/' + global.teamActive.logo + ')'}">
+         data-ng-style="{'background-image': 'url(/logo/' + (global.teamActive ? global.teamActive : active.team)._id + '/' + (global.teamActive ? global.teamActive : active.team).logo + ')'}">
     </div>
     <overlay-style data-ng-if="dom.configuration.overlay" overlay="dom.configuration.overlay"></overlay-style>
 </div> 

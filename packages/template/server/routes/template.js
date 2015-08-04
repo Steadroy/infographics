@@ -21,7 +21,7 @@ module.exports = function (Element, app, auth) {
         .put(auth.isMongoId, auth.requiresLogin, hasAuthorization, template.update)
         .delete(auth.isMongoId, auth.requiresLogin, hasAuthorization, template.destroy);
 
-    app.route('/poster/:teamId/:templateId')
+    app.route('/template/poster/:teamId/:templateId')
             .get(template.poster);
 
     // Finish with template up the templateId param

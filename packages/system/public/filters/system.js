@@ -81,4 +81,19 @@ angular.module('mean.system')
                 return colour;
             }
         };
+    })
+    .filter('getContent', function () {
+        return function (dom, active, edit) {
+            var result = '';
+            if(!edit && active && dom.type === 'text'){
+                for (var i = 0; i < active.content.length; i = i + 1) {
+                    if (active.content[i].id === dom._id) {
+                        result = active.content[i].content;
+                        break;
+                    }
+                }
+                return result;
+            }
+            return result;
+        };
     });

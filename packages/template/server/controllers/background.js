@@ -39,7 +39,10 @@ exports.create = function (req, res) {
                 error: 'Cannot save the background'
             });
         }
-        res.json(background);
+        Background
+            .deepPopulate(background, populate,function(err, background){
+                res.json(background);
+            });
     });
 };
 

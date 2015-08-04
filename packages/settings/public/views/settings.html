@@ -1,8 +1,8 @@
 <section> 
     <h1 class="setting_header col-md-12 col-sm-12" data-ng-controller="SettingsController">
         <form name="teamName" role="form" data-ng-submit="update(teamName.$valid, global.teamActive.name)" novalidate> 
-            General settings for 
-            <input id="team_name" name="team_name" data-ng-model="global.teamActive.name" class="col-md-7" data-ng-blur="update(teamName.$valid, global.teamActive.name)"/>
+            General settings for
+            <input id="team_name" name="team_name" data-ng-model="global.teamActive.name" class="col-md-7" data-ng-blur="update(teamName.$valid, global.teamActive.name)" required/> 
             <label class="btn btn-success pull-right" role="button" data-ng-click="clone()" data-ng-if="teams.length < constants.max.teams"> 
                 <i class="fa fa-copy"></i>
                 Clone Team
@@ -10,7 +10,7 @@
         </form>
     </h1>
     <div role="tabpanel" class="col-md-12 col-sm-12"> 
-        <tabset> 
+        <tabset>
             <tab data-ng-controller="ColoursController" active="tabs['colours']"> 
                 <tab-heading>
                     <i class="fa fa-paint-brush"></i> Colours
@@ -19,18 +19,18 @@
                     <ul class="nav nav-pills nav-stacked col-md-3 col-sm-3" role="tablist">
                         <li role="presentation" data-ng-class="{active: usage === actives['colours']}" data-ng-repeat="usage in coloursUsage" >
                             <a href aria-controls="{{usage}}" role="tab" data-toggle="tab" data-ng-click="changeSubtabActive('colours', usage)"> 
-                                {{ usage | pretify}}
+                                {{ usage | pretify }}
                             </a>
                         </li>
                     </ul>
                     <div class="tab-content col-md-9 col-sm-9">
                         <div role="tabpanel" class="tab-pane" id="{{usage}}" data-ng-class="{active: usage === actives['colours']}" data-ng-repeat="usage in coloursUsage" > 
-                            <h2>{{ usage | pretify}}</h2>
+                            <h2>{{ usage | pretify }}</h2>
                             <hr/>
                             <div> 
                                 <div class="col-md-2 col-sm-2 colour_container" data-ng-repeat="colour in global.teamActive.settings.colours[usage]" >
                                     <input class="colour_input" colorpicker type="text" data-ng-model="colour.hex" style="background: {{colour | toRGBA}}" data-ng-blur="update(colour)"/>
-                                    <button tooltip="Remove {{colour.hex | uppercase}}" tooltip-trigger="mouseenter" tooltip-placement="right" class="colour_remove" data-ng-click="remove(colour)" role="button"><i class="fa fa-close"></i></button>
+                                    <button tooltip="Remove {{colour.hex | uppercase}}" tooltip-trigger="mouseenter" tooltip-placement="right" class="colour_remove" data-ng-click="openModal(colour, usage)" role="button"><i class="fa fa-close"></i></button>
                                     <input tooltip="Alpha: {{colour.alpha | number:3}}" tooltip-trigger="mouseenter" tooltip-placement="bottom" type="range" min="0" max="1" step=".025" data-ng-model="colour.alpha" data-ng-blur="update(colour)" />
                                 </div> 
                                 <div class="col-md-2 col-sm-2 colour_container colour_new new_plus" data-ng-if="global.teamActive.settings.colours[usage].length < constants.max[usage + '_colours']">
@@ -55,12 +55,12 @@
                             <a href aria-controls="{{font.name}}" role="tab" data-toggle="tab" data-ng-click="changeSubtabActive('fonts', font._id)">
                                 {{font.name}}
                             </a>
-                            <a role="button" data-ng-click="remove(font)" class="remove"><i class="fa fa-remove"></i></a>
+                            <a tooltip="Remove font" tooltip-trigger="mouseenter" tooltip-placement="right" role="button" data-ng-click="openModal(font)" class="remove"><i class="fa fa-remove"></i></a>
                         </li>
                         <li role="presentation" data-ng-if="global.teamActive.settings.colours.fonts.length > 0 && global.teamActive.settings.fonts.length < constants.max.fonts"> 
                             <a role="menuitem" class="new_element_hover_plus"> 
                                 <form name="newFont" role="form" data-ng-submit="create(newFont.$valid)" novalidate>
-                                    <input class="new_font" name="new_font" type="text" placeholder="Add new font..." data-ng-model="font.name" required="" data-ng-blur="font.name = ''">
+                                    <input class="new_font" name="new_font" type="text" placeholder="Add new font..." data-ng-model="font.name" data-ng-blur="font.name = ''" required />
                                 </form>
                             </a>
                         </li>
@@ -70,7 +70,7 @@
                             <div class="example">
                                 <h2>
                                     <form name="fontName" role="form" data-ng-submit="update(font)" novalidate> 
-                                        <input id="fonts_name_{{font._id}}" data-ng-model="font.name" class="col-md-10"/>
+                                        <input id="fonts_name_{{font._id}}" data-ng-model="font.name" class="col-md-10" required />
                                         <label class="btn btn-success" role="button" data-ng-click="clone(font)" data-ng-if="global.teamActive.settings.fonts.length < constants.max.fonts">
                                             <i class="fa fa-copy"></i>
                                             Clone Font
@@ -138,12 +138,12 @@
                             <a href aria-controls="{{border.name}}" role="tab" data-toggle="tab" data-ng-click="changeSubtabActive('borders', border._id)">
                                 {{border.name}}
                             </a>
-                            <a role="button" data-ng-click="remove(border)" class="remove"><i class="fa fa-remove"></i></a>
+                            <a tooltip="Remove font" tooltip-trigger="mouseenter" tooltip-placement="right" role="button" data-ng-click="openModal(border)" class="remove"><i class="fa fa-remove"></i></a>
                         </li>
                         <li role="presentation" data-ng-if="global.teamActive.settings.colours.borders.length > 0 && global.teamActive.settings.borders.length < constants.max.borders"> 
                             <a role="menuitem" class="new_element_hover_plus"> 
                                 <form name="newBorder" role="form" data-ng-submit="create(newBorder.$valid)" novalidate>
-                                    <input class="new_border" name="new_border" type="text" placeholder="Add new border..." data-ng-model="border.name" required="" data-ng-blur="border.name = ''">
+                                    <input class="new_border" name="new_border" type="text" placeholder="Add new border..." data-ng-model="border.name" data-ng-blur="border.name = ''" required />
                                 </form>
                             </a>
                         </li>
@@ -153,7 +153,7 @@
                             <div class="example">
                                 <h2>
                                     <form name="borderName" role="form" data-ng-submit="update(border)" novalidate> 
-                                        <input id="borders_name_{{border._id}}" data-ng-model="border.name" class="col-md-10"/>
+                                        <input id="borders_name_{{border._id}}" data-ng-model="border.name" class="col-md-10" required />
                                         <label class="btn btn-success" role="button" data-ng-click="clone(border)" data-ng-if="global.teamActive.settings.borders.length < constants.max.borders">
                                             <i class="fa fa-copy"></i>
                                             Clone Border
@@ -217,12 +217,12 @@
                             <a href aria-controls="{{overlay.name}}" role="tab" data-toggle="tab" data-ng-click="changeSubtabActive('overlays', overlay._id)">
                                 {{overlay.name}}
                             </a>
-                            <a role="button" data-ng-click="remove(overlay, 'overlays')" class="remove"><i class="fa fa-remove"></i></a>
+                            <a tooltip="Remove font" tooltip-trigger="mouseenter" tooltip-placement="right" role="button" data-ng-click="openModal(overlay)" class="remove"><i class="fa fa-remove"></i></a>
                         </li>
                         <li role="presentation" data-ng-if="global.teamActive.settings.colours.overlays.length > 0 && global.teamActive.settings.overlays.length < constants.max.overlays"> 
                             <a role="menuitem" class="new_element_hover_plus"> 
                                 <form name="newOverlay" role="form" data-ng-submit="create(newOverlay.$valid)" novalidate>
-                                    <input class="new_overlay" name="new_overlay" type="text" placeholder="Add new overlay..." data-ng-model="overlay.name" required="" data-ng-blur="overlay.name = ''">
+                                    <input class="new_overlay" name="new_overlay" type="text" placeholder="Add new overlay..." data-ng-model="overlay.name" data-ng-blur="overlay.name = ''" required />
                                 </form>
                             </a>
                         </li>
@@ -232,7 +232,7 @@
                             <div class="example">
                                 <h2>
                                     <form name="overlayName" role="form" data-ng-submit="update(overlay)" novalidate> 
-                                        <input id="overlays_name_{{overlay._id}}" data-ng-model="overlay.name" class="col-md-10"/> 
+                                        <input id="overlays_name_{{overlay._id}}" data-ng-model="overlay.name" class="col-md-10" required /> 
                                         <label class="btn btn-success" role="button" data-ng-click="clone(overlay)" data-ng-if="global.teamActive.settings.overlays.length < constants.max.overlays">
                                             <i class="fa fa-copy"></i>
                                             Clone Overlay

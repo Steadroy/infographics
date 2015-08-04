@@ -1,15 +1,15 @@
 'use strict';
 
 angular.module('mean.media', [
-    'ngFileUpload', 
+    'ngFileUpload',  
     'ngTagsInput', 
     'ngSanitize',
     'com.2fdevs.videogular',
     'com.2fdevs.videogular.plugins.controls',
     'com.2fdevs.videogular.plugins.overlayplay',
     'com.2fdevs.videogular.plugins.poster'])
-        .controller('MediaController', ['$scope', 'Upload', '$timeout', '$location', 'Global', 'Media',
-            function ($scope, Upload, $timeout, $location, Global, Media) {
+        .controller('MediaController', ['$scope', '$rootScope', 'Upload', '$timeout', '$location', 'Global', 'Media', '$modal',
+            function ($scope, $rootScope, Upload, $timeout, $location, Global, Media, $modal) {
                 $scope.global = Global;
                 $scope.theme = '/bower_components/videogular-themes-default/videogular.css';
                 
@@ -24,7 +24,7 @@ angular.module('mean.media', [
 
                 $scope.$watch('global.teamActive.settings', function(){
                     if($scope.global.teamActive && $scope.global.teamActive._id){
-                        $scope.search_query = '';
+                        $scope.search = {};
                         $scope.mediaFiles = [];
                         $scope.progress = 0;
 
@@ -90,6 +90,36 @@ angular.module('mean.media', [
                 };
                 $scope.loadTags = function(query){
                     return Media.tags({query: query, team: $scope.global.teamActive._id}, function(resp){ }).$promise;
+                };
+                
+                $scope.openModal = function(media){
+                    $rootScope.modal = {
+                        title: 'Remove media element',
+                        body: 'Removing this media element would cause unpredicted behaviour in the already created templates.',
+                        buttons: [{
+                            class: 'btn-danger',
+                            fn: 'removeMedia',
+                            txt: 'Remove',
+                            obj: media
+                        },{
+                            class: 'btn-success',
+                            fn: 'cancel',
+                            txt: 'Cancel',
+                            obj: media
+                        }]
+                    };
+
+                    $modal
+                        .open({
+                            templateUrl: 'modal.html',
+                            controller: 'ModalInstanceCtrl',
+                            size: 'sm'
+                        })
+                        .result.then(function (btn) {
+                            $scope[btn.fn](btn.obj);
+                        }, function () {
+                            console.log('Modal dismissed at: ' + new Date());
+                        });
                 };
             }
         ]);

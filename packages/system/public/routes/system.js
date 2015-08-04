@@ -54,17 +54,17 @@ angular.module('mean.system').config(['$meanStateProvider', '$urlRouterProvider'
 
         // states for my app
         $meanStateProvider
-                .state('home', {
-                    url: '/',
-                    templateUrl: 'system/views/index.html'
-                });
+            .state('home', {
+                url: '/',
+                templateUrl: 'system/views/index.html'
+            });
 
         $meanStateProvider
-                .state('Log Out', {
-                    controller: function () {
-                        window.location = '/logout';
-                    }
-                });
+            .state('Log Out', {
+                controller: function () {
+                    window.location = '/logout';
+                }
+            });
     }
 ]).config(['$locationProvider',
     function ($locationProvider) {

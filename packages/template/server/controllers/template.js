@@ -206,7 +206,12 @@ exports.destroy = function (req, res) {
  * List of Template
  */
 exports.get = function (req, res) {
-    Template.find({team: req.query.teamId}).deepPopulate(populate).sort('-created').exec(function (err, template) {
+    var options = {team: req.query.teamId};
+    
+    if('ready' in req.query)
+        options.ready = req.query.ready;
+    
+    Template.find(options).deepPopulate(populate).sort('-created').exec(function (err, template) {
         if (err) {
             return res.status(500).json({
                 error: 'Cannot list the template'

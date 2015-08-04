@@ -39,7 +39,7 @@ var BackgroundSchema = new Schema({
         required: true,
         trim: true,
         enum: ['contain', 'cover', 'inherit', '10%', '20%', '30%', '40%', '50%', '60%', '70%', '80%', '90%', '100%'],
-        default: 'inherit'
+        default: 'cover'
     },
     background_position: {
         type: String,

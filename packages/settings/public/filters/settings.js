@@ -1,6 +1,6 @@
 'use strict';
-
-angular.module('mean.settings')
+ 
+angular.module('mean.settings') 
         .filter('pretify', function () {
             return function (input) {
                 var output = '';

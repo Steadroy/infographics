@@ -29,6 +29,21 @@ exports.media = function (req, res, next, id) {
         });
     }
 };
+exports.getjson = function (req, res, next, id) {
+    if(id === 'none'){
+        res.json({});
+    }
+    else{
+        Media.load(id, function (err, media) {
+            if (err)
+                return next(err);
+            if (!media)
+                return next(new Error('Failed to load media ' + id));
+            
+            res.json(media);
+        });
+    }
+};
 
 /**
  * Create a media
@@ -74,6 +89,11 @@ exports.update = function (req, res) {
  * Show a media
  */
 exports.show = function (req, res) {
+    var fallback = function(res){
+        var img = fs.readFileSync(config.root + '/upload/transparent.png');
+        res.writeHead(200, {'Content-Type': 'image/png'});
+        res.end(img, 'binary');
+    };
     if(req.media){
         var intervalID = setInterval(function(){
             try{
@@ -81,13 +101,13 @@ exports.show = function (req, res) {
                 res.writeHead(200, {'Content-Type': req.media.type});
                 res.end(img, 'binary');
                 clearInterval(intervalID);
-            } catch(err){ }
+            } catch(err){ 
+                fallback(res);
+            }
         }, 750);
     }
     else{
-        var img = fs.readFileSync(config.root + '/upload/transparent.png');
-        res.writeHead(200, {'Content-Type': 'image/png'});
-        res.end(img, 'binary');
+        fallback(res);
     }
 };
 
@@ -197,7 +217,7 @@ function rename(req, file, dest, user, callback) {
                 var poster = '';
 
                 if(file.type.indexOf('video') >= 0){
-                    var ffmpeg = require('fluent-ffmpeg'),
+                    var ffmpeg = require('fluent-ffmpeg'), 
                         poster_name = file_name + '.png';
 
                     ffmpeg(config.root + dest + file_name)

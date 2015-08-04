@@ -4,7 +4,7 @@ angular.module('mean.settings', ['colorpicker.module'])
     .controller('SettingsController', ['$scope', '$rootScope', '$timeout', '$location', 'Global', 'Teams', 'Settings',
         function ($scope, $rootScope, $timeout, $location, Global, Teams, Settings) { 
             $scope.global = Global;
-            $rootScope.tabs = {colours:false, fonts:false, borders:false, overlays: false, members:false};
+            $rootScope.tabs = {colours:false, fonts:false, borders:false, overlays: false, members:false}; 
             $rootScope.actives = {colours: '', fonts:'', borders:'', overlays:'', members: ''};
             
             $scope.update = function (isValid, newName) {
@@ -60,8 +60,8 @@ angular.module('mean.settings', ['colorpicker.module'])
             $rootScope.open('colours');
         }
     ])
-    .controller('ColoursController', ['$scope', '$rootScope', 'Global', 'Colour',
-        function ($scope, $rootScope, Global, Colour) {
+    .controller('ColoursController', ['$scope', '$rootScope', 'Global', 'Colour', '$modal',
+        function ($scope, $rootScope, Global, Colour, $modal) {
             $scope.global = Global;
             $scope.coloursUsage = ['backgrounds', 'fonts', 'borders', 'overlays'];
             $scope.newColour = '';
@@ -94,10 +94,40 @@ angular.module('mean.settings', ['colorpicker.module'])
                     $scope.changeSubtabActive('colours', $scope.coloursUsage[0]);
                 }
             });
+            
+            $scope.openModal = function(colour, usage){
+                $rootScope.modal = {
+                    title: 'Remove ' + usage.replace(/s$/, '') + ' colour',
+                    body: 'Removing this colour would cause unpredicted behaviour in the already created templates.',
+                    buttons: [{
+                        class: 'btn-danger',
+                        fn: 'remove',
+                        txt: 'Remove',
+                        obj: colour
+                    },{
+                        class: 'btn-success',
+                        fn: 'cancel',
+                        txt: 'Cancel',
+                        obj: colour
+                    }]
+                };
+                
+                $modal
+                    .open({
+                        templateUrl: 'modal.html',
+                        controller: 'ModalInstanceCtrl',
+                        size: 'sm'
+                    })
+                    .result.then(function (btn) {
+                        $scope[btn.fn](btn.obj);
+                    }, function () {
+                        console.log('Modal dismissed at: ' + new Date());
+                    });
+            };
         }
     ])
-    .controller('FontsController', ['$scope', '$rootScope', '$stateParams', '$timeout', '$location', 'Global', 'Font',
-        function ($scope, $rootScope, $stateParams, $timeout, $location, Global, Font) {
+    .controller('FontsController', ['$scope', '$rootScope', '$timeout', 'Global', 'Font', '$modal',
+        function ($scope, $rootScope, $timeout, Global, Font, $modal) {
             var sizes = Array.apply(null, new Array(21)).map(function(i, j) { return 10 + j + 'px'; });
             
             $scope.global = Global;
@@ -253,10 +283,39 @@ angular.module('mean.settings', ['colorpicker.module'])
                 if($scope.global.teamActive.settings.fonts.length)
                     $scope.changeSubtabActive('fonts', $scope.global.teamActive.settings.fonts[0]._id);
             }, 500, false);
+            $scope.openModal = function(font){
+                $rootScope.modal = {
+                    title: 'Remove font',
+                    body: 'Removing this font would cause unpredicted behaviour in the already created templates.',
+                    buttons: [{
+                        class: 'btn-danger',
+                        fn: 'remove',
+                        txt: 'Remove',
+                        obj: font
+                    },{
+                        class: 'btn-success',
+                        fn: 'cancel',
+                        txt: 'Cancel',
+                        obj: font
+                    }]
+                };
+                
+                $modal
+                    .open({
+                        templateUrl: 'modal.html',
+                        controller: 'ModalInstanceCtrl',
+                        size: 'sm'
+                    })
+                    .result.then(function (btn) {
+                        $scope[btn.fn](btn.obj);
+                    }, function () {
+                        console.log('Modal dismissed at: ' + new Date());
+                    });
+            };
         }
     ])
-    .controller('BordersController', ['$scope', '$rootScope', '$stateParams', '$timeout', '$location', 'Global', 'Border',
-        function ($scope, $rootScope, $stateParams, $timeout, $location, Global, Border) {
+    .controller('BordersController', ['$scope', '$rootScope', '$timeout', 'Global', 'Border', '$modal',
+        function ($scope, $rootScope, $timeout, Global, Border, $modal) {
             var widths = Array.apply(null, new Array(6)).map(function(i, j) { return j; }),
                 radius = Array.apply(null, new Array(11)).map(function(i, j) { return (10*j); });
             $scope.global = Global;
@@ -342,10 +401,39 @@ angular.module('mean.settings', ['colorpicker.module'])
                 if($scope.global.teamActive.settings.borders.length)
                     $scope.changeSubtabActive('borders', $scope.global.teamActive.settings.borders[0]._id);
             }, 500, false);
+            $scope.openModal = function(border){
+                $rootScope.modal = {
+                    title: 'Remove border',
+                    body: 'Removing this border would cause unpredicted behaviour in the already created templates.',
+                    buttons: [{
+                        class: 'btn-danger',
+                        fn: 'remove',
+                        txt: 'Remove',
+                        obj: border
+                    },{
+                        class: 'btn-success',
+                        fn: 'cancel',
+                        txt: 'Cancel',
+                        obj: border
+                    }]
+                };
+                
+                $modal
+                    .open({
+                        templateUrl: 'modal.html',
+                        controller: 'ModalInstanceCtrl',
+                        size: 'sm'
+                    })
+                    .result.then(function (btn) {
+                        $scope[btn.fn](btn.obj);
+                    }, function () {
+                        console.log('Modal dismissed at: ' + new Date());
+                    });
+            };
         }
     ])
-    .controller('OverlaysController', ['$scope', '$rootScope', '$stateParams', '$timeout', '$location', 'Global', 'Overlay',
-        function ($scope, $rootScope, $stateParams, $timeout, $location, Global, Overlay) {
+    .controller('OverlaysController', ['$scope', '$rootScope', '$timeout', 'Global', 'Overlay', '$modal',
+        function ($scope, $rootScope, $timeout, Global, Overlay, $modal) {
             $scope.global = Global;
             $scope.overlay = {};
             
@@ -418,5 +506,34 @@ angular.module('mean.settings', ['colorpicker.module'])
                 if($scope.global.teamActive.settings.overlays.length)
                     $scope.changeSubtabActive('overlays', $scope.global.teamActive.settings.overlays[0]._id);
             }, 500, false);
+            $scope.openModal = function(overlay){
+                $rootScope.modal = {
+                    title: 'Remove overlay',
+                    body: 'Removing this overlay border would cause unpredicted behaviour in the already created templates.',
+                    buttons: [{
+                        class: 'btn-danger',
+                        fn: 'remove',
+                        txt: 'Remove',
+                        obj: overlay
+                    },{
+                        class: 'btn-success',
+                        fn: 'cancel',
+                        txt: 'Cancel',
+                        obj: overlay
+                    }]
+                };
+                
+                $modal
+                    .open({
+                        templateUrl: 'modal.html',
+                        controller: 'ModalInstanceCtrl',
+                        size: 'sm'
+                    })
+                    .result.then(function (btn) {
+                        $scope[btn.fn](btn.obj);
+                    }, function () {
+                        console.log('Modal dismissed at: ' + new Date());
+                    });
+            };
         }
     ]);

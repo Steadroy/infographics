@@ -3,29 +3,29 @@
         Template for <span>{{global.teamActive.name}}</span>
     </h1>
     <div class="col-md-12"> 
-        <ul class="nav nav-pills nav-stacked col-md-3 col-sm-3 template-list" role="tablist">
-            <li role="presentation" data-ng-if="template.length > 0"> 
+        <ul class="nav nav-pills nav-stacked col-md-3 col-sm-3 list" role="tablist">
+            <li role="presentation" data-ng-if="templates.length > 0"> 
                 <a role="menuitem"> 
                     <form name="searchTemplate" role="form" novalidate="">
-                        <input class="search_template" name="search_template" type="text" placeholder="Search Template..." data-ng-model="search_query">
+                        <input class="search" name="search_template" type="text" placeholder="Search Template..." data-ng-model="search.query" /> 
                     </form>
                 </a> 
             </li>
-            <li role="presentation" data-ng-repeat="template in template | filter:search_query" data-ng-class="{active: template._id === active._id}">
+            <li role="presentation" data-ng-repeat="template in templates | filter:search.query" data-ng-class="{active: template._id === active._id}"> 
                 <a href data-ng-click="select(template)">{{template.name}}</a>
-                <a role="button" data-ng-click="remove(template)" class="remove"><i class="fa fa-remove"></i></a>
+                <a tooltip="Remove template" tooltip-trigger="mouseenter" tooltip-placement="right" role="button" data-ng-click="openModal(template)" class="remove"><i class="fa fa-remove"></i></a> 
             </li>
             <li role="presentation"> 
                 <a role="menuitem" class="new_element_hover_plus"> 
-                    <form name="newTemplate" role="form" data-ng-submit="create(newTemplate.$valid)" novalidate="">
-                        <input class="new_template" name="new_template" type="text" placeholder="Add new template..." data-ng-model="template_name" data-ng-blur="template_name = ''">
+                    <form name="newTemplate" role="form" data-ng-submit="create(newTemplate.$valid)" novalidate> 
+                        <input class="new" name="new_template" type="text" placeholder="Add new template..." data-ng-model="template_name" data-ng-blur="template_name = ''" required />
                     </form>
                 </a>
             </li>
         </ul>
         
-        <div class="template-container infographic edit col-md-9" data-ng-if="active._id" >
-            <h2 class="template_header_name">
+        <div class="infographic edit col-md-9" data-ng-if="active._id" >
+            <h2 class="header_name">
                 <form name="templateName" role="form" data-ng-submit="update(active)" novalidate> 
                     <input id="templates_name_{{active._id}}" data-ng-model="active.name" class="col-md-8"/>
                     <label class="btn btn-warning col-md-1" role="button" data-ng-click="toggleTemplateSetting(active)"
@@ -39,8 +39,8 @@
                     </label>
                 </form> 
             </h2> 
-            <section id="template" class="template-edit template" data-ng-class="{'col-md-9': active_dom || active_template, 'col-md-12': !active_dom && !active_template, 'active': active_template}">
-                <dom-element data-ng-repeat="dom in active.doms | orderBy:'order'" dom="dom"></dom-element>
+            <section id="template-section" data-ng-class="{'col-md-9': active_dom || active_template, 'col-md-12': !active_dom && !active_template, 'active': active_template}">
+                <dom-element edit="true" data-ng-repeat="dom in active.doms | orderBy:'order'" dom="dom"></dom-element>
             </section>
             <dom-settings active_dom="active_dom" active_template="active_template" data-ng-class="{'col-md-3': active_dom || active_template, 'hidden': !active_dom && !active_template}"></dom-settings>
         </div>

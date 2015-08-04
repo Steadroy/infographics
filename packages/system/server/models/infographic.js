@@ -6,7 +6,7 @@
 var mongoose = require('mongoose'),
     Schema = mongoose.Schema;
 
-var TemplateSchema = new Schema({
+var InfographicSchema = new Schema({
     created: {
         type: Date,
         default: Date.now
@@ -15,8 +15,15 @@ var TemplateSchema = new Schema({
         type: String,
         required: true,
         trim: true,
-        default: 'Template'
+        default: 'Infographic'
     },
+    description: {
+        type: String,
+        required: true,
+        trim: true,
+        default: 'Description'
+    },
+    tags: [],
     team: {
         type: Schema.Types.ObjectId,
         require: true,
@@ -36,23 +43,40 @@ var TemplateSchema = new Schema({
         required: true,
         default: false
     },
-    doms: [{
+    template: {
         type: Schema.Types.ObjectId,
         require: true,
-        ref: 'Dom'
+        ref: 'Template'
+    },
+    content: [{
+        id: {
+            type: String,
+            required: false,
+            default: ''
+        },
+        content: {
+            type: String,
+            required: false,
+            default: ''
+        },
+        background: { 
+            type: Schema.Types.ObjectId,
+            require: true,
+            ref: 'Background'
+        }
     }]
 });
 
 /**
  * Statics
  */
-TemplateSchema.statics.load = function (id, cb) {
+InfographicSchema.statics.load = function (id, cb) {
     this.findOne({
         _id: id
     }).exec(cb);
 };
 
 var deepPopulate = require('mongoose-deep-populate');
-TemplateSchema.plugin(deepPopulate);
+InfographicSchema.plugin(deepPopulate);
 
-mongoose.model('Template', TemplateSchema);
+mongoose.model('Infographic', InfographicSchema);

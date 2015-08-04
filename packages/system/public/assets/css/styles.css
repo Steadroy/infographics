@@ -6,6 +6,9 @@ body {
   padding-bottom: 60px;
   /*INFOGRAPHIC STYLES*/
 }
+body #loading-bar-spinner .spinner-icon {
+  border-radius: 50% !important;
+}
 body > header.navbar {
   position: fixed;
   width: 100%;
@@ -22,6 +25,9 @@ body > header.navbar:hover.translucent {
 }
 body > header.navbar #logo img {
   max-height: 20px;
+}
+body > header.navbar ~ section.content > section.container {
+  min-height: 700px;
 }
 body > section.content {
   padding-top: 50px;
@@ -210,4 +216,455 @@ body .type_4 .inner-overlay:after {
 }
 body .infographic .infographic-container {
   margin: auto;
+}
+body.template ul.nav.list li.active input.new::-moz-placeholder,
+body.firstPage ul.nav.list li.active input.new::-moz-placeholder {
+  color: #ffffff;
+  opacity: 1;
+}
+body.template ul.nav.list li.active input.new:-ms-input-placeholder,
+body.firstPage ul.nav.list li.active input.new:-ms-input-placeholder {
+  color: #ffffff;
+}
+body.template ul.nav.list li.active input.new::-webkit-input-placeholder,
+body.firstPage ul.nav.list li.active input.new::-webkit-input-placeholder {
+  color: #ffffff;
+}
+body.template ul.nav.list li.active .remove,
+body.firstPage ul.nav.list li.active .remove {
+  color: #ffffff;
+}
+body.template ul.nav.list li .remove,
+body.firstPage ul.nav.list li .remove {
+  display: none;
+  position: absolute;
+  right: 0;
+  top: 0;
+}
+body.template ul.nav.list li:hover .remove,
+body.firstPage ul.nav.list li:hover .remove {
+  display: block;
+}
+body.template ul.nav.list li:hover:not(.active) a,
+body.firstPage ul.nav.list li:hover:not(.active) a {
+  background: #f5f5f5;
+}
+body.template ul.nav.list .search,
+body.firstPage ul.nav.list .search {
+  width: 100%;
+  padding: 0;
+  border: 1px solid transparent;
+  background-color: transparent;
+}
+body.template ul.nav.list .search:hover,
+body.firstPage ul.nav.list .search:hover {
+  border: 1px solid #dddddd;
+}
+body.template .infographic,
+body.firstPage .infographic {
+  /*min-height: 700px;*/
+}
+body.template .infographic .header_name,
+body.firstPage .infographic .header_name {
+  text-align: left;
+  margin-bottom: 30px;
+  height: 48px;
+  padding-top: 4px;
+}
+body.template .infographic .header_name input,
+body.firstPage .infographic .header_name input {
+  border: 1px solid transparent;
+  background: transparent;
+  float: none;
+  padding-left: 0;
+}
+body.template .infographic .header_name input:hover,
+body.firstPage .infographic .header_name input:hover {
+  border: 1px solid #dddddd;
+}
+body.template .infographic .header_name input ~ .btn,
+body.firstPage .infographic .header_name input ~ .btn {
+  margin-top: 6px;
+  display: none;
+}
+body.template .infographic .header_name:hover input ~ .btn,
+body.firstPage .infographic .header_name:hover input ~ .btn {
+  display: inline;
+}
+body.template .infographic .editing,
+body.firstPage .infographic .editing {
+  box-shadow: 0 0 10px blue;
+  opacity: 1;
+  z-index: 100 !important;
+  outline: 1px solid #222222 !important;
+  opacity: 1 !important;
+}
+body.template .infographic .editing .toggle-settings,
+body.firstPage .infographic .editing .toggle-settings,
+body.template .infographic .editing .size,
+body.firstPage .infographic .editing .size {
+  display: block !important;
+}
+body.template .infographic .header_name,
+body.firstPage .infographic .header_name {
+  padding-top: 0;
+  margin-top: 0;
+}
+body.template .infographic .header_name label,
+body.firstPage .infographic .header_name label {
+  margin: 4px 1px !important;
+  vertical-align: 5px;
+  float: right;
+}
+body.template .infographic .header_name label.col-md-3,
+body.firstPage .infographic .header_name label.col-md-3 {
+  width: 24%;
+}
+body.template .infographic .infographic-container,
+body.firstPage .infographic .infographic-container,
+body.template .infographic .infographic-element,
+body.firstPage .infographic .infographic-element {
+  position: absolute;
+  border-collapse: collapse;
+  opacity: 1;
+  outline: 1px solid #eeeeee;
+}
+body.template .infographic .infographic-container.chart,
+body.firstPage .infographic .infographic-container.chart,
+body.template .infographic .infographic-element.chart,
+body.firstPage .infographic .infographic-element.chart {
+  border: none !important;
+}
+body.template .infographic .infographic-container.chart .dom-chart,
+body.firstPage .infographic .infographic-container.chart .dom-chart,
+body.template .infographic .infographic-element.chart .dom-chart,
+body.firstPage .infographic .infographic-element.chart .dom-chart {
+  width: 100%;
+  table-layout: fixed;
+  height: 100%;
+}
+body.template .infographic .infographic-container.chart .dom-chart th,
+body.firstPage .infographic .infographic-container.chart .dom-chart th,
+body.template .infographic .infographic-element.chart .dom-chart th,
+body.firstPage .infographic .infographic-element.chart .dom-chart th {
+  font-weight: bold !important;
+}
+body.template .infographic .infographic-container.chart .dom-chart tr:first-child th,
+body.firstPage .infographic .infographic-container.chart .dom-chart tr:first-child th,
+body.template .infographic .infographic-element.chart .dom-chart tr:first-child th,
+body.firstPage .infographic .infographic-element.chart .dom-chart tr:first-child th,
+body.template .infographic .infographic-container.chart .dom-chart tr:first-child td,
+body.firstPage .infographic .infographic-container.chart .dom-chart tr:first-child td,
+body.template .infographic .infographic-element.chart .dom-chart tr:first-child td,
+body.firstPage .infographic .infographic-element.chart .dom-chart tr:first-child td {
+  border-top: none !important;
+}
+body.template .infographic .infographic-container.chart .dom-chart tr td:first-child,
+body.firstPage .infographic .infographic-container.chart .dom-chart tr td:first-child,
+body.template .infographic .infographic-element.chart .dom-chart tr td:first-child,
+body.firstPage .infographic .infographic-element.chart .dom-chart tr td:first-child,
+body.template .infographic .infographic-container.chart .dom-chart tr th:first-child,
+body.firstPage .infographic .infographic-container.chart .dom-chart tr th:first-child,
+body.template .infographic .infographic-element.chart .dom-chart tr th:first-child,
+body.firstPage .infographic .infographic-element.chart .dom-chart tr th:first-child {
+  border-left: none !important;
+}
+body.template .infographic .infographic-container.chart .dom-chart tr:last-child td,
+body.firstPage .infographic .infographic-container.chart .dom-chart tr:last-child td,
+body.template .infographic .infographic-element.chart .dom-chart tr:last-child td,
+body.firstPage .infographic .infographic-element.chart .dom-chart tr:last-child td {
+  border-bottom: none !important;
+}
+body.template .infographic .infographic-container.chart .dom-chart tr td:last-child,
+body.firstPage .infographic .infographic-container.chart .dom-chart tr td:last-child,
+body.template .infographic .infographic-element.chart .dom-chart tr td:last-child,
+body.firstPage .infographic .infographic-element.chart .dom-chart tr td:last-child,
+body.template .infographic .infographic-container.chart .dom-chart tr th:last-child,
+body.firstPage .infographic .infographic-container.chart .dom-chart tr th:last-child,
+body.template .infographic .infographic-element.chart .dom-chart tr th:last-child,
+body.firstPage .infographic .infographic-element.chart .dom-chart tr th:last-child {
+  border-right: none !important;
+}
+body.template .infographic .infographic-container.text .dom-text,
+body.firstPage .infographic .infographic-container.text .dom-text,
+body.template .infographic .infographic-element.text .dom-text,
+body.firstPage .infographic .infographic-element.text .dom-text {
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  width: 100%;
+  overflow: hidden;
+}
+body.template .infographic .infographic-container.media .dom-media.drop-box,
+body.firstPage .infographic .infographic-container.media .dom-media.drop-box,
+body.template .infographic .infographic-element.media .dom-media.drop-box,
+body.firstPage .infographic .infographic-element.media .dom-media.drop-box {
+  width: 100%;
+  height: 100%;
+}
+body.template .infographic .infographic-container.media .dom-media:not(.clean),
+body.firstPage .infographic .infographic-container.media .dom-media:not(.clean),
+body.template .infographic .infographic-element.media .dom-media:not(.clean),
+body.firstPage .infographic .infographic-element.media .dom-media:not(.clean) {
+  background-color: transparent;
+  background-color: rgba(255, 255, 255, 0.65);
+  width: 100%;
+  display: flex;
+}
+body.template .infographic .infographic-container.media .dom-media:not(.clean):before,
+body.firstPage .infographic .infographic-container.media .dom-media:not(.clean):before,
+body.template .infographic .infographic-element.media .dom-media:not(.clean):before,
+body.firstPage .infographic .infographic-element.media .dom-media:not(.clean):before {
+  content: " ";
+  margin: auto;
+  width: 5em;
+  height: 3em;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: 50%;
+  background-image: url(../img/picture-o.png);
+}
+body.template .infographic .infographic-container .logo,
+body.firstPage .infographic .infographic-container .logo,
+body.template .infographic .infographic-element .logo,
+body.firstPage .infographic .infographic-element .logo {
+  width: 30%;
+  height: 40px;
+  position: absolute;
+  z-index: 2;
+  background-size: contain;
+  background-repeat: no-repeat;
+}
+body.template .infographic .infographic-container .logo.bottom-right,
+body.firstPage .infographic .infographic-container .logo.bottom-right,
+body.template .infographic .infographic-element .logo.bottom-right,
+body.firstPage .infographic .infographic-element .logo.bottom-right {
+  bottom: 0;
+  right: 0;
+  background-position: right bottom;
+}
+body.template .infographic .infographic-container .logo.bottom-left,
+body.firstPage .infographic .infographic-container .logo.bottom-left,
+body.template .infographic .infographic-element .logo.bottom-left,
+body.firstPage .infographic .infographic-element .logo.bottom-left {
+  bottom: 0;
+  left: 0;
+  background-position: left bottom;
+}
+body.template .infographic .infographic-container .logo.top-right,
+body.firstPage .infographic .infographic-container .logo.top-right,
+body.template .infographic .infographic-element .logo.top-right,
+body.firstPage .infographic .infographic-element .logo.top-right {
+  top: 0;
+  right: 0;
+  background-position: right top;
+}
+body.template .infographic .infographic-container .logo.top-left,
+body.firstPage .infographic .infographic-container .logo.top-left,
+body.template .infographic .infographic-element .logo.top-left,
+body.firstPage .infographic .infographic-element .logo.top-left {
+  top: 0;
+  left: 0;
+  background-position: left top;
+}
+body.template .details-panel,
+body.firstPage .details-panel {
+  float: right;
+  position: absolute;
+  right: 0;
+}
+body.template .details-panel .status,
+body.firstPage .details-panel .status {
+  margin-bottom: 10px;
+}
+body.template .details-panel .tabpanel.images input,
+body.firstPage .details-panel .tabpanel.images input {
+  width: 100%;
+}
+body.template .details-panel .tabpanel.images .image,
+body.firstPage .details-panel .tabpanel.images .image {
+  width: 53.5px;
+  height: 53.5px;
+  cursor: pointer;
+  margin: 5px 5px 0 0;
+  display: inline-block;
+  background-position: 50%;
+  background-size: cover;
+  background-repeat: no-repeat;
+  border: 2px solid #999999;
+}
+body.template .details-panel .tabpanel.images .image:nth-of-type(3n),
+body.firstPage .details-panel .tabpanel.images .image:nth-of-type(3n) {
+  margin: 5px 0 0 0;
+}
+body.template .details-panel .tabpanel.images .image:nth-of-type(3n + 1),
+body.firstPage .details-panel .tabpanel.images .image:nth-of-type(3n + 1) {
+  clear: both;
+}
+body.template .details-panel .tabpanel.images .image.selected,
+body.firstPage .details-panel .tabpanel.images .image.selected {
+  border: 2px #46b8da solid;
+}
+body.template .details-panel .tabpanel .btn-group[dropdown],
+body.firstPage .details-panel .tabpanel .btn-group[dropdown] {
+  margin-bottom: 10px;
+  display: inline-block;
+  width: 100%;
+}
+body.template .details-panel .tabpanel .btn-group[dropdown] button,
+body.firstPage .details-panel .tabpanel .btn-group[dropdown] button,
+body.template .details-panel .tabpanel .btn-group[dropdown] ul,
+body.firstPage .details-panel .tabpanel .btn-group[dropdown] ul {
+  min-width: 100%;
+  max-width: 100%;
+  max-height: 170px;
+  overflow: auto;
+}
+body.template .details-panel .tabpanel .btn-group[dropdown] button li a,
+body.firstPage .details-panel .tabpanel .btn-group[dropdown] button li a,
+body.template .details-panel .tabpanel .btn-group[dropdown] ul li a,
+body.firstPage .details-panel .tabpanel .btn-group[dropdown] ul li a {
+  padding: 10px;
+}
+body.template .details-panel .tabpanel > div,
+body.firstPage .details-panel .tabpanel > div {
+  text-align: center;
+}
+body.template .details-panel .tabpanel > div h5,
+body.firstPage .details-panel .tabpanel > div h5 {
+  margin-bottom: 5px;
+}
+body.template .details-panel .tabpanel > div textarea,
+body.firstPage .details-panel .tabpanel > div textarea {
+  width: 100%;
+  border: 1px #cccccc solid;
+  resize: none;
+  padding: 5px 10px;
+}
+body.template .details-panel .tabpanel .background-position .btn-group label,
+body.firstPage .details-panel .tabpanel .background-position .btn-group label {
+  width: 25px;
+  height: 25px;
+  margin: 1px;
+}
+body.template .details-panel .tabpanel .background-position .btn-group label:nth-of-type(3n+1),
+body.firstPage .details-panel .tabpanel .background-position .btn-group label:nth-of-type(3n+1) {
+  clear: left;
+}
+body.template .details-panel .tabpanel .generate_thumbnail div,
+body.firstPage .details-panel .tabpanel .generate_thumbnail div,
+body.template .details-panel .tabpanel .is_ready div,
+body.firstPage .details-panel .tabpanel .is_ready div,
+body.template .details-panel .tabpanel .templates div,
+body.firstPage .details-panel .tabpanel .templates div,
+body.template .details-panel .tabpanel .save div,
+body.firstPage .details-panel .tabpanel .save div {
+  position: relative;
+}
+body.template .details-panel .tabpanel .generate_thumbnail div:before,
+body.firstPage .details-panel .tabpanel .generate_thumbnail div:before,
+body.template .details-panel .tabpanel .is_ready div:before,
+body.firstPage .details-panel .tabpanel .is_ready div:before,
+body.template .details-panel .tabpanel .templates div:before,
+body.firstPage .details-panel .tabpanel .templates div:before,
+body.template .details-panel .tabpanel .save div:before,
+body.firstPage .details-panel .tabpanel .save div:before {
+  font: normal normal normal 14px/1 FontAwesome;
+  text-shadow: 0 0 10px #000;
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  font-size: 3em;
+  display: inline-block;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  transform: translate(0, 0);
+  color: #5cb85c;
+  content: "\f00c";
+  opacity: 0;
+  -webkit-transition: opacity .5s, background .5s;
+  transition: opacity .5s, background .5s;
+}
+body.template .details-panel .tabpanel .generate_thumbnail div.feedback:before,
+body.firstPage .details-panel .tabpanel .generate_thumbnail div.feedback:before,
+body.template .details-panel .tabpanel .is_ready div.feedback:before,
+body.firstPage .details-panel .tabpanel .is_ready div.feedback:before,
+body.template .details-panel .tabpanel .templates div.feedback:before,
+body.firstPage .details-panel .tabpanel .templates div.feedback:before,
+body.template .details-panel .tabpanel .save div.feedback:before,
+body.firstPage .details-panel .tabpanel .save div.feedback:before {
+  opacity: 1;
+}
+body.template .details-panel .tabpanel .generate_thumbnail div .template_thumbnail,
+body.firstPage .details-panel .tabpanel .generate_thumbnail div .template_thumbnail,
+body.template .details-panel .tabpanel .is_ready div .template_thumbnail,
+body.firstPage .details-panel .tabpanel .is_ready div .template_thumbnail,
+body.template .details-panel .tabpanel .templates div .template_thumbnail,
+body.firstPage .details-panel .tabpanel .templates div .template_thumbnail,
+body.template .details-panel .tabpanel .save div .template_thumbnail,
+body.firstPage .details-panel .tabpanel .save div .template_thumbnail {
+  max-width: 100%;
+  margin-bottom: 10px;
+  max-height: 150px;
+}
+body.template .details-panel .tabpanel .generate_thumbnail .ready,
+body.firstPage .details-panel .tabpanel .generate_thumbnail .ready,
+body.template .details-panel .tabpanel .is_ready .ready,
+body.firstPage .details-panel .tabpanel .is_ready .ready,
+body.template .details-panel .tabpanel .templates .ready,
+body.firstPage .details-panel .tabpanel .templates .ready,
+body.template .details-panel .tabpanel .save .ready,
+body.firstPage .details-panel .tabpanel .save .ready,
+body.template .details-panel .tabpanel .generate_thumbnail .generate,
+body.firstPage .details-panel .tabpanel .generate_thumbnail .generate,
+body.template .details-panel .tabpanel .is_ready .generate,
+body.firstPage .details-panel .tabpanel .is_ready .generate,
+body.template .details-panel .tabpanel .templates .generate,
+body.firstPage .details-panel .tabpanel .templates .generate,
+body.template .details-panel .tabpanel .save .generate,
+body.firstPage .details-panel .tabpanel .save .generate,
+body.template .details-panel .tabpanel .generate_thumbnail .save,
+body.firstPage .details-panel .tabpanel .generate_thumbnail .save,
+body.template .details-panel .tabpanel .is_ready .save,
+body.firstPage .details-panel .tabpanel .is_ready .save,
+body.template .details-panel .tabpanel .templates .save,
+body.firstPage .details-panel .tabpanel .templates .save,
+body.template .details-panel .tabpanel .save .save,
+body.firstPage .details-panel .tabpanel .save .save {
+  margin-bottom: 10px;
+  float: none;
+}
+body.template .gallery_panel .thumbnail,
+body.firstPage .gallery_panel .thumbnail {
+  margin-right: 10px;
+  margin-bottom: 10px;
+  width: 24.325%;
+  cursor: pointer;
+  vertical-align: middle;
+  float: none;
+  display: inline-block;
+}
+body.template .gallery_panel .thumbnail:nth-of-type(4n),
+body.firstPage .gallery_panel .thumbnail:nth-of-type(4n) {
+  margin-right: 0;
+}
+body .dragover {
+  border: 2px #4cae4c dashed;
+}
+body tags-input .tags {
+  border: 1px #cccccc solid;
+  -webkit-box-shadow: none;
+  box-shadow: none;
+}
+body tags-input .tags .tag-item {
+  padding: 4px 10px;
+  background: #5bc0de;
+  border-color: #46b8da;
+}
+body tags-input .tags .tag-item.selected {
+  background: #d9534f;
+  border-color: #d43f3a;
+}
+body tags-input .tags .input,
+body tags-input .tags .tag-item {
+  height: 36px;
 }

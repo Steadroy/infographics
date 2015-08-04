@@ -92,7 +92,10 @@ exports.update = function (req, res) {
                 error: 'Cannot update the dom' 
             });
         }
-        res.json(dom);
+        Dom
+            .deepPopulate(dom, populate, function(err, dom){
+                res.json(dom);
+            });
     });
 };
 

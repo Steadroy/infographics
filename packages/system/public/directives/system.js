@@ -9,7 +9,7 @@ angular.module('mean.system')
             scope: {
                 overlay: '=overlay'
             },
-            templateUrl: 'system/views/overlay-style.html'
+            templateUrl: '/system/views/overlay-style.html'
         };
     })
     .directive('scroll', function ($window) {

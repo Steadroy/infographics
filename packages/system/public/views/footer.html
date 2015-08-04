@@ -1,3 +1,16 @@
 <div class="container" >
     <p class="text-muted">Infographics</p>
 </div>
+<script type="text/ng-template" id="modal.html">
+    <div class="modal-header">
+        <h3 class="modal-title">{{modal.title}}</h3>
+    </div>
+    <div class="modal-body">
+        {{modal.body}}
+    </div>
+    <div class="modal-footer">
+        <button data-ng-repeat="button in modal.buttons" class="btn {{button.class}}" data-ng-click="execute(this)">
+            {{button.txt}}
+        </button>
+    </div>
+</script>

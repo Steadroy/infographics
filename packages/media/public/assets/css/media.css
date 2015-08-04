@@ -115,9 +115,6 @@ body.media .media_container .media.new_file .drop-box:before {
   margin-left: -10px;
   margin-top: -10px;
 }
-body.media .media_container .media.new_file .drop-box.dragover {
-  border: 2px #4cae4c dashed;
-}
 body.media .details .thumbnail {
   max-width: 100%;
   max-height: 220px;
@@ -140,22 +137,4 @@ body.media .details form {
 body.media .details form input {
   padding: 10px 15px;
   margin-bottom: 10px;
-}
-body.media .details .tags {
-  border: 1px #cccccc solid;
-  -webkit-box-shadow: none;
-  box-shadow: none;
-}
-body.media .details .tags .tag-item {
-  padding: 4px 10px;
-  background: #5bc0de;
-  border-color: #46b8da;
-}
-body.media .details .tags .tag-item.selected {
-  background: #d9534f;
-  border-color: #d43f3a;
-}
-body.media .details .tags .input,
-body.media .details .tags .tag-item {
-  height: 36px;
 }

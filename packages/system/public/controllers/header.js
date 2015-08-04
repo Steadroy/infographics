@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('mean.system')
-    .controller('HeaderController', ['$scope', 'Upload', '$rootScope', 'Global', 'Menus',
+    .controller('HeaderController', ['$scope', 'Upload', '$rootScope', 'Global', 'Menus', 
         function ($scope, Upload, $rootScope, Global, Menus) {
             $scope.global = Global;
             $scope.menus = {};
@@ -9,12 +9,12 @@ angular.module('mean.system')
                 max: {
                     teams: 3,
                     backgrounds_colours: 6,
-                    fonts_colours: 3,
-                    borders_colours: 2,
+                    fonts_colours: 6,
+                    borders_colours: 6,
                     overlays_colours: 6,
-                    fonts: 6,
-                    borders: 6,
-                    overlays: 2
+                    fonts: 12,
+                    borders: 12,
+                    overlays: 6
                 }
             };
 
@@ -76,7 +76,7 @@ angular.module('mean.system')
             $scope.init = function () {
                 Teams.query(function (teams) {
                     $rootScope.teams = teams;
-                    if($scope.teams.length && !$scope.global.user.lastTeamAccessed){
+                    if($scope.teams.length){
                         $scope.changeTeamActive($scope.teams[0]);
                     }
                     else{

@@ -1,8 +1,8 @@
 'use strict';
 
 angular.module('mean.template', [])
-    .controller('TemplateController', ['$scope', 'Global', 'Template', 'Configuration', 'Dom',
-        function ($scope, Global, Template, Configuration, Dom) {
+    .controller('TemplateController', ['$scope', '$rootScope', 'Global', 'Template', 'Configuration', 'Dom', '$modal',
+        function ($scope, $rootScope, Global, Template, Configuration, Dom, $modal) {
             $scope.global = Global;
             $scope.active = {};
             
@@ -10,12 +10,12 @@ angular.module('mean.template', [])
                 if($scope.global.teamActive && $scope.global.teamActive._id){
                     $scope.active_dom = null;
                     $scope.active_template = null;
-                    $scope.search_query = '';
-                    $scope.template = [];
+                    $scope.search = {};
+                    $scope.templates = [];
                     Template.get({teamId: $scope.global.teamActive._id}, function (template) {
-                        $scope.template = template;
-                        if ($scope.template.length > 0) {
-                            $scope.active = $scope.template[0];
+                        $scope.templates = template;
+                        if ($scope.templates.length > 0) {
+                            $scope.active = $scope.templates[0];
                             $scope.active_template = $scope.active;
                         }
                     });
@@ -31,7 +31,7 @@ angular.module('mean.template', [])
             $scope.create = function(isValid){
                 if (isValid) {
                     new Template({name: $scope.template_name, team: $scope.global.teamActive._id}).$save(function(template){
-                        $scope.template.push(template);
+                        $scope.templates.push(template);
                         $scope.active = template;
                         $scope.template_name = '';
                         $scope.active_dom = null;
@@ -44,18 +44,47 @@ angular.module('mean.template', [])
             
             $scope.remove = function(template){
                 template.$remove(function(response){
-                    for(var i = 0; i < $scope.template.length; i = i + 1){
-                        if($scope.template[i] === response){
-                            $scope.template.splice(i, 1);
+                    for(var i = 0; i < $scope.templates.length; i = i + 1){
+                        if($scope.templates[i] === response){
+                            $scope.templates.splice(i, 1);
                         }
                     }
-                    if(response === $scope.active && $scope.template.length){
-                        $scope.active = $scope.template[0];
+                    if(response === $scope.active && $scope.templates.length){
+                        $scope.active = $scope.templates[0];
                     }
-                    if(!$scope.template.length){
+                    if(!$scope.templates.length){
                         $scope.active = {};
                     }
                 });
+            };
+            $scope.openModal = function(template){
+                $rootScope.modal = {
+                    title: 'Remove template',
+                    body: 'Removing this template would cause unpredicted behaviour in the already created infographics.',
+                    buttons: [{
+                        class: 'btn-danger',
+                        fn: 'remove',
+                        txt: 'Remove',
+                        obj: template
+                    },{
+                        class: 'btn-success',
+                        fn: 'cancel',
+                        txt: 'Cancel',
+                        obj: template
+                    }]
+                };
+
+                $modal
+                    .open({
+                        templateUrl: 'modal.html',
+                        controller: 'ModalInstanceCtrl',
+                        size: 'sm'
+                    })
+                    .result.then(function (btn) {
+                        $scope[btn.fn](btn.obj);
+                    }, function () {
+                        console.log('Modal dismissed at: ' + new Date());
+                    });
             };
             $scope.update = function(template){ 
                 new Template(template).$update(function(response){ 
@@ -65,7 +94,7 @@ angular.module('mean.template', [])
             };
             $scope.clone = function(template){
                 new Template(template).$save({clone: true}, function(new_template){
-                    $scope.template.push(new_template);
+                    $scope.templates.push(new_template);
                 });
             };
             $scope.resize = function (evt, ui, dom) {
@@ -103,7 +132,6 @@ angular.module('mean.template', [])
                 var update_children = function(dom){
                     for(var j = 0; j < $scope.active.doms.length; j = j + 1){
                         if(dom.dom_id === $scope.active.doms[j].parent_dom_id){
-                            console.log(ui);
                             $scope.active.doms[j].configuration.top = $scope.active.doms[j].configuration.top + (ui.position.top - ui.originalPosition.top); 
                             $scope.active.doms[j].configuration.left = $scope.active.doms[j].configuration.left + (ui.position.left - ui.originalPosition.left);
                             $scope.dragStop(evt, ui, $scope.active.doms[j]);
@@ -124,7 +152,7 @@ angular.module('mean.template', [])
                     $scope.active_template = null;
                 }
             };
-            $scope.removeDom = function(dom){
+            $scope._removeDom = function(dom){
                 var find_children = function(dom){
                     for(var j = 0; j < $scope.active.doms.length; j = j + 1){
                         if(dom.dom_id === $scope.active.doms[j].parent_dom_id){
@@ -145,6 +173,36 @@ angular.module('mean.template', [])
                 $scope.active_dom = null;
                 $scope.active_template = $scope.active;
             };
+            
+            $scope.removeDom = function(dom){
+                $rootScope.modal = {
+                    title: 'Remove element from template',
+                    body: 'Removing this element from the template would cause unpredicted behaviour in the already created infographics.',
+                    buttons: [{
+                        class: 'btn-danger',
+                        fn: '_removeDom',
+                        txt: 'Remove',
+                        obj: dom
+                    },{
+                        class: 'btn-success',
+                        fn: 'cancel',
+                        txt: 'Cancel',
+                        obj: dom
+                    }]
+                };
+
+                $modal
+                    .open({
+                        templateUrl: 'modal.html',
+                        controller: 'ModalInstanceCtrl',
+                        size: 'sm'
+                    })
+                    .result.then(function (btn) {
+                        $scope[btn.fn](btn.obj);
+                    }, function () {
+                        console.log('Modal dismissed at: ' + new Date());
+                    });
+            };
             $scope.toggleTemplateSetting = function(template){
                 if($scope.active_template && template._id === $scope.active_template._id){
                     $scope.active_template = null;
@@ -161,10 +219,14 @@ angular.module('mean.template', [])
             $scope.global = Global;
             $scope.configuration = null;
             $scope.paddings = Array.apply(null, new Array(11)).map(function(i, j) { return j; });
+            $scope.is_infographic = !!$scope.$parent.infographic;
             
+            $scope.$watch('$parent.active', function(){
+                $scope.inf_active_template = {};
+            });
             $scope.$watch('global.teamActive.settings', function(){
                 if($scope.global.teamActive && $scope.global.teamActive._id){
-                    $scope.search_query_media = '';
+                    $scope.search = {};
                     $scope.mediaFiles = [];
                     $scope.config = {
                         'logo_position': [
@@ -188,8 +250,7 @@ angular.module('mean.template', [])
                                     'right bottom'
                                 ],
                             'background_repeat': ['no-repeat', 'repeat-x', 'repeat-y', 'repeat'],
-                            'background_size': ['contain', 'cover', 'inherit', '10%', '20%', '30%', '40%', '50%', '60%', '70%', '80%', '90%', '100%'],
-                            'background_color': $scope.global.teamActive.settings.colours ? $scope.global.teamActive.settings.colours.backgrounds : []
+                            'background_size': ['contain', 'cover', 'inherit', '10%', '20%', '30%', '40%', '50%', '60%', '70%', '80%', '90%', '100%']
                         },
                         'overwrites': [
                             'padding_top',
@@ -198,6 +259,10 @@ angular.module('mean.template', [])
                             'padding_left'
                         ]
                     };
+                    if(!$scope.is_infographic){
+                        $scope.config.background_settings.background_color = $scope.global.teamActive.settings.colours ? $scope.global.teamActive.settings.colours.backgrounds : [];
+                    }
+                    
                     Media.query({teamId: $scope.global.teamActive._id, filetype: 'image'}, function (media_files) {
                         $scope.mediaFiles = media_files;
                     });
@@ -215,9 +280,19 @@ angular.module('mean.template', [])
                 else{
                     background.background_image = image._id;
                 }
-                background.$update(function(response){
-                    $scope.$parent.active_dom.configuration.background = response;
-                });
+                $scope.$parent.active_dom.configuration.background = background;
+                if($scope.is_infographic){
+                    $scope.$parent.saveContent($scope.$parent.active_dom, '', background);
+                }
+                else{
+                    background.$update(function(){ });
+                }
+            };
+            $scope.updateInfographic = function(){
+                $scope.$parent.update($scope.$parent.active);
+            };
+            $scope.loadTags = function(query){
+                return $scope.$parent.loadTags(query);
             };
             $scope.changeSetting = function(setting, key, value){
                 if(setting === 'background'){
@@ -230,6 +305,9 @@ angular.module('mean.template', [])
                     
                     background.$update(function(response){
                         $scope.$parent.active_dom.configuration.background = response;
+                        if($scope.is_infographic){
+                            $scope.$parent.parseConfigurations($scope.$parent.active, $scope.$parent.active_dom.configuration);
+                        }
                     });
                 }
                 else if (['logo_position', 'font', 'border', 'overlay', 'overwrite'].indexOf(setting) >= 0) {
@@ -282,19 +360,22 @@ angular.module('mean.template', [])
                 });
             };
             
-            $scope.generateThumbnail = function () {
+            $scope.generateThumbnail = function (obj) {
                 var dimensions = {width: 0, height: 0},
-                    $template = angular.element('#template');
+                    $obj = angular.element('#' + obj + '-section'),
+                    //template or infographic
+                    doms = obj === 'template' ? $scope.$parent.active.doms : $scope.$parent.active.template.doms;
+                
                 $scope.generating = true;
-                for (var i = 0; i < $scope.$parent.active.doms.length; i = i + 1) {
-                    if (!$scope.$parent.active.doms[i].parent_dom_id) {
-                        dimensions.width = $scope.$parent.active.doms[i].configuration.width;
-                        dimensions.height = $scope.$parent.active.doms[i].configuration.height;
+                for (var i = 0; i < doms.length; i = i + 1) {
+                    if (!doms[i].parent_dom_id) {
+                        dimensions.width = doms[i].configuration.width;
+                        dimensions.height = doms[i].configuration.height;
                         break;
                     }
                 }
-                $template.css(dimensions);
-                window.html2canvas(document.getElementById('template'), {
+                $obj.css(dimensions);
+                window.html2canvas(document.getElementById(obj + '-section'), {
                     onrendered: function (canvas) {
                         var mime = 'image/png', 
                             img = canvas.toDataURL(mime), cod = 'data:' + mime + ';base64,',
@@ -312,23 +393,33 @@ angular.module('mean.template', [])
                             .success(function(data, status, headers, config){
                                 $scope.$parent.active.poster = data.file.filename;
                                 $scope.update($scope.$parent.active);
-                                $scope._t = new Date().getTime();
+                                $scope._t = Date.now();
                                 $scope.feedback = true;
                                 
                                 $timeout(function(){
                                     $scope.feedback = false;
                                 }, 2500);
                             });
-                        $template.css({width: '', height: ''});
+                        $obj.css({width: '', height: ''});
                         $scope.generating = false;
                     }
                 });
             };
-            $scope.un_publish = function(){
-                $scope.active_template.ready = !$scope.active_template.ready; 
-                $scope.update($scope.active_template);
-                
-                if($scope.active_template.ready)
-                    $scope.generateThumbnail();
+            $scope.un_publish = function(obj){
+                $scope['active_' + obj].ready = !$scope['active_' + obj].ready; 
+                $scope.update($scope['active_' + obj]);
+
+                if($scope['active_' + obj].ready)
+                    $scope.generateThumbnail(obj);
+            };
+            $scope.select = function(template){
+                $scope.inf_active_template = template;
+                $timeout(function(){
+                    angular.element('html').trigger('click');
+                }, 0);
+            };
+            $scope.save = function(template){
+                //infographic save method
+                $scope.$parent.save(template);
             };
         }]);
