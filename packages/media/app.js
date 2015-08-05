@@ -23,7 +23,7 @@ Media.register(function (app, auth, database) {
         'link': 'see media'
     });
     
-    //added on System package
+    //added on System package 
     //Media.aggregateAsset('js', '../../../../../bower_components/ng-file-upload/ng-file-upload-shim.min.js', {group: 'footer'});
     //Media.aggregateAsset('js', '../../../../../bower_components/ng-file-upload/ng-file-upload.min.js', {group: 'footer'});
     

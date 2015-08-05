@@ -421,7 +421,7 @@ body.firstPage .infographic .infographic-element.media .dom-media:not(.clean):be
   background-size: contain;
   background-repeat: no-repeat;
   background-position: 50%;
-  background-image: url(../img/picture-o.png);
+  background-image: url(/system/assets/img/picture-o.png);
 }
 body.template .infographic .infographic-container .logo,
 body.firstPage .infographic .infographic-container .logo,
